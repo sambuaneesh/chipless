@@ -1,0 +1,28 @@
+# OS / editors
+.DS_Store
+*.swp
+.idea/
+.vscode/
+*.iml
+
+# Android / Gradle
+.gradle/
+build/
+local.properties
+captures/
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Rust
+target/
+
+# Web
+node_modules/
+dist/
+.cache/
+
+# Env / secrets
+.env
+.env.*
