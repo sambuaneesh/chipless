@@ -491,6 +491,9 @@ class Game {
         }
         h.sc.clear()
         val live = h.live
+        if (live.size > 1 && (h.street == Street.RIVER || live.count { stack(it) > 0 } <= 1)) {
+            for (id in live) if (h.label[id] != "All-in") h.label.remove(id)
+        }
         if (live.size == 1) { winUncontested(h, live[0]); return }
         val canAct = live.count { stack(it) > 0 }
         if (canAct <= 1 && h.street != Street.RIVER) {
