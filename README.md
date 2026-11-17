@@ -10,7 +10,7 @@
 
 # Chipless
 
-**Real cards. No chips.** Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. You deal real cards; the app runs every No-Limit Hold'em hand correctly, explains each rule as it comes up, and your friends play along from their own phones.
+**Real cards. No chips.** A free, open-source **poker chips app** for Android. Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. You deal real cards; the app runs every No-Limit Hold'em hand correctly, explains each rule as it comes up, and your friends play along from their own phones.
 
 **[Website](https://sambuaneesh.github.io/chipless/)** · **[Download the APK](https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk)** · Android 8.0+
 
@@ -22,7 +22,7 @@
 - **It's the floor manager, not just a chip counter.** A narrator line says what happened and what each player can do. A dealer card spells out the physical steps ("Burn 1 · deal 3 face up: the Flop").
 - **Two ways to play, in one app.**
   - **Pass this phone:** one phone in the middle of the table.
-  - **Everyone uses theirs:** friends scan a QR code and play from any browser. There's nothing to install, and every phone updates live.
+  - **Everyone uses theirs:** friends scan a QR code and play from their phone's browser. There's nothing to install, and every phone updates live.
 - **Casino-correct rules:** blinds and button, minimum raises, short all-ins (TDA 49), side pots, uncalled bets and the odd chip.
 - **Betting is tap, size, hold.** One tap to check or call, smart raise presets, and a hold for all-in. Undo replaces "are you sure?" pop-ups. Tap a greyed-out button to learn why it's disabled.
 - **The Referee:** enter the cards and it names the winner, then explains why ("Maya's Flush, Ace-high beats Sam's Three Kings").

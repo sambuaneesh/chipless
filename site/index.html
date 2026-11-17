@@ -3,16 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Chipless: real cards, no chips</title>
-<meta name="description" content="Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. Friends join from their own phones, no install. Free, open source, 106 KB.">
+<title>Chipless: Poker Chips App for Home Games (Texas Hold'em, No Chips Needed)</title>
+<meta name="description" content="Free poker chips app for Android. Play Texas Hold'em home games with real cards and no chips: Chipless tracks chips, bets, blinds and side pots, explains the rules to beginners, and friends join from their phone's browser. Offline, no ads, open source.">
+<link rel="canonical" href="https://sambuaneesh.github.io/chipless/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="keywords" content="poker chips app, poker chip counter, virtual poker chips, texas holdem app, home poker game, poker without chips, poker bank app, poker settle up, learn poker, poker rules app">
+<meta name="application-name" content="Chipless">
+<link rel="icon" type="image/png" sizes="192x192" href="media/icon-192.png">
+<link rel="apple-touch-icon" href="media/icon-180.png">
 <meta name="theme-color" content="#090e0c">
 <meta property="og:title" content="Chipless: real cards, no chips">
 <meta property="og:description" content="Your phone runs the poker table and teaches as you play. Friends join from their browser. Free and open source.">
 <meta property="og:image" content="https://sambuaneesh.github.io/chipless/media/og.jpg">
 <meta property="og:url" content="https://sambuaneesh.github.io/chipless/">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Chipless">
+<meta property="og:image:alt" content="Chipless poker table app on a phone">
+<meta name="twitter:title" content="Chipless: real cards, no chips">
+<meta name="twitter:description" content="Your phone runs the poker table and teaches as you play. Free, offline, open source.">
+<meta name="twitter:image" content="https://sambuaneesh.github.io/chipless/media/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23d24b4b'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%23f2ede2' stroke-width='3' stroke-dasharray='4 4'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23f2ede2'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="media/icon.svg">
 <style>
 :root {
   color-scheme: dark;
@@ -143,6 +154,8 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .reveal { opacity: 1; transform: none; transition: none; } }
 </style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Chipless", "alternateName": "Chipless poker chips app", "description": "Poker chips app for real-card Texas Hold'em home games. Tracks chips, bets, blinds and side pots, teaches the rules, and lets friends join from their phone's browser.", "applicationCategory": "GameApplication", "applicationSubCategory": "Card game companion", "operatingSystem": "Android 8.0+", "softwareVersion": "1.0.1", "fileSize": "106KB", "downloadUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "installUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "url": "https://sambuaneesh.github.io/chipless/", "license": "https://www.gnu.org/licenses/gpl-3.0.html", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "screenshot": ["https://sambuaneesh.github.io/chipless/media/deal.webp", "https://sambuaneesh.github.io/chipless/media/raise.webp", "https://sambuaneesh.github.io/chipless/media/referee.webp", "https://sambuaneesh.github.io/chipless/media/settle.webp"], "image": "https://sambuaneesh.github.io/chipless/media/og.jpg", "codeRepository": "https://github.com/sambuaneesh/chipless", "author": {"@type": "Person", "name": "Aneesh Sambu", "url": "https://github.com/sambuaneesh"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do my friends need to install anything?", "acceptedAnswer": {"@type": "Answer", "text": "No. Only the host needs the Android app. Everyone else scans the QR code and plays in their phone's web browser."}}, {"@type": "Question", "name": "Does it need the internet?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything runs on the host's phone over your Wi-Fi or the host's mobile hotspot. Nothing leaves the room. If public or campus Wi-Fi blocks phones from talking to each other, use the hotspot."}}, {"@type": "Question", "name": "Which poker game does it support?", "acceptedAnswer": {"@type": "Answer", "text": "No-Limit Texas Hold'em. Raises, all-ins, side pots and split pots follow the official TDA tournament rules and Robert's Rules of Poker. You deal real cards; the app tracks everything else."}}, {"@type": "Question", "name": "Can we play without phones for everyone?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Leave one phone in the middle of the table and take turns tapping. You can invite phones any time later, and mix both."}}, {"@type": "Question", "name": "Does Chipless handle real money?", "acceptedAnswer": {"@type": "Answer", "text": "No. It only keeps score. In buy-in mode it records what each person bought in for and tells you who owes whom at the end. You settle up yourselves."}}, {"@type": "Question", "name": "What if the app gets closed mid-game?", "acceptedAnswer": {"@type": "Answer", "text": "Every action is saved as it happens. Reopen the app and the table is exactly where you left it, and friends' phones reconnect on their own."}}, {"@type": "Question", "name": "Is it really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Chipless is open source under the GPL-3.0 license. No ads, no in-app purchases, no tracking."}}]}</script>
 </head>
 <body>
 
@@ -152,6 +165,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
     <ul>
       <li><a href="#how">How it works</a></li>
       <li><a href="#features">Features</a></li>
+      <li><a href="#who">Who it's for</a></li>
       <li><a href="#learn">Learn</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
@@ -165,7 +179,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
 <header class="hero">
   <div class="wrap">
     <div>
-      <span class="eyebrow"><span class="chip" style="width:14px;height:14px"></span> Free · Open source · Android</span>
+      <span class="eyebrow"><span class="chip" style="width:14px;height:14px"></span> Free poker chips app · Android</span>
       <h1>Real cards.<br><em>No chips.</em></h1>
       <p class="lede">Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. Deal real cards; the app runs every hand, explains every rule, and your friends play along from their own phones.</p>
       <div class="ctas">
@@ -179,7 +193,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
         <li>106 KB app</li>
         <li>Works offline</li>
         <li>No accounts, no ads</li>
-        <li>Friends join from any browser</li>
+        <li>Friends join from their browser</li>
       </ul>
     </div>
     <div class="phone reveal">
@@ -225,11 +239,11 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
       <div class="reveal">
         <div class="kicker">Everyone's phone</div>
         <h3>Friends play from their own phones</h3>
-        <p>Scan, tap your name, done. Your stack, your turn and your buttons are right in your hand, and the whole table updates live on every phone.</p>
+        <p>Scan, tap your name, and you're in. Your stack, your turn and your buttons are on your own phone, and the whole table updates live on every phone.</p>
         <ul>
-          <li>Joins in under ten seconds, from any browser</li>
+          <li>Join with one scan and one tap, right in the browser</li>
           <li>Private pre-actions: Check/Fold, Call any</li>
-          <li>Phone fell asleep? It rejoins your seat instantly</li>
+          <li>Phone went to sleep? It reconnects to your seat automatically</li>
           <li>Or keep one phone on the table and pass it around</li>
         </ul>
       </div>
@@ -259,7 +273,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
     <div class="feature">
       <div class="reveal">
         <div class="kicker">The referee</div>
-        <h3>“Who won?” Settled in seconds.</h3>
+        <h3>“Who won?” Settled at the table.</h3>
         <p>Not sure whose hand is better? Enter the cards and Chipless names the winner, lights up the five cards that play, and explains why.</p>
         <div class="quote">“Maya's Flush, Ace-high beats Sam's Three Kings.”</div>
       </div>
@@ -275,7 +289,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
         <h3>Who pays whom, in the fewest payments</h3>
         <p>Playing for real buy-ins? Chipless tracks every rebuy and works out the minimum number of transfers at the end of the night. Share the summary to your group chat with one tap.</p>
         <ul>
-          <li>“Balanced ✓”: every chip accounted for</li>
+          <li>Balance check: chips in must equal chips out</li>
           <li>Fewest payments, or everyone settles with one banker</li>
           <li>Or just play for points</li>
         </ul>
@@ -284,6 +298,19 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
         <div class="phone sm"><img src="media/settle.webp" alt="Results and payments" loading="lazy"></div>
         <div class="phone sm"><img src="media/guest-join.webp" alt="Join screen on a friend's phone" loading="lazy"></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="who">
+  <div class="wrap center-h">
+    <div class="kicker">Who it's for</div>
+    <h2>The poker chips app for real-life games</h2>
+    <p class="sub">Got a deck of cards but no poker chip set? Chipless is a virtual chip counter, poker bank and rules guide in one free app.</p>
+    <div class="steps" style="text-align:left">
+      <div class="step reveal"><h3>Game nights with friends</h3><p>Hostel rooms, house parties, road trips. Bring a deck; everyone's stack lives on their phone.</p></div>
+      <div class="step reveal"><h3>Total beginners</h3><p>Never played Texas Hold'em? The app tells you whose turn it is, what you can do, and who won and why.</p></div>
+      <div class="step reveal"><h3>Regular home games</h3><p>Blind timers, rebuys and an end-of-night settle-up that works out who pays whom, with no spreadsheet.</p></div>
     </div>
   </div>
 </section>
@@ -300,13 +327,13 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
 <section>
   <div class="wrap center-h">
     <div class="kicker">Tiny and private</div>
-    <h2>Made like it's 1999. Feels like 2026.</h2>
+    <h2>Small, fast and private</h2>
     <p class="sub">No frameworks bolted together, no trackers, no cloud. The whole app is smaller than a single photo.</p>
     <div class="grid4" style="text-align:left">
       <div class="stat reveal"><b>106 KB</b><span>Entire Android app</span></div>
       <div class="stat reveal"><b>0</b><span>Accounts, ads or analytics</span></div>
       <div class="stat reveal"><b>34 KB</b><span>All a friend's phone downloads to join</span></div>
-      <div class="stat reveal"><b>2.6 M</b><span>Hands tested against the evaluator</span></div>
+      <div class="stat reveal"><b>2–10</b><span>Players at one table</span></div>
     </div>
   </div>
 </section>
@@ -339,12 +366,12 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
     <h2>Questions</h2>
   </div>
   <div class="wrap faq">
-    <details><summary>Do my friends need to install anything?</summary><p>No. Only the host needs the Android app. Everyone else scans the QR code and plays in their phone's browser, on Android or iPhone.</p></details>
+    <details><summary>Do my friends need to install anything?</summary><p>No. Only the host needs the Android app. Everyone else scans the QR code and plays in their phone's web browser.</p></details>
     <details><summary>Does it need the internet?</summary><p>No. Everything runs on the host's phone over your Wi-Fi or the host's mobile hotspot. Nothing leaves the room. If public or campus Wi-Fi blocks phones from talking to each other, use the hotspot.</p></details>
-    <details><summary>Which poker game does it support?</summary><p>No-Limit Texas Hold'em, with proper tournament-grade rules for raises, all-ins, side pots and split pots. You deal real cards; the app tracks everything else.</p></details>
+    <details><summary>Which poker game does it support?</summary><p>No-Limit Texas Hold'em. Raises, all-ins, side pots and split pots follow the official TDA tournament rules and Robert's Rules of Poker. You deal real cards; the app tracks everything else.</p></details>
     <details><summary>Can we play without phones for everyone?</summary><p>Yes. Leave one phone in the middle of the table and take turns tapping. You can invite phones any time later, and mix both.</p></details>
     <details><summary>Does Chipless handle real money?</summary><p>No. It only keeps score. In buy-in mode it records what each person bought in for and tells you who owes whom at the end. You settle up yourselves.</p></details>
-    <details><summary>What if the app gets closed mid-game?</summary><p>Every action is saved instantly. Reopen the app and the table is exactly where you left it, and friends' phones reconnect on their own.</p></details>
+    <details><summary>What if the app gets closed mid-game?</summary><p>Every action is saved as it happens. Reopen the app and the table is exactly where you left it, and friends' phones reconnect on their own.</p></details>
     <details><summary>Is it really free?</summary><p>Yes. Chipless is open source under the GPL-3.0 license. No ads, no in-app purchases, no tracking.</p></details>
   </div>
 </section>

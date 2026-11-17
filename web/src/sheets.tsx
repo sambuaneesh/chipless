@@ -4,6 +4,7 @@ import { cmd, forgetSeat, store } from './net'
 import { share } from './native'
 import { prefs, setPref } from './prefs'
 import { qrPath } from './qr'
+import { CurrencyPick } from './setup'
 import type { Snap } from './types'
 import { Avatar, Btn, Icon, NumField, Seg, Sheet, Toggle } from './ui'
 import { closeSheet, openSheet, uiSet, useUi } from './uistate'
@@ -218,7 +219,7 @@ export function MoneyFields({ s }: { s: Snap }) {
   const [amt, setAmt] = useState(s.cfg.money / Math.pow(10, s.cfg.decimals))
   return (
     <div class="money">
-      <label class="field"><span>Currency</span><input value={cur} maxLength={4} onInput={(e) => setCur((e.target as HTMLInputElement).value)} /></label>
+      <CurrencyPick value={cur} onChange={setCur} />
       <NumField label={`Buy-in for ${chips(s.cfg.stack)} chips`} value={amt} min={0} step={100} onChange={setAmt} />
       <Btn kind="ghost" onClick={() => cmd('settings', { currency: cur, money: Math.round(amt * 100), decimals: 2 })}>Save</Btn>
     </div>

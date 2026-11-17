@@ -167,4 +167,16 @@ class ServerTest {
         assertEquals(a.game.players.map { it.stack }, b.game.players.map { it.stack })
         assertEquals(2, b.game.hand!!.toAct)
     }
+
+    @Test
+    fun currencyOnlyFromFixedList() {
+        val c = Config()
+        assertEquals("", c.currency)
+        c.read(mapOf("currency" to "lol123"))
+        assertEquals("", c.currency)
+        c.read(mapOf("currency" to "EUR"))
+        assertEquals("EUR", c.currency)
+        c.read(mapOf("currency" to "<b>"))
+        assertEquals("EUR", c.currency)
+    }
 }

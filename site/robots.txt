@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sambuaneesh.github.io/chipless/sitemap.xml

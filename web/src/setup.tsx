@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { chips, money } from './fmt'
+import { chips, CURRENCIES, money } from './fmt'
 import { cmd } from './net'
 import { haptic } from './native'
 import { local } from './prefs'
@@ -40,7 +40,7 @@ export function Setup({ onBack }: { onBack: () => void }) {
   const [preset, setPreset] = useState<Preset>('casual')
   const [c, setC] = useState({ sb: 5, bb: 10, stack: 1000, timer: false, minutes: 20 })
   const [mode, setMode] = useState<Cfg['mode']>('free')
-  const [currency, setCurrency] = useState(local('chipless.currency') || '₹')
+  const [currency, setCurrency] = useState('')
   const [buyIn, setBuyIn] = useState(500)
   const [teach, setTeach] = useState<Cfg['teach']>('beginner')
   const [share, setShare] = useState(false)
@@ -63,7 +63,7 @@ export function Setup({ onBack }: { onBack: () => void }) {
     if (p !== 'custom') { const x = PRESETS[p]; setC({ ...c, sb: x.sb, bb: x.bb, stack: x.stack, timer: x.timer }) }
   }
   const start = () => {
-    local('chipless.lastNames', JSON.stringify(names)); local('chipless.currency', currency)
+    local('chipless.lastNames', JSON.stringify(names))
     haptic('confirm')
     cmd('setup', {
       names, button: dealer, sb: c.sb, bb: c.bb, stack: c.stack, timer: c.timer, minutes: c.minutes,
@@ -133,7 +133,7 @@ export function Setup({ onBack }: { onBack: () => void }) {
         <Seg label="Chips are" value={mode} onChange={setMode} options={[['free', 'Just for fun'], ['money', 'Real buy-ins']]} />
         {mode === 'money' && (
           <div class="grid2">
-            <label class="field"><span>Currency</span><input value={currency} maxLength={4} onInput={(e) => setCurrency((e.target as HTMLInputElement).value)} /></label>
+            <CurrencyPick value={currency} onChange={setCurrency} />
             <NumField label="Buy-in" value={buyIn} min={0} step={100} onChange={setBuyIn} />
           </div>
         )}
@@ -155,6 +155,16 @@ export function Setup({ onBack }: { onBack: () => void }) {
         <Btn kind="primary" big disabled={!can} onClick={start}>{names.length < 2 ? 'Add at least 2 players' : `Start table · ${names.length} players`}</Btn>
       </div>
     </div>
+  )
+}
+
+export function CurrencyPick({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  return (
+    <label class="field"><span>Currency</span>
+      <select class="select" value={value} onChange={(e) => onChange((e.target as HTMLSelectElement).value)}>
+        {CURRENCIES.map(([code, sym, name]) => <option value={code}>{code ? `${sym.trim()} ${name}` : name}</option>)}
+      </select>
+    </label>
   )
 }
 

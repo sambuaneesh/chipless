@@ -31,7 +31,7 @@ class Config {
     var bb = 10
     var stack = 1000
     var mode = "free" // "free" | "money"
-    var currency = "₹"
+    var currency = "" // ISO code from CURRENCIES, or "" for plain numbers
     var money = 50_000L // minor units per buy-in of [stack] chips
     var decimals = 2
     var teach = "beginner" // "beginner" | "mixed" | "pro"
@@ -43,10 +43,15 @@ class Config {
         "money" to money, "decimals" to decimals, "teach" to teach, "timer" to timer, "minutes" to minutes,
     )
 
+    companion object {
+        /** Must match CURRENCIES in web/src/fmt.ts. */
+        val CURRENCIES = setOf("", "USD", "EUR", "GBP", "INR", "CAD", "AUD", "JPY", "CNY", "KRW", "SGD", "AED", "CHF", "BRL", "MXN", "ZAR", "PHP", "NGN")
+    }
+
     fun read(o: Obj) {
         sb = o.intOr("sb", sb); bb = o.intOr("bb", bb); stack = o.intOr("stack", stack)
         mode = o.strOr("mode", mode)!!.takeIf { it == "free" || it == "money" } ?: mode
-        currency = (o.strOr("currency", currency) ?: currency).take(4)
+        currency = o.strOr("currency", currency)?.takeIf { it in CURRENCIES } ?: currency
         money = o.longOr("money", money); decimals = o.intOr("decimals", decimals).coerceIn(0, 2)
         teach = o.strOr("teach", teach)!!.takeIf { it in setOf("beginner", "mixed", "pro") } ?: teach
         timer = o.bool("timer", timer); minutes = o.intOr("minutes", minutes).coerceIn(1, 120)

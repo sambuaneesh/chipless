@@ -120,8 +120,13 @@ export function NumField({ label, value, onChange, min = 0, step = 1, suffix }: 
       <span>{label}</span>
       <div class="num">
         <button aria-label={`Less ${label}`} onClick={(e) => { e.preventDefault(); onChange(Math.max(min, value - step)) }}><Icon name="minus" size={18} /></button>
-        <input type="number" inputMode="numeric" value={value} min={min}
-          onInput={(e) => { const v = Number((e.target as HTMLInputElement).value); if (Number.isFinite(v)) onChange(v) }} />
+        <input type="text" inputMode="numeric" pattern="[0-9]*" autoComplete="off" value={value} aria-label={label}
+          onInput={(e) => {
+            const el = e.target as HTMLInputElement
+            const digits = el.value.replace(/\D/g, '').slice(0, 9)
+            if (digits !== el.value) el.value = digits
+            onChange(digits ? Math.max(min, Number(digits)) : min)
+          }} />
         {suffix && <em>{suffix}</em>}
         <button aria-label={`More ${label}`} onClick={(e) => { e.preventDefault(); onChange(value + step) }}><Icon name="plus" size={18} /></button>
       </div>

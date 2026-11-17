@@ -15,14 +15,37 @@ export function signed(n: number): string {
   return (n > 0 ? '+' : n < 0 ? '−' : '') + chips(Math.abs(n))
 }
 
-/** Money from minor units, e.g. 12550 → ₹125.50 (trailing .00 dropped). */
+/** Currencies people can pick (code, symbol, name). '' = plain numbers, no symbol. Keep in sync with Session.kt. */
+export const CURRENCIES: [string, string, string][] = [
+  ['', '', 'No currency symbol'],
+  ['USD', '$', 'US dollar'],
+  ['EUR', '€', 'Euro'],
+  ['GBP', '£', 'British pound'],
+  ['INR', '₹', 'Indian rupee'],
+  ['CAD', 'C$', 'Canadian dollar'],
+  ['AUD', 'A$', 'Australian dollar'],
+  ['JPY', '¥', 'Japanese yen'],
+  ['CNY', 'CN¥', 'Chinese yuan'],
+  ['KRW', '₩', 'South Korean won'],
+  ['SGD', 'S$', 'Singapore dollar'],
+  ['AED', 'AED ', 'UAE dirham'],
+  ['CHF', 'CHF ', 'Swiss franc'],
+  ['BRL', 'R$', 'Brazilian real'],
+  ['MXN', 'MX$', 'Mexican peso'],
+  ['ZAR', 'R ', 'South African rand'],
+  ['PHP', '₱', 'Philippine peso'],
+  ['NGN', '₦', 'Nigerian naira'],
+]
+const symbol = (code: string) => CURRENCIES.find((c) => c[0] === code)?.[1] ?? ''
+
+/** Money from minor units, e.g. 12550 → $125.50 (trailing .00 dropped; no symbol if none chosen). */
 export function money(minor: number, cfg: Cfg, sign = false): string {
   const d = cfg.decimals
   const abs = Math.abs(minor) / Math.pow(10, d)
   let s = abs.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d })
   if (d > 0 && s.endsWith('.' + '0'.repeat(d))) s = s.slice(0, -(d + 1))
   const pre = sign ? (minor > 0 ? '+' : minor < 0 ? '−' : '') : minor < 0 ? '−' : ''
-  return pre + cfg.currency + s
+  return pre + symbol(cfg.currency) + s
 }
 
 export function clock(ms: number): string {
