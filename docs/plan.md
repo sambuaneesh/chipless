@@ -24,6 +24,17 @@ docs/      Spec, ADRs, research, plan.
 | M8 | **Polish** | Motion and sound set, haptics, hint fading, pre-actions, replay card, full accessibility pass, beginner usability test with real people. |
 | M9 | **Release** | R8/shrinking, signing, size budget check, versioning, Play listing (specialUse declaration). |
 
+## Status (2026-11-17)
+M0–M9 are done as a v1.0 build:
+- 32 JVM tests and a headless two-phone e2e test pass.
+- The release APK is 106 KB and installs and runs on a Realme RMX3921 (Android 16).
+
+Still to verify with real people:
+- multi-phone play over Wi-Fi/hotspot on the device
+- iOS Safari guests
+- a 6+ hour hosting session
+- a TalkBack pass
+
 ## Engineering practices
 - **Zero runtime dependencies** in the APK beyond the Android framework and the Kotlin stdlib. Dev/test tooling is fine.
 - **Engine is pure and deterministic.** Everything else is a thin adapter. Most bugs should be catchable in JVM tests without a phone.

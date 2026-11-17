@@ -27,6 +27,9 @@ Casino/TDA rules and common home-game practice differ. The engine must be correc
 
 **Settlement:** exact minimum number of transfers (subset DP, ≤ 10 players), with a greedy fallback.
 
+## Implementation status (v1.0)
+The defaults above are implemented and tested. The alternative *settings* (dead button, casino missed blinds) are **not yet implemented**. v1 always uses the moving button and post-or-wait entry.
+
 ## Consequences
 - The rules are casino-correct where it matters for fairness (reopening, min-raise, side pots, odd chip) and forgiving where home games are informal (button, missed blinds, showdown order).
 - The "Why?" explanations must cover TDA 49 and the min-raise rule specifically; these are the rules beginners trip on most.

@@ -1,0 +1,12 @@
+<resources>
+    <style name="Theme.Chips" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:colorBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:navigationBarColor">@color/bg</item>
+        <item name="android:colorAccent">@color/brass</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+    <color name="bg">#090E0C</color>
+    <color name="brass">#D6AD62</color>
+</resources>

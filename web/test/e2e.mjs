@@ -17,6 +17,14 @@ const shot = (p, n) => p.screenshot({ path: `${shots}/${n}.png` })
 const wait = (ms) => new Promise((r) => setTimeout(r, ms))
 const click = async (p, text) => { await p.getByRole('button', { name: text }).first().click(); await wait(250) }
 
+// Start from a clean table.
+await new Promise((resolve, reject) => {
+  const u = new URL(hostUrl)
+  const ws = new WebSocket(`ws://${u.host}/ws`)
+  ws.onopen = () => { ws.send(JSON.stringify({ t: 'hello', host: u.searchParams.get('host') })); ws.send(JSON.stringify({ t: 'cmd', c: 'reset' })); setTimeout(() => { ws.close(); resolve() }, 300) }
+  ws.onerror = reject
+})
+
 const host = await mk('host')
 await host.goto(hostUrl)
 await host.waitForSelector('text=New table')
