@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'preact/hooks'
-import { chips, money, signed } from './fmt'
+import { chips, money, signed, SITE } from './fmt'
 import { cmd, forgetSeat, store } from './net'
 import { share } from './native'
 import { prefs, setPref } from './prefs'
@@ -288,7 +288,8 @@ export function SettleView({ s }: { s: Snap }) {
     `Chipless — poker night results`,
     ...nets.map((n) => `${n.name}: ${isMoney && n.money != null ? money(n.money, s.cfg, true) : signed(n.chips)}`),
     '',
-    ...(transfers.length ? ['Payments:', ...transfers.map((t) => `${name(t.from)} → ${name(t.to)}: ${fmtAmt(t.amount)}`)] : []),
+    ...(transfers.length ? ['Payments:', ...transfers.map((t) => `${name(t.from)} → ${name(t.to)}: ${fmtAmt(t.amount)}`), ''] : []),
+    `Tracked with Chipless, the free poker chips app: ${SITE}`,
   ].join('\n')
   return (
     <div class="settle">
@@ -330,6 +331,7 @@ export function SettleView({ s }: { s: Snap }) {
           <Btn kind="primary" big onClick={() => openSheet({ k: 'confirm', text: 'Start a new game? These results will be cleared.', yes: 'New game', run: () => cmd('reset') })}>New game</Btn>
         </div>
       )}
+      {!host && <p class="tiny muted center-t">Host your own game: <a href={SITE} target="_blank" rel="noopener">get Chipless</a>, free for Android.</p>}
     </div>
   )
 }

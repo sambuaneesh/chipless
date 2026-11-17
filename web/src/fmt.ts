@@ -1,3 +1,5 @@
+/** Public website, shown only in quiet credits and shared results. */
+export const SITE = 'https://sambuaneesh.github.io/chipless/'
 import type { Cfg } from './types'
 
 const nf = new Intl.NumberFormat('en-US')

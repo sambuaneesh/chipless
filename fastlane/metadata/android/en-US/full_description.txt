@@ -1,0 +1,38 @@
+<p>Got a deck of cards but no poker chips? <b>Chipless</b> turns one phone into the chips, the pot, the dealer button and a patient rules coach for real-card <b>No-Limit Texas Hold'em</b> home games.</p>
+
+<p><b>Two ways to play</b></p>
+<ul>
+<li><b>Pass and play:</b> one phone in the middle of the table runs everything.</li>
+<li><b>Host a table:</b> your phone serves the game over Wi-Fi or its own hotspot. Friends scan a QR code and play from their phone's browser. They don't install anything, and no internet connection is needed.</li>
+</ul>
+
+<p><b>Runs the hand for you</b></p>
+<ul>
+<li>Posts the blinds, moves the button and tells the dealer what to deal next.</li>
+<li>Shows whose turn it is and the exact amount to call or raise.</li>
+<li>Handles all-ins, side pots, minimum raises and split pots.</li>
+<li>Undo for any mistake, and the game is saved after every action.</li>
+</ul>
+
+<p><b>Teaches beginners as you play</b></p>
+<ul>
+<li>Plain-language hints that fade once you know the rules.</li>
+<li>"Who wins?" showdown helper: enter the cards to see the winning hand and why it wins.</li>
+<li>Hand rankings always one tap away.</li>
+</ul>
+
+<p><b>Free play or real buy-ins</b></p>
+<ul>
+<li>Play for points with a leaderboard, or track real buy-ins and rebuys.</li>
+<li>At the end of the night, settle up with the fewest possible payments.</li>
+<li>Optional blind timer for tournament-style nights.</li>
+</ul>
+
+<p><b>Small, fast and private</b></p>
+<ul>
+<li>About 100 KB. No ads, no accounts, no analytics, no cloud.</li>
+<li>Works offline in the same room. The table never leaves your local network.</li>
+<li>Free and open source (GPL-3.0).</li>
+</ul>
+
+<p>Chipless never deals cards: you play with a real deck, it keeps track of everything else.</p>

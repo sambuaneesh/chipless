@@ -14,6 +14,13 @@
 
 **[Website](https://sambuaneesh.github.io/chipless/)** · **[Download the APK](https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk)** · Android 8.0+
 
+## Install
+- **Direct:** download [`chipless.apk`](https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk) on your phone and open it. Only the host needs it; friends join from any browser.
+- **With automatic updates:** add `https://github.com/sambuaneesh/chipless` to [Obtainium](https://github.com/ImranR98/Obtainium), or [open it in Obtainium directly](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/sambuaneesh/chipless).
+- **Verify:** releases are signed with the Chipless key, certificate SHA-256 `a562dd57a4542e6eee37b12877825b42129813aa48efb8832d5a5d755c0a762f`. Builds are reproducible: building a release tag yourself gives the same APK contents.
+
+**Free web tools** (no install): [poker hand rankings + who-wins calculator](https://sambuaneesh.github.io/chipless/poker-hand-rankings/) · [poker settle-up calculator](https://sambuaneesh.github.io/chipless/poker-settle-up-calculator/) · [how to play poker without chips](https://sambuaneesh.github.io/chipless/play-poker-without-chips/)
+
 | | | | |
 |---|---|---|---|
 | <img src="site/media/deal.webp" width="200" alt="Table with dealer cue"> | <img src="site/media/raise.webp" width="200" alt="Raise tray"> | <img src="site/media/referee.webp" width="200" alt="Referee verdict"> | <img src="site/media/settle.webp" width="200" alt="Settlement"> |
@@ -27,7 +34,7 @@
 - **Betting is tap, size, hold.** One tap to check or call, smart raise presets, and a hold for all-in. Undo replaces "are you sure?" pop-ups. Tap a greyed-out button to learn why it's disabled.
 - **The Referee:** enter the cards and it names the winner, then explains why ("Maya's Flush, Ace-high beats Sam's Three Kings").
 - **Settling up:** play for points, or for real buy-ins with rebuys, and finish with the fewest payments.
-- **Tiny, offline and private.** The whole app is about 106 KB. No accounts, ads, analytics or cloud. Every action is saved, so a closed app picks up exactly where it was.
+- **Tiny, offline and private.** The whole app is about 108 KB. No accounts, ads, analytics or cloud. Every action is saved, so a closed app picks up exactly where it was.
 
 ## Layout
 | Path | What |
@@ -62,7 +69,10 @@ node web/test/e2e.mjs <HOST url> <GUEST url> <screenshot dir>   # headless two-p
 Open the HOST URL in a desktop browser to act as the host phone. Open the GUEST URL on any phone on the same network.
 
 ## Website
-The landing page lives in [`site/`](site/) and deploys to GitHub Pages on every push to `main`. `site/capture.mjs` re-records the demo video and screenshots from a real game against the dev server.
+The site lives in [`site/`](site/) and deploys to GitHub Pages on every push to `main`: the landing page plus three tool and guide pages that share `site.css` and `poker.js` (a dependency-free hand evaluator and settle-up solver mirroring the engine). `site/capture.mjs` re-records the demo video and screenshots from a real game against the dev server.
+
+## Distribution
+Store listing text, screenshots and changelogs live in [`fastlane/metadata/android/en-US/`](fastlane/metadata/android/en-US/) (used by F-Droid and IzzyOnDroid). Add `changelogs/<versionCode>.txt` before each release. See [docs/distribution.md](docs/distribution.md) for the store and launch checklist.
 
 ## License
 [GPL-3.0](LICENSE). Chipless only keeps score. It doesn't handle money. Please play responsibly and within the law where you live.

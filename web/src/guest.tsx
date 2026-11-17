@@ -1,6 +1,6 @@
 import { useState } from 'preact/hooks'
 import { ActionBar } from './actions'
-import { chips, signed } from './fmt'
+import { chips, signed, SITE } from './fmt'
 import { send, store, undo } from './net'
 import { haptic } from './native'
 import type { Snap } from './types'
@@ -37,6 +37,7 @@ export function Join({ s }: { s: Snap }) {
         </div>
       )}
       <p class="tiny muted center-t">New players get {chips(s.cfg.stack)} chips and are dealt in from the next hand.</p>
+      <p class="tiny muted center-t">Running on <a href={SITE} target="_blank" rel="noopener">Chipless</a>, a free, open-source poker chips app.</p>
     </div>
   )
 }

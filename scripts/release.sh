@@ -17,7 +17,16 @@ if [[ "$ver" != "$cur" ]]; then
   sed -i "s/^chiplessVersion=.*/chiplessVersion=$ver/; s/^chiplessVersionCode=.*/chiplessVersionCode=$code/" gradle.properties
 fi
 
-./gradlew :engine:test :server:test :android:assembleRelease
+# Keep the website's structured data on the current version.
+sed -i "s/\"softwareVersion\": \"[0-9.]*\"/\"softwareVersion\": \"$ver\"/" site/index.html
+[[ -f "fastlane/metadata/android/en-US/changelogs/$code.txt" ]] || echo "note: no fastlane changelog for versionCode $code"
+
+# Commit the version bump first so the APK is built from exactly the tagged commit (reproducible builds).
+if [[ -n "$(git status --porcelain gradle.properties site/index.html)" ]]; then
+  git commit -qm "chore(release): v$ver" gradle.properties site/index.html
+fi
+
+./gradlew clean :engine:test :server:test :android:assembleRelease
 
 apk=android/build/outputs/apk/release/android-release.apk
 sdk="${ANDROID_HOME:-$HOME/Android/Sdk}"
@@ -30,9 +39,6 @@ cp "$apk" dist/chipless.apk
 sha=$(sha256sum dist/chipless.apk | cut -d' ' -f1)
 size=$(( $(stat -c %s dist/chipless.apk) / 1024 ))
 
-if [[ -n "$(git status --porcelain gradle.properties)" ]]; then
-  git commit -qm "chore(release): v$ver" gradle.properties
-fi
 git tag -a "v$ver" -m "Chipless v$ver"
 git push origin HEAD "v$ver"
 
@@ -47,3 +53,4 @@ NOTES
 gh release create "v$ver" dist/chipless.apk --title "Chipless v$ver" --notes-file "$notes" --generate-notes
 rm -f "$notes"
 echo "Released v$ver"
+scripts/indexnow.sh || true

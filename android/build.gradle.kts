@@ -34,6 +34,8 @@ android {
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
+            // No git commit stamp in the APK: builds from the same source are byte-identical (F-Droid reproducible builds).
+            vcsInfo.include = false
         }
     }
 

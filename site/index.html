@@ -24,137 +24,8 @@
 <meta name="twitter:image" content="https://sambuaneesh.github.io/chipless/media/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="media/icon.svg">
-<style>
-:root {
-  color-scheme: dark;
-  --bg: #090e0c; --bg2: #0e1512; --surface: #131b18; --surface2: #1a2420; --line: rgba(226,238,230,.09);
-  --text: #e8eee9; --muted: #92a29a; --brass: #d6ad62; --brass2: #f1d28f; --ink: #1d1508; --green: #63cf96; --red: #e57a7a;
-  --max: 1120px; --ease: cubic-bezier(.2,.7,.2,1);
-}
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-html, body { overflow-x: clip; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-a { color: inherit; }
-img, video { display: block; max-width: 100%; }
-h1, h2, h3, p { margin: 0; }
-.wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
-.muted { color: var(--muted); }
-
-/* nav */
-nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background: rgba(9,14,12,.72); border-bottom: 1px solid var(--line); }
-nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 62px; gap: 16px; }
-.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; text-decoration: none; letter-spacing: -.01em; }
-.chip { width: 26px; height: 26px; border-radius: 50%; flex: none; background: radial-gradient(circle, var(--c,#d24b4b) 0 36%, #f2ede2 37% 42%, var(--c,#d24b4b) 43%), repeating-conic-gradient(var(--c,#d24b4b) 0 30deg, #f2ede2 30deg 45deg); box-shadow: 0 3px 10px rgba(0,0,0,.5); }
-nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; font-size: 15px; }
-nav ul a { text-decoration: none; color: var(--muted); }
-nav ul a:hover { color: var(--text); }
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 24px; border-radius: 14px; font-weight: 700; font-size: 16px; text-decoration: none; border: 1px solid var(--line); background: var(--surface2); transition: transform .15s var(--ease), box-shadow .2s; }
-.btn:hover { transform: translateY(-1px); }
-.btn.primary { background: linear-gradient(180deg, var(--brass2), var(--brass)); color: var(--ink); border: 0; box-shadow: 0 10px 30px rgba(214,173,98,.25), inset 0 1px 0 rgba(255,255,255,.45); }
-.btn.sm { min-height: 40px; padding: 0 16px; font-size: 14px; border-radius: 11px; }
-.btn svg { flex: none; }
-
-/* hero */
-.hero { position: relative; padding: 72px 0 40px; }
-.hero::before { content: ''; position: absolute; inset: -20% -10% auto; height: 900px; background: radial-gradient(ellipse at 70% 30%, rgba(22,67,51,.55), transparent 60%); pointer-events: none; z-index: -1; }
-.hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
-.eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--brass2); padding: 6px 12px; border-radius: 999px; background: rgba(214,173,98,.1); border: 1px solid rgba(214,173,98,.3); }
-.hero h1 { font-size: clamp(44px, 7vw, 76px); line-height: 1.02; letter-spacing: -.035em; margin: 18px 0 18px; font-weight: 850; }
-.hero h1 em { font-style: normal; color: var(--brass2); }
-.lede { font-size: clamp(18px, 2.2vw, 21px); color: #c7d3cc; max-width: 34em; }
-.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 30px 0 22px; }
-.facts { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; color: var(--muted); list-style: none; padding: 0; margin: 0; }
-.facts li::before { content: '◆'; color: var(--brass); font-size: 9px; margin-right: 8px; vertical-align: 2px; }
-
-.phone { position: relative; width: min(320px, 78vw); margin: 0 auto; aspect-ratio: 390/844; border-radius: 46px; padding: 11px; background: linear-gradient(160deg, #2b302e, #121514); box-shadow: 0 0 0 1px rgba(255,255,255,.07), 0 40px 80px rgba(0,0,0,.6), 0 0 120px rgba(214,173,98,.12); }
-.phone > * { width: 100%; height: 100%; object-fit: cover; border-radius: 36px; background: var(--bg); }
-.phone::after { content: ''; position: absolute; top: 20px; left: 50%; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; background: #050706; box-shadow: 0 0 0 2px #1d2220; }
-.phone.sm { width: 100%; border-radius: 34px; padding: 8px; }
-.phone.sm > * { border-radius: 27px; }
-.phone.sm::after { top: 15px; width: 14px; height: 14px; margin-left: -7px; }
-
-/* sections */
-section { padding: 84px 0; }
-.kicker { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--brass2); font-weight: 700; }
-h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: -.025em; margin: 10px 0 16px; font-weight: 800; }
-.sub { color: var(--muted); font-size: 19px; max-width: 40em; }
-.center-h { text-align: center; }
-.center-h .sub { margin: 0 auto; }
-
-.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; counter-reset: s; }
-.step { padding: 26px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); position: relative; }
-.step::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(214,173,98,.12); color: var(--brass2); font-weight: 800; margin-bottom: 16px; border: 1px solid rgba(214,173,98,.35); }
-.step h3 { font-size: 20px; margin-bottom: 6px; }
-.step p { color: var(--muted); font-size: 16px; }
-
-.feature { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 56px 0; border-top: 1px solid var(--line); }
-.feature:nth-of-type(even) .shots { order: -1; }
-.feature h3 { font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; letter-spacing: -.02em; margin: 10px 0 14px; }
-.feature p { color: #c2cec7; font-size: 18px; }
-.feature ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; color: var(--muted); font-size: 16px; }
-.feature li { display: flex; gap: 10px; }
-.feature li::before { content: ''; flex: none; width: 18px; height: 18px; margin-top: 3px; border-radius: 50%; background: rgba(99,207,150,.15) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2363cf96' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center/11px no-repeat; }
-.shots { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
-.shots .phone:nth-child(2) { margin-top: 56px; }
-.quote { margin-top: 22px; padding: 14px 16px; border-radius: 14px; background: rgba(99,207,150,.07); border-left: 3px solid var(--green); color: #d3e7db; font-size: 16px; }
-
-/* quiz */
-.quiz { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 40px; }
-.q { padding: 22px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
-.q .board { display: flex; gap: 6px; }
-.card { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: 38px; height: 52px; border-radius: 7px; background: #f6f2e9; color: #1a1a1a; font-weight: 800; line-height: 1; font-size: 16px; box-shadow: 0 3px 8px rgba(0,0,0,.4); }
-.card i { font-style: normal; font-size: 15px; }
-.card.r { color: #c93a3a; }
-.hands { display: grid; gap: 8px; }
-.hand { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface2); cursor: pointer; font: inherit; color: inherit; text-align: left; }
-.hand:hover { border-color: rgba(214,173,98,.5); }
-.hand .board { gap: 4px; }
-.hand .card { width: 30px; height: 42px; font-size: 13px; }
-.hand.win { border-color: var(--green); background: rgba(99,207,150,.08); }
-.hand.lose { opacity: .55; }
-.verdict { font-size: 15px; color: #d3e7db; min-height: 3.2em; }
-
-/* tech */
-.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; }
-.stat { padding: 24px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
-.stat b { display: block; font-size: 34px; color: var(--brass2); letter-spacing: -.02em; }
-.stat span { color: var(--muted); font-size: 15px; }
-
-/* download */
-.download { position: relative; overflow: hidden; border-radius: 30px; padding: 56px; background: radial-gradient(ellipse at 80% 0%, rgba(22,67,51,.9), transparent 60%), var(--surface); border: 1px solid rgba(214,173,98,.25); display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
-.download ol { margin: 18px 0 0; padding-left: 20px; color: var(--muted); display: grid; gap: 6px; font-size: 16px; }
-.download .ctas { margin: 26px 0 0; }
-
-/* faq */
-.faq { max-width: 780px; margin: 36px auto 0; display: grid; gap: 10px; }
-details { border-radius: 16px; background: var(--surface); border: 1px solid var(--line); padding: 0 22px; }
-summary { cursor: pointer; padding: 18px 0; font-weight: 650; font-size: 17px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
-summary::-webkit-details-marker { display: none; }
-summary::after { content: '+'; color: var(--brass2); font-size: 22px; line-height: 1; transition: transform .2s; }
-details[open] summary::after { transform: rotate(45deg); }
-details p { color: var(--muted); padding-bottom: 18px; font-size: 16px; }
-
-footer { border-top: 1px solid var(--line); padding: 36px 0 48px; color: var(--muted); font-size: 14px; }
-footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center; }
-
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
-.reveal.in { opacity: 1; transform: none; }
-
-@media (max-width: 900px) {
-  nav ul { display: none; }
-  .hero { padding-top: 40px; }
-  .hero .wrap, .feature, .download { grid-template-columns: 1fr; }
-  .feature:nth-of-type(even) .shots { order: 0; }
-  .feature { gap: 36px; }
-  .steps, .quiz { grid-template-columns: 1fr; }
-  .grid4 { grid-template-columns: 1fr 1fr; }
-  .download { padding: 32px 22px; }
-  section { padding: 60px 0; }
-}
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .reveal { opacity: 1; transform: none; transition: none; } }
-</style>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Chipless", "alternateName": "Chipless poker chips app", "description": "Poker chips app for real-card Texas Hold'em home games. Tracks chips, bets, blinds and side pots, teaches the rules, and lets friends join from their phone's browser.", "applicationCategory": "GameApplication", "applicationSubCategory": "Card game companion", "operatingSystem": "Android 8.0+", "softwareVersion": "1.0.1", "fileSize": "106KB", "downloadUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "installUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "url": "https://sambuaneesh.github.io/chipless/", "license": "https://www.gnu.org/licenses/gpl-3.0.html", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "screenshot": ["https://sambuaneesh.github.io/chipless/media/deal.webp", "https://sambuaneesh.github.io/chipless/media/raise.webp", "https://sambuaneesh.github.io/chipless/media/referee.webp", "https://sambuaneesh.github.io/chipless/media/settle.webp"], "image": "https://sambuaneesh.github.io/chipless/media/og.jpg", "codeRepository": "https://github.com/sambuaneesh/chipless", "author": {"@type": "Person", "name": "Aneesh Sambu", "url": "https://github.com/sambuaneesh"}}</script>
+<link rel="stylesheet" href="site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Chipless", "alternateName": "Chipless poker chips app", "description": "Poker chips app for real-card Texas Hold'em home games. Tracks chips, bets, blinds and side pots, teaches the rules, and lets friends join from their phone's browser.", "applicationCategory": "GameApplication", "applicationSubCategory": "Card game companion", "operatingSystem": "Android 8.0+", "softwareVersion": "1.0.1", "fileSize": "108KB", "downloadUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "installUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "url": "https://sambuaneesh.github.io/chipless/", "license": "https://www.gnu.org/licenses/gpl-3.0.html", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "screenshot": ["https://sambuaneesh.github.io/chipless/media/deal.webp", "https://sambuaneesh.github.io/chipless/media/raise.webp", "https://sambuaneesh.github.io/chipless/media/referee.webp", "https://sambuaneesh.github.io/chipless/media/settle.webp"], "image": "https://sambuaneesh.github.io/chipless/media/og.jpg", "codeRepository": "https://github.com/sambuaneesh/chipless", "author": {"@type": "Person", "name": "Aneesh Sambu", "url": "https://github.com/sambuaneesh"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do my friends need to install anything?", "acceptedAnswer": {"@type": "Answer", "text": "No. Only the host needs the Android app. Everyone else scans the QR code and plays in their phone's web browser."}}, {"@type": "Question", "name": "Does it need the internet?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything runs on the host's phone over your Wi-Fi or the host's mobile hotspot. Nothing leaves the room. If public or campus Wi-Fi blocks phones from talking to each other, use the hotspot."}}, {"@type": "Question", "name": "Which poker game does it support?", "acceptedAnswer": {"@type": "Answer", "text": "No-Limit Texas Hold'em. Raises, all-ins, side pots and split pots follow the official TDA tournament rules and Robert's Rules of Poker. You deal real cards; the app tracks everything else."}}, {"@type": "Question", "name": "Can we play without phones for everyone?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Leave one phone in the middle of the table and take turns tapping. You can invite phones any time later, and mix both."}}, {"@type": "Question", "name": "Does Chipless handle real money?", "acceptedAnswer": {"@type": "Answer", "text": "No. It only keeps score. In buy-in mode it records what each person bought in for and tells you who owes whom at the end. You settle up yourselves."}}, {"@type": "Question", "name": "What if the app gets closed mid-game?", "acceptedAnswer": {"@type": "Answer", "text": "Every action is saved as it happens. Reopen the app and the table is exactly where you left it, and friends' phones reconnect on their own."}}, {"@type": "Question", "name": "Is it really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Chipless is open source under the GPL-3.0 license. No ads, no in-app purchases, no tracking."}}]}</script>
 </head>
 <body>
@@ -167,6 +38,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
       <li><a href="#features">Features</a></li>
       <li><a href="#who">Who it's for</a></li>
       <li><a href="#learn">Learn</a></li>
+      <li><a href="#tools">Free tools</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
     <a class="btn sm" href="https://github.com/sambuaneesh/chipless">
@@ -179,8 +51,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
 <header class="hero">
   <div class="wrap">
     <div>
-      <span class="eyebrow"><span class="chip" style="width:14px;height:14px"></span> Free poker chips app · Android</span>
-      <h1>Real cards.<br><em>No chips.</em></h1>
+      <h1><span class="eyebrow"><span class="chip" style="width:14px;height:14px"></span> Free poker chips app for home games</span><span class="h1big">Real cards.<br><em>No chips.</em></span></h1>
       <p class="lede">Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. Deal real cards; the app runs every hand, explains every rule, and your friends play along from their own phones.</p>
       <div class="ctas">
         <a class="btn primary" href="https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk">
@@ -190,7 +61,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
         <a class="btn" href="#how">See how it works</a>
       </div>
       <ul class="facts">
-        <li>106 KB app</li>
+        <li>108 KB app</li>
         <li>Works offline</li>
         <li>No accounts, no ads</li>
         <li>Friends join from their browser</li>
@@ -330,9 +201,9 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
     <h2>Small, fast and private</h2>
     <p class="sub">No frameworks bolted together, no trackers, no cloud. The whole app is smaller than a single photo.</p>
     <div class="grid4" style="text-align:left">
-      <div class="stat reveal"><b>106 KB</b><span>Entire Android app</span></div>
+      <div class="stat reveal"><b>108 KB</b><span>Entire Android app</span></div>
       <div class="stat reveal"><b>0</b><span>Accounts, ads or analytics</span></div>
-      <div class="stat reveal"><b>34 KB</b><span>All a friend's phone downloads to join</span></div>
+      <div class="stat reveal"><b>36 KB</b><span>All a friend's phone downloads to join</span></div>
       <div class="stat reveal"><b>2–10</b><span>Players at one table</span></div>
     </div>
   </div>
@@ -354,8 +225,22 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
           <a class="btn primary" href="https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk">Download APK</a>
           <a class="btn" href="https://github.com/sambuaneesh/chipless/releases">All releases</a>
         </div>
+        <p class="muted" style="font-size:15px;margin-top:16px">Want automatic updates? Add it to <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/sambuaneesh/chipless">Obtainium</a>, which installs new releases straight from GitHub.</p>
       </div>
       <div class="phone sm" style="max-width:260px;margin:0 auto"><img src="media/home.webp" alt="Chipless home screen" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section id="tools">
+  <div class="wrap center-h">
+    <div class="kicker">Free poker tools</div>
+    <h2>No app needed for these</h2>
+    <p class="sub">Handy at any home game, on any phone or computer.</p>
+    <div class="more" style="text-align:left;margin-top:32px">
+      <a href="poker-hand-rankings/"><b>Poker hand rankings and who wins</b><small>Every hand from best to worst, plus a calculator that settles any showdown</small></a>
+      <a href="poker-settle-up-calculator/"><b>Poker settle-up calculator</b><small>Enter buy-ins and cash-outs; get who pays whom in the fewest payments</small></a>
+      <a href="play-poker-without-chips/"><b>How to play poker without chips</b><small>What to use instead, starting stacks, and blinds for home games</small></a>
     </div>
   </div>
 </section>
@@ -379,7 +264,13 @@ footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wr
 <footer>
   <div class="wrap">
     <a class="brand" href="#"><span class="chip"></span>Chipless</a>
-    <span>Free and open source (GPL-3.0) · <a href="https://github.com/sambuaneesh/chipless">Source on GitHub</a> · Please play responsibly.</span>
+    <ul class="flinks">
+      <li><a href="poker-hand-rankings/">Hand rankings</a></li>
+      <li><a href="poker-settle-up-calculator/">Settle-up calculator</a></li>
+      <li><a href="play-poker-without-chips/">Play without chips</a></li>
+      <li><a href="https://github.com/sambuaneesh/chipless">Source on GitHub</a></li>
+    </ul>
+    <span>Free and open source (GPL-3.0) · Please play responsibly.</span>
   </div>
 </footer>
 

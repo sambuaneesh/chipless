@@ -1,0 +1,3 @@
+- Currency is now picked from a fixed list, and no symbol is shown by default
+- Number fields accept digits only
+- New app ID: io.github.sambuaneesh.chipless

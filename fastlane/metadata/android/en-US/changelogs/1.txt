@@ -1,0 +1,5 @@
+First public release.
+
+- Pass-and-play and hosted tables (friends join from a browser by QR code)
+- Rules coach, showdown hand evaluator, side pots, undo
+- Free play or real buy-ins with settle-up

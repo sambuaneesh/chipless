@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Poker Settle-Up Calculator: Who Pays Whom After a Home Game · Chipless</title>
+<meta name="description" content="Free poker settle-up calculator for home cash games. Enter each player's buy-ins and cash-out to get everyone's net result and the fewest payments to settle the debts.">
+<link rel="canonical" href="https://sambuaneesh.github.io/chipless/poker-settle-up-calculator/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="icon" type="image/png" sizes="192x192" href="../media/icon-192.png">
+<link rel="icon" type="image/svg+xml" href="../media/icon.svg">
+<link rel="apple-touch-icon" href="../media/icon-180.png">
+<meta name="theme-color" content="#090e0c">
+<meta property="og:title" content="Poker settle-up calculator">
+<meta property="og:description" content="Who pays whom after a home poker game, in the fewest payments. Free, no sign-up.">
+<meta property="og:image" content="https://sambuaneesh.github.io/chipless/media/og.jpg">
+<meta property="og:url" content="https://sambuaneesh.github.io/chipless/poker-settle-up-calculator/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Chipless">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="../site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [
+  {"@type": "WebApplication", "name": "Poker settle-up calculator", "url": "https://sambuaneesh.github.io/chipless/poker-settle-up-calculator/", "applicationCategory": "FinanceApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Enter buy-ins and cash-outs from a home poker game to get each player's net result and the fewest payments to settle up."},
+  {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Chipless", "item": "https://sambuaneesh.github.io/chipless/"}, {"@type": "ListItem", "position": 2, "name": "Poker settle-up calculator", "item": "https://sambuaneesh.github.io/chipless/poker-settle-up-calculator/"}]}
+]}</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="../"><span class="chip"></span>Chipless</a>
+    <ul>
+      <li><a href="../poker-hand-rankings/">Hand rankings</a></li>
+      <li><a href="./" aria-current="page">Settle-up calculator</a></li>
+      <li><a href="../play-poker-without-chips/">Play without chips</a></li>
+    </ul>
+    <a class="btn sm" href="../#download">Get the app</a>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="crumbs"><a href="../">Chipless</a> › Settle-up calculator</div>
+  <h1>Poker settle-up calculator</h1>
+  <p class="lede">End of the night and nobody knows who owes whom? Enter what each player paid in and what they left with. You'll get everyone's result and the fewest payments that settle it.</p>
+
+  <section class="tool" id="calculator" aria-labelledby="calc-h">
+    <h2 id="calc-h">Who pays whom</h2>
+    <p class="muted" style="font-size:15px">Amounts in money, not chips. "Bought in" is the total of every buy-in and rebuy. "Cashed out" is what their final chips are worth.</p>
+    <div class="srows" id="rows"></div>
+    <div class="toolbar">
+      <button class="tbtn" id="add">+ Player</button>
+      <button class="tbtn" id="clear">Clear all</button>
+    </div>
+    <div id="out" role="status" aria-live="polite"></div>
+  </section>
+
+  <h2>How it works</h2>
+  <ol>
+    <li><b>Net result.</b> Each player's result is what they cashed out minus what they bought in. Winners are positive, losers negative.</li>
+    <li><b>Balance check.</b> The money that came in must equal the money that went out. If it doesn't, a stack was miscounted or a rebuy wasn't written down. Fix that before anyone pays.</li>
+    <li><b>Fewest payments.</b> The calculator looks for groups of players whose results cancel out exactly and settles each group on its own. That gives the smallest possible number of payments, not just a good guess.</li>
+  </ol>
+
+  <h2>Example</h2>
+  <p>Four friends play with buy-ins of 500. Maya leaves with 1,200, Arjun busts after one buy-in, Sam rebuys once and leaves with 600, and Zoe leaves with 700.</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Player</th><th>Bought in</th><th>Cashed out</th><th>Net</th></tr></thead>
+    <tbody>
+      <tr><td>Maya</td><td class="num">500</td><td class="num">1,200</td><td class="num up">+700</td></tr>
+      <tr><td>Arjun</td><td class="num">500</td><td class="num">0</td><td class="num down">−500</td></tr>
+      <tr><td>Sam</td><td class="num">1,000</td><td class="num">600</td><td class="num down">−400</td></tr>
+      <tr><td>Zoe</td><td class="num">500</td><td class="num">700</td><td class="num up">+200</td></tr>
+    </tbody>
+  </table></div>
+  <p>Total in: 2,500. Total out: 2,500, so it balances. Three payments settle it: Arjun pays Maya 500, Sam pays Maya 200, and Sam pays Zoe 200.</p>
+
+  <h2>Two ways to settle</h2>
+  <h3>Direct payments (fewest transfers)</h3>
+  <p>Losers pay winners directly. This is what the calculator above works out, and it's best when everyone pays by phone.</p>
+  <h3>Through a banker</h3>
+  <p>One person collects all the cash at the start and pays winners at the end. It takes more payments but is simpler with cash, because the banker holds the money from the first buy-in.</p>
+
+  <h2>Questions</h2>
+  <h3>What if the totals don't match?</h3>
+  <p>Recount the final stacks and check every rebuy was recorded. A small difference usually means someone's chips were counted wrong. Agree on a fix at the table before anyone pays.</p>
+  <h3>How do I convert chips to money?</h3>
+  <p>Divide the buy-in amount by the number of chips each buy-in gets. If a 500 buy-in gets 1,000 chips, each chip is worth 0.50, so a final stack of 2,400 chips is worth 1,200.</p>
+  <h3>Is my data saved or sent anywhere?</h3>
+  <p>No. The calculator runs entirely in your browser; nothing you type leaves your device.</p>
+
+  <div class="cta-box">
+    <div class="kicker">Skip the maths next time</div>
+    <h2>Track buy-ins as you play</h2>
+    <p>Chipless is a free poker chips app for real-card home games. It records every buy-in and rebuy during the game, checks that the totals balance, and shows who pays whom at the end of the night.</p>
+    <div class="ctas"><a class="btn primary" href="../">See how Chipless works</a><a class="btn" href="https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk">Download for Android</a></div>
+  </div>
+
+  <h2 style="font-size:22px">More for your home game</h2>
+  <div class="more">
+    <a href="../poker-hand-rankings/"><b>Hand rankings and who wins</b><small>Every hand from best to worst, plus a showdown calculator</small></a>
+    <a href="../play-poker-without-chips/"><b>Play poker without chips</b><small>Starting stacks, blinds and how to run a game with no chip set</small></a>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="../"><span class="chip"></span>Chipless</a>
+    <ul class="flinks">
+      <li><a href="../">Poker chips app</a></li>
+      <li><a href="../poker-hand-rankings/">Hand rankings</a></li>
+      <li><a href="./">Settle-up calculator</a></li>
+      <li><a href="../play-poker-without-chips/">Play without chips</a></li>
+      <li><a href="https://github.com/sambuaneesh/chipless">Source on GitHub</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="../poker.js"></script>
+<script>
+const P = window.Poker
+let rows = [['Maya', '500', '1200'], ['Arjun', '500', '0'], ['Sam', '1000', '600'], ['Zoe', '500', '700']]
+const rowsEl = document.getElementById('rows'), outEl = document.getElementById('out')
+const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c])
+// Money as integer cents; accepts "1,200", "1200.50" and blanks.
+const cents = (v) => { const t = String(v).replace(/[,\s]/g, ''); if (!/^\d*(\.\d{0,2})?$/.test(t)) return NaN; return Math.round(Number(t || 0) * 100) }
+const fmt = (c) => { const s = (Math.abs(c) / 100).toLocaleString(undefined, { minimumFractionDigits: c % 100 ? 2 : 0, maximumFractionDigits: 2 }); return s }
+const signed = (c) => (c > 0 ? '+' : c < 0 ? '−' : '') + fmt(c)
+
+function drawRows() {
+  rowsEl.innerHTML = `<div class="srow head"><span>Player</span><span>Bought in</span><span>Cashed out</span><span></span></div>` +
+    rows.map((r, i) => `<div class="srow" data-i="${i}">
+      <input aria-label="Player ${i + 1} name" data-k="0" value="${esc(r[0])}" maxlength="24" placeholder="Name">
+      <input aria-label="Player ${i + 1} bought in" data-k="1" value="${esc(r[1])}" inputmode="decimal" placeholder="0">
+      <input aria-label="Player ${i + 1} cashed out" data-k="2" value="${esc(r[2])}" inputmode="decimal" placeholder="0">
+      <button class="x" aria-label="Remove player ${i + 1}" ${rows.length <= 2 ? 'disabled' : ''}>×</button></div>`).join('')
+}
+
+function compute() {
+  const ps = rows.map((r, i) => ({ name: r[0].trim() || 'Player ' + (i + 1), inn: cents(r[1]), out: cents(r[2]) }))
+  if (ps.some((p) => Number.isNaN(p.inn) || Number.isNaN(p.out))) { outEl.innerHTML = '<p class="bal down">Use plain numbers, like 500 or 12.50.</p>'; return }
+  const tin = ps.reduce((a, p) => a + p.inn, 0), tout = ps.reduce((a, p) => a + p.out, 0)
+  const nets = ps.map((p) => p.out - p.inn)
+  let html = '<div class="nets">' + ps.map((p, i) => ({ p, n: nets[i] })).sort((a, b) => b.n - a.n)
+    .map(({ p, n }) => `<div><span>${esc(p.name)}</span><b class="num ${n > 0 ? 'up' : n < 0 ? 'down' : ''}">${signed(n)}</b></div>`).join('') + '</div>'
+  if (tin !== tout) {
+    html += `<p class="bal down">Not balanced: ${fmt(tin)} came in but ${fmt(tout)} went out (${tout > tin ? 'over' : 'short'} by ${fmt(tout - tin)}). Recount the stacks before settling.</p>`
+  } else {
+    const x = P.settle(nets)
+    html += `<p class="bal up">Balanced: ${fmt(tin)} in, ${fmt(tout)} out.</p>`
+    html += x.length ? `<h3 style="margin:14px 0 6px">${x.length} payment${x.length > 1 ? 's' : ''}, the fewest possible</h3><div class="xfers">` +
+      x.map((t) => `<div><span><b>${esc(ps[t.from].name)}</b> pays <b>${esc(ps[t.to].name)}</b></span><b class="num">${fmt(t.amount)}</b></div>`).join('') + '</div>'
+      : '<p class="muted">Nobody owes anything.</p>'
+  }
+  outEl.innerHTML = html
+}
+
+rowsEl.addEventListener('input', (e) => { const el = e.target, i = +el.closest('.srow').dataset.i; rows[i][+el.dataset.k] = el.value; compute() })
+rowsEl.addEventListener('click', (e) => { const b = e.target.closest('.x'); if (!b) return; rows.splice(+b.closest('.srow').dataset.i, 1); drawRows(); compute() })
+document.getElementById('add').onclick = () => { if (rows.length < 20) rows.push(['', '', '']); drawRows(); compute(); rowsEl.querySelector('.srow:last-child input').focus() }
+document.getElementById('clear').onclick = () => { rows = [['', '', ''], ['', '', '']]; drawRows(); compute() }
+drawRows(); compute()
+</script>
+</body>
+</html>

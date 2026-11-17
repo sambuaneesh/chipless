@@ -1,0 +1,3 @@
+- Free web tools on the website: hand rankings + who-wins calculator, settle-up calculator
+- Friends' phones show a small "Running on Chipless" credit; shared results include the website
+- Reproducible builds: F-Droid and IzzyOnDroid can verify the APK

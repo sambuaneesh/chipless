@@ -1,7 +1,8 @@
 // Bundles the client into dist/: index.html, app.js, app.css, static files, plus .gz copies.
 import * as esbuild from 'esbuild'
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
-import { gzipSync } from 'node:zlib'
+// fflate (pure JS, pinned) instead of node:zlib: identical bytes on every machine, so release builds are reproducible.
+import { gzipSync } from 'fflate'
 import { createHash } from 'node:crypto'
 
 const watch = process.argv.includes('--watch')
@@ -17,7 +18,7 @@ function finish() {
   for (const f of readdirSync(out)) {
     if (!/\.(html|js|css|svg)$/.test(f)) continue
     const buf = readFileSync(`${out}/${f}`)
-    const z = gzipSync(buf, { level: 9 })
+    const z = gzipSync(buf, { level: 9, mtime: 0 })
     writeFileSync(`${out}/${f}.gz`, z)
     raw += buf.length; gz += z.length
   }

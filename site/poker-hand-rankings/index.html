@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Poker Hand Rankings + Who Wins? Calculator (Texas Hold'em) · Chipless</title>
+<meta name="description" content="Poker hand rankings from royal flush to high card, with examples and odds, plus a free calculator: enter the board and each player's cards to see who wins a Texas Hold'em hand and why.">
+<link rel="canonical" href="https://sambuaneesh.github.io/chipless/poker-hand-rankings/">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="icon" type="image/png" sizes="192x192" href="../media/icon-192.png">
+<link rel="icon" type="image/svg+xml" href="../media/icon.svg">
+<link rel="apple-touch-icon" href="../media/icon-180.png">
+<meta name="theme-color" content="#090e0c">
+<meta property="og:title" content="Poker hand rankings and a who-wins calculator">
+<meta property="og:description" content="Every Texas Hold'em hand from best to worst, and a free tool that tells you who won a hand and why.">
+<meta property="og:image" content="https://sambuaneesh.github.io/chipless/media/og.jpg">
+<meta property="og:url" content="https://sambuaneesh.github.io/chipless/poker-hand-rankings/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Chipless">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="../site.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [
+  {"@type": "WebApplication", "name": "Who wins? Poker hand calculator", "url": "https://sambuaneesh.github.io/chipless/poker-hand-rankings/#calculator", "applicationCategory": "GameApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "description": "Enter the board and each player's hole cards to find the winning Texas Hold'em hand, with a one-line explanation."},
+  {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Chipless", "item": "https://sambuaneesh.github.io/chipless/"}, {"@type": "ListItem", "position": 2, "name": "Poker hand rankings", "item": "https://sambuaneesh.github.io/chipless/poker-hand-rankings/"}]}
+]}</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="../"><span class="chip"></span>Chipless</a>
+    <ul>
+      <li><a href="./" aria-current="page">Hand rankings</a></li>
+      <li><a href="../poker-settle-up-calculator/">Settle-up calculator</a></li>
+      <li><a href="../play-poker-without-chips/">Play without chips</a></li>
+    </ul>
+    <a class="btn sm" href="../#download">Get the app</a>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="crumbs"><a href="../">Chipless</a> › Poker hand rankings</div>
+  <h1>Poker hand rankings, and who wins</h1>
+  <p class="lede">Every Texas Hold'em hand from best to worst, the tie-break rules that confuse everyone, and a free calculator: enter the cards and it tells you who won and why.</p>
+
+  <div class="answer"><p><b>Best to worst:</b> royal flush, straight flush, four of a kind, full house, flush, straight, three of a kind, two pair, one pair, high card. In Texas Hold'em each player makes the best five-card hand from their two cards and the five on the board.</p></div>
+
+  <h2 id="chart">Hand rankings chart</h2>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>#</th><th>Hand</th><th>Example</th><th>Chance by the river</th></tr></thead>
+    <tbody id="ranks"></tbody>
+  </table></div>
+  <p class="muted" style="font-size:14px">Chances are for the best five-card hand out of seven cards (your two plus the five on the board), the standard published odds for Texas Hold'em.</p>
+
+  <section class="tool" id="calculator" aria-labelledby="calc-h">
+    <h2 id="calc-h">Who wins? Calculator</h2>
+    <p class="muted" style="font-size:15px">Tap a slot, then a card. Enter at least the flop (three board cards) and two cards for each player.</p>
+    <div class="slots" id="slots"></div>
+    <div class="toolbar">
+      <button class="tbtn" id="add">+ Player</button>
+      <button class="tbtn" id="remove">− Player</button>
+      <button class="tbtn" id="clear">Clear</button>
+    </div>
+    <div class="picker" id="picker" role="group" aria-label="Pick a card"></div>
+    <div class="result" id="result" role="status" aria-live="polite">Enter the cards to see who wins.</div>
+  </section>
+
+  <h2 id="ties">How ties are broken</h2>
+  <h3>The kicker</h3>
+  <p>When two players have the same pair, two pair, three of a kind or four of a kind, the next-highest card in their five-card hand (the <b>kicker</b>) decides. With a board of K♥ 7♦ 7♣ 2♠ 9♥, a player holding K♠ Q♦ and one holding K♦ J♣ both have two pair, kings and sevens. The queen beats the jack, so K-Q wins.</p>
+  <h3>Only five cards count</h3>
+  <p>Your hand is always exactly five cards. If the board gives both players the same best five cards, their sixth and seventh cards don't matter and the pot is split.</p>
+  <h3>The board plays</h3>
+  <p>Sometimes the best hand is the five cards on the table, for example a straight on the board that nobody can beat. Everyone still in the hand then ties and splits the pot.</p>
+  <h3>Suits never break ties</h3>
+  <p>In Texas Hold'em no suit is higher than another. Two flushes are compared card by card from the top; if every card matches in rank, it's a split.</p>
+
+  <h2 id="confusions">Common mix-ups</h2>
+  <ul>
+    <li><b>Flush beats straight.</b> Five cards of one suit are harder to make than five in a row.</li>
+    <li><b>Full house beats flush.</b> Three of a kind plus a pair outranks any flush.</li>
+    <li><b>The ace plays high or low in a straight.</b> A-2-3-4-5 (the "wheel") is the lowest straight; 10-J-Q-K-A is the highest. Straights can't wrap around (Q-K-A-2-3 is not a straight).</li>
+    <li><b>Two pair is compared top pair first.</b> Kings and twos beats queens and jacks.</li>
+    <li><b>A full house is ranked by its three of a kind.</b> Kings full of sevens beats sevens full of kings.</li>
+  </ul>
+
+  <h2>Questions</h2>
+  <h3>Does a flush beat a straight?</h3>
+  <p>Yes. A flush ranks above a straight, and a full house ranks above both.</p>
+  <h3>What happens when two players have the same hand?</h3>
+  <p>The pot is split equally between them. If it can't be divided evenly, the odd chip goes to the first tied player to the left of the dealer button.</p>
+  <h3>Do I have to use both of my cards?</h3>
+  <p>No. You can use both, one or neither of your hole cards. Whatever five of the seven cards make the best hand is your hand.</p>
+
+  <div class="cta-box">
+    <div class="kicker">Playing at home?</div>
+    <h2>Let your phone settle every showdown</h2>
+    <p>Chipless is a free poker chips app for real-card home games. It tracks every bet and side pot, tells beginners what they can do, and at showdown explains exactly who won and why, just like this calculator.</p>
+    <div class="ctas"><a class="btn primary" href="../">See how Chipless works</a><a class="btn" href="https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk">Download for Android</a></div>
+  </div>
+
+  <h2 style="font-size:22px">More for your home game</h2>
+  <div class="more">
+    <a href="../poker-settle-up-calculator/"><b>Settle-up calculator</b><small>Who pays whom after a cash game, in the fewest payments</small></a>
+    <a href="../play-poker-without-chips/"><b>Play poker without chips</b><small>Starting stacks, blinds and how to run a game with no chip set</small></a>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="../"><span class="chip"></span>Chipless</a>
+    <ul class="flinks">
+      <li><a href="../">Poker chips app</a></li>
+      <li><a href="./">Hand rankings</a></li>
+      <li><a href="../poker-settle-up-calculator/">Settle-up calculator</a></li>
+      <li><a href="../play-poker-without-chips/">Play without chips</a></li>
+      <li><a href="https://github.com/sambuaneesh/chipless">Source on GitHub</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="../poker.js"></script>
+<script>
+const P = window.Poker
+const RANKINGS = [
+  ['Royal flush', 'As Ks Qs Js Ts', 'A-K-Q-J-10, all the same suit', '0.003%'],
+  ['Straight flush', '9h 8h 7h 6h 5h', 'Five in a row, all the same suit', '0.03%'],
+  ['Four of a kind', 'Qs Qh Qd Qc 4s', 'Four cards of one rank', '0.17%'],
+  ['Full house', 'Kh Kd Ks 7c 7d', 'Three of a kind plus a pair', '2.6%'],
+  ['Flush', 'Ad Jd 9d 6d 2d', 'Any five of one suit', '3.0%'],
+  ['Straight', 'Tc 9d 8h 7s 6c', 'Five in a row, mixed suits', '4.6%'],
+  ['Three of a kind', '8s 8h 8d Kc 3s', 'Three cards of one rank', '4.8%'],
+  ['Two pair', 'Jh Jc 4s 4d Ah', 'Two different pairs', '23.5%'],
+  ['One pair', 'Th Ts Ac 7d 2h', 'Two cards of one rank', '43.8%'],
+  ['High card', 'Ah Jd 8c 5s 3h', 'None of the above; highest card plays', '17.4%'],
+]
+document.getElementById('ranks').innerHTML = RANKINGS.map(([n, cs, d, p], i) =>
+  `<tr><td class="num">${i + 1}</td><td><b>${n}</b><br><span class="muted" style="font-size:14px">${d}</span></td><td><span class="board">${cs.split(' ').map(P.cardHtml).join('')}</span></td><td class="num">${p}</td></tr>`).join('')
+
+// Calculator state: board (5 slots) + players (2 slots each).
+let players = 2
+let board = [null, null, null, null, null]
+let hands = [[null, null], [null, null]]
+let sel = { w: -1, i: 0 }
+const slotsEl = document.getElementById('slots'), pickerEl = document.getElementById('picker'), resultEl = document.getElementById('result')
+const all = () => [...board, ...hands.flat()]
+const get = (s) => (s.w < 0 ? board[s.i] : hands[s.w][s.i])
+const put = (s, c) => { if (s.w < 0) board[s.i] = c; else hands[s.w][s.i] = c }
+const order = () => [...[0, 1, 2, 3, 4].map((i) => ({ w: -1, i })), ...hands.flatMap((_, w) => [{ w, i: 0 }, { w, i: 1 }])]
+
+function render() {
+  const ok = evaluate()
+  const slot = (s) => {
+    const c = get(s), on = s.w === sel.w && s.i === sel.i
+    return `<button class="slot${on ? ' on' : ''}${c ? ' filled' : ''}" data-w="${s.w}" data-i="${s.i}" aria-label="${c ? 'Card ' + c + ', tap to change' : 'Empty card slot'}">${c ? P.cardHtml(c) : ''}</button>`
+  }
+  slotsEl.innerHTML = `<div class="slotrow"><span>Board</span><span class="board">${[0, 1, 2, 3, 4].map((i) => slot({ w: -1, i })).join('')}</span></div>` +
+    hands.map((_, w) => `<div class="slotrow${ok && ok.winners.includes(w) ? ' win' : ''}"><span>Player ${w + 1}</span><span class="board">${slot({ w, i: 0 })}${slot({ w, i: 1 })}</span><span class="tag">${ok && ok.names[w] ? ok.names[w] : ''}</span></div>`).join('')
+  const used = new Set(all().filter(Boolean))
+  pickerEl.innerHTML = 'shdc'.split('').map((s) => `<div class="prow">${'AKQJT98765432'.split('').map((r) => {
+    const c = r + s
+    return `<button class="pc${s === 'h' || s === 'd' ? ' r' : ''}" data-c="${c}" ${used.has(c) ? 'disabled' : ''} aria-label="${c}">${r === 'T' ? '10' : r}<i>${P.SUIT[s]}</i></button>`
+  }).join('')}</div>`).join('')
+  document.getElementById('add').disabled = players >= 9
+  document.getElementById('remove').disabled = players <= 2
+}
+
+function evaluate() {
+  const nb = board.filter(Boolean).length
+  const contiguous = board.slice(0, nb).every(Boolean)
+  const ready = hands.map((h) => h.every(Boolean))
+  if (nb < 3 || !contiguous || ready.filter(Boolean).length < 1) {
+    resultEl.textContent = nb < 3 ? 'Enter at least three board cards (the flop).' : !contiguous ? 'Fill the board from the left.' : 'Enter two cards for a player.'
+    return null
+  }
+  const idx = hands.map((_, w) => w).filter((w) => ready[w])
+  const r = P.showdown(board.filter(Boolean), idx.map((w) => hands[w]))
+  const names = {}
+  idx.forEach((w, k) => (names[w] = r.hands[k].name))
+  const winners = r.winners.map((k) => idx[k])
+  const who = winners.map((w) => 'Player ' + (w + 1)).join(' and ')
+  resultEl.innerHTML = (idx.length > 1 ? `<b>${who} win${winners.length > 1 ? '' : 's'}.</b> ` : '') + r.text +
+    ` <span class="best5"><span class="muted">Best five:</span> ${r.hands[r.winners[0]].best.map(P.cardHtml).join('')}</span>`
+  return { winners, names }
+}
+
+slotsEl.addEventListener('click', (e) => {
+  const b = e.target.closest('.slot'); if (!b) return
+  const s = { w: +b.dataset.w, i: +b.dataset.i }
+  if (get(s) && s.w === sel.w && s.i === sel.i) put(s, null)
+  sel = s; render()
+})
+pickerEl.addEventListener('click', (e) => {
+  const b = e.target.closest('.pc'); if (!b || b.disabled) return
+  put(sel, b.dataset.c)
+  const o = order(), start = o.findIndex((x) => x.w === sel.w && x.i === sel.i)
+  for (let k = 1; k <= o.length; k++) { const x = o[(start + k) % o.length]; if (!get(x)) { sel = x; break } }
+  render()
+})
+document.getElementById('add').onclick = () => { players++; hands.push([null, null]); render() }
+document.getElementById('remove').onclick = () => { players--; hands.pop(); if (sel.w >= players) sel = { w: -1, i: 0 }; render() }
+document.getElementById('clear').onclick = () => { board = [null, null, null, null, null]; hands = hands.map(() => [null, null]); sel = { w: -1, i: 0 }; render() }
+render()
+</script>
+</body>
+</html>
