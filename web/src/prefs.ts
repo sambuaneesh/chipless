@@ -10,7 +10,7 @@ export interface Prefs {
 const KEY = 'pc.prefs'
 
 function load(host: boolean): Prefs {
-  const d: Prefs = { sound: host, voice: host, face: true, fourColor: false, haptics: true }
+  const d: Prefs = { sound: host, voice: host, face: false, fourColor: false, haptics: true }
   try {
     return { ...d, ...JSON.parse(localStorage.getItem(KEY) || '{}') }
   } catch {
