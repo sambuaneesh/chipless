@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "poker-chips"
+rootProject.name = "chipless"
 include(":engine", ":server", ":android")

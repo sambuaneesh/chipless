@@ -7,7 +7,7 @@ export interface Prefs {
   haptics: boolean
 }
 
-const KEY = 'pc.prefs'
+const KEY = 'chipless.prefs'
 
 function load(host: boolean): Prefs {
   const d: Prefs = { sound: host, voice: host, face: false, fourColor: false, haptics: true }
@@ -30,7 +30,7 @@ export function setPref<K extends keyof Prefs>(k: K, v: Prefs[K]) {
 /** Hints retire after being shown a few times on this device. */
 export function hintSeen(key: string, limit: number): boolean {
   try {
-    const n = Number(localStorage.getItem('pc.hint.' + key) || 0)
+    const n = Number(localStorage.getItem('chipless.hint.' + key) || 0)
     return n >= limit
   } catch {
     return false
@@ -39,7 +39,7 @@ export function hintSeen(key: string, limit: number): boolean {
 
 export function markHint(key: string) {
   try {
-    const k = 'pc.hint.' + key
+    const k = 'chipless.hint.' + key
     localStorage.setItem(k, String(Number(localStorage.getItem(k) || 0) + 1))
   } catch { /* ignore */ }
 }

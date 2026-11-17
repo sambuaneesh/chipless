@@ -46,11 +46,11 @@ export function toast(text: string) {
 const params = new URLSearchParams(location.search)
 const urlHost = params.get('host')
 if (urlHost) {
-  local('pc.host', urlHost)
+  local('chipless.host', urlHost)
   history.replaceState(null, '', location.pathname)
 }
-export const hostToken = urlHost || local('pc.host')
-const SEAT_KEY = 'pc.seat'
+export const hostToken = urlHost || local('chipless.host')
+const SEAT_KEY = 'chipless.seat'
 
 // --------------------------------------------------------------------- socket
 

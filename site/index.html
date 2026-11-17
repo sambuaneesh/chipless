@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Chipless: real cards, no chips</title>
+<meta name="description" content="Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. Friends join from their own phones, no install. Free, open source, 106 KB.">
+<meta name="theme-color" content="#090e0c">
+<meta property="og:title" content="Chipless: real cards, no chips">
+<meta property="og:description" content="Your phone runs the poker table and teaches as you play. Friends join from their browser. Free and open source.">
+<meta property="og:image" content="https://sambuaneesh.github.io/chipless/media/og.jpg">
+<meta property="og:url" content="https://sambuaneesh.github.io/chipless/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23d24b4b'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%23f2ede2' stroke-width='3' stroke-dasharray='4 4'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23f2ede2'/%3E%3C/svg%3E">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #090e0c; --bg2: #0e1512; --surface: #131b18; --surface2: #1a2420; --line: rgba(226,238,230,.09);
+  --text: #e8eee9; --muted: #92a29a; --brass: #d6ad62; --brass2: #f1d28f; --ink: #1d1508; --green: #63cf96; --red: #e57a7a;
+  --max: 1120px; --ease: cubic-bezier(.2,.7,.2,1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body { overflow-x: clip; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 17px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+img, video { display: block; max-width: 100%; }
+h1, h2, h3, p { margin: 0; }
+.wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+.muted { color: var(--muted); }
+
+/* nav */
+nav { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background: rgba(9,14,12,.72); border-bottom: 1px solid var(--line); }
+nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 62px; gap: 16px; }
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; text-decoration: none; letter-spacing: -.01em; }
+.chip { width: 26px; height: 26px; border-radius: 50%; flex: none; background: radial-gradient(circle, var(--c,#d24b4b) 0 36%, #f2ede2 37% 42%, var(--c,#d24b4b) 43%), repeating-conic-gradient(var(--c,#d24b4b) 0 30deg, #f2ede2 30deg 45deg); box-shadow: 0 3px 10px rgba(0,0,0,.5); }
+nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; font-size: 15px; }
+nav ul a { text-decoration: none; color: var(--muted); }
+nav ul a:hover { color: var(--text); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 24px; border-radius: 14px; font-weight: 700; font-size: 16px; text-decoration: none; border: 1px solid var(--line); background: var(--surface2); transition: transform .15s var(--ease), box-shadow .2s; }
+.btn:hover { transform: translateY(-1px); }
+.btn.primary { background: linear-gradient(180deg, var(--brass2), var(--brass)); color: var(--ink); border: 0; box-shadow: 0 10px 30px rgba(214,173,98,.25), inset 0 1px 0 rgba(255,255,255,.45); }
+.btn.sm { min-height: 40px; padding: 0 16px; font-size: 14px; border-radius: 11px; }
+.btn svg { flex: none; }
+
+/* hero */
+.hero { position: relative; padding: 72px 0 40px; }
+.hero::before { content: ''; position: absolute; inset: -20% -10% auto; height: 900px; background: radial-gradient(ellipse at 70% 30%, rgba(22,67,51,.55), transparent 60%); pointer-events: none; z-index: -1; }
+.hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+.eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--brass2); padding: 6px 12px; border-radius: 999px; background: rgba(214,173,98,.1); border: 1px solid rgba(214,173,98,.3); }
+.hero h1 { font-size: clamp(44px, 7vw, 76px); line-height: 1.02; letter-spacing: -.035em; margin: 18px 0 18px; font-weight: 850; }
+.hero h1 em { font-style: normal; color: var(--brass2); }
+.lede { font-size: clamp(18px, 2.2vw, 21px); color: #c7d3cc; max-width: 34em; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin: 30px 0 22px; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; color: var(--muted); list-style: none; padding: 0; margin: 0; }
+.facts li::before { content: '◆'; color: var(--brass); font-size: 9px; margin-right: 8px; vertical-align: 2px; }
+
+.phone { position: relative; width: min(320px, 78vw); margin: 0 auto; aspect-ratio: 390/844; border-radius: 46px; padding: 11px; background: linear-gradient(160deg, #2b302e, #121514); box-shadow: 0 0 0 1px rgba(255,255,255,.07), 0 40px 80px rgba(0,0,0,.6), 0 0 120px rgba(214,173,98,.12); }
+.phone > * { width: 100%; height: 100%; object-fit: cover; border-radius: 36px; background: var(--bg); }
+.phone::after { content: ''; position: absolute; top: 20px; left: 50%; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%; background: #050706; box-shadow: 0 0 0 2px #1d2220; }
+.phone.sm { width: 100%; border-radius: 34px; padding: 8px; }
+.phone.sm > * { border-radius: 27px; }
+.phone.sm::after { top: 15px; width: 14px; height: 14px; margin-left: -7px; }
+
+/* sections */
+section { padding: 84px 0; }
+.kicker { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--brass2); font-weight: 700; }
+h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.1; letter-spacing: -.025em; margin: 10px 0 16px; font-weight: 800; }
+.sub { color: var(--muted); font-size: 19px; max-width: 40em; }
+.center-h { text-align: center; }
+.center-h .sub { margin: 0 auto; }
+
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 44px; counter-reset: s; }
+.step { padding: 26px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); position: relative; }
+.step::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: rgba(214,173,98,.12); color: var(--brass2); font-weight: 800; margin-bottom: 16px; border: 1px solid rgba(214,173,98,.35); }
+.step h3 { font-size: 20px; margin-bottom: 6px; }
+.step p { color: var(--muted); font-size: 16px; }
+
+.feature { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding: 56px 0; border-top: 1px solid var(--line); }
+.feature:nth-of-type(even) .shots { order: -1; }
+.feature h3 { font-size: clamp(26px, 3.4vw, 34px); line-height: 1.15; letter-spacing: -.02em; margin: 10px 0 14px; }
+.feature p { color: #c2cec7; font-size: 18px; }
+.feature ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; color: var(--muted); font-size: 16px; }
+.feature li { display: flex; gap: 10px; }
+.feature li::before { content: ''; flex: none; width: 18px; height: 18px; margin-top: 3px; border-radius: 50%; background: rgba(99,207,150,.15) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2363cf96' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center/11px no-repeat; }
+.shots { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.shots .phone:nth-child(2) { margin-top: 56px; }
+.quote { margin-top: 22px; padding: 14px 16px; border-radius: 14px; background: rgba(99,207,150,.07); border-left: 3px solid var(--green); color: #d3e7db; font-size: 16px; }
+
+/* quiz */
+.quiz { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 40px; }
+.q { padding: 22px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
+.q .board { display: flex; gap: 6px; }
+.card { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; width: 38px; height: 52px; border-radius: 7px; background: #f6f2e9; color: #1a1a1a; font-weight: 800; line-height: 1; font-size: 16px; box-shadow: 0 3px 8px rgba(0,0,0,.4); }
+.card i { font-style: normal; font-size: 15px; }
+.card.r { color: #c93a3a; }
+.hands { display: grid; gap: 8px; }
+.hand { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface2); cursor: pointer; font: inherit; color: inherit; text-align: left; }
+.hand:hover { border-color: rgba(214,173,98,.5); }
+.hand .board { gap: 4px; }
+.hand .card { width: 30px; height: 42px; font-size: 13px; }
+.hand.win { border-color: var(--green); background: rgba(99,207,150,.08); }
+.hand.lose { opacity: .55; }
+.verdict { font-size: 15px; color: #d3e7db; min-height: 3.2em; }
+
+/* tech */
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; }
+.stat { padding: 24px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); }
+.stat b { display: block; font-size: 34px; color: var(--brass2); letter-spacing: -.02em; }
+.stat span { color: var(--muted); font-size: 15px; }
+
+/* download */
+.download { position: relative; overflow: hidden; border-radius: 30px; padding: 56px; background: radial-gradient(ellipse at 80% 0%, rgba(22,67,51,.9), transparent 60%), var(--surface); border: 1px solid rgba(214,173,98,.25); display: grid; grid-template-columns: 1.3fr 1fr; gap: 40px; align-items: center; }
+.download ol { margin: 18px 0 0; padding-left: 20px; color: var(--muted); display: grid; gap: 6px; font-size: 16px; }
+.download .ctas { margin: 26px 0 0; }
+
+/* faq */
+.faq { max-width: 780px; margin: 36px auto 0; display: grid; gap: 10px; }
+details { border-radius: 16px; background: var(--surface); border: 1px solid var(--line); padding: 0 22px; }
+summary { cursor: pointer; padding: 18px 0; font-weight: 650; font-size: 17px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: '+'; color: var(--brass2); font-size: 22px; line-height: 1; transition: transform .2s; }
+details[open] summary::after { transform: rotate(45deg); }
+details p { color: var(--muted); padding-bottom: 18px; font-size: 16px; }
+
+footer { border-top: 1px solid var(--line); padding: 36px 0 48px; color: var(--muted); font-size: 14px; }
+footer .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: center; }
+
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+
+@media (max-width: 900px) {
+  nav ul { display: none; }
+  .hero { padding-top: 40px; }
+  .hero .wrap, .feature, .download { grid-template-columns: 1fr; }
+  .feature:nth-of-type(even) .shots { order: 0; }
+  .feature { gap: 36px; }
+  .steps, .quiz { grid-template-columns: 1fr; }
+  .grid4 { grid-template-columns: 1fr 1fr; }
+  .download { padding: 32px 22px; }
+  section { padding: 60px 0; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .reveal { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#"><span class="chip"></span>Chipless</a>
+    <ul>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#learn">Learn</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a class="btn sm" href="https://github.com/sambuaneesh/chipless">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.9 10.9c.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      GitHub
+    </a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow"><span class="chip" style="width:14px;height:14px"></span> Free · Open source · Android</span>
+      <h1>Real cards.<br><em>No chips.</em></h1>
+      <p class="lede">Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. Deal real cards; the app runs every hand, explains every rule, and your friends play along from their own phones.</p>
+      <div class="ctas">
+        <a class="btn primary" href="https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+          Download for Android
+        </a>
+        <a class="btn" href="#how">See how it works</a>
+      </div>
+      <ul class="facts">
+        <li>106 KB app</li>
+        <li>Works offline</li>
+        <li>No accounts, no ads</li>
+        <li>Friends join from any browser</li>
+      </ul>
+    </div>
+    <div class="phone reveal">
+      <video src="media/demo.mp4" poster="media/poster.webp" autoplay muted loop playsinline aria-label="Demo: a hand of poker played with Chipless"></video>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="wrap center-h">
+    <div class="kicker">How it works</div>
+    <h2>Three taps to a real poker night</h2>
+    <p class="sub">No chips, no dealer who knows the rules, no problem. Chipless handles everything except the cards.</p>
+    <div class="steps" style="text-align:left">
+      <div class="step reveal"><h3>Set the table</h3><p>Type names in the order you sit, pick stakes, and choose fun points or real buy-ins.</p></div>
+      <div class="step reveal"><h3>Friends scan to join</h3><p>Everyone scans a QR code on your phone and plays from their own browser. Nothing to install, no internet needed.</p></div>
+      <div class="step reveal"><h3>Deal real cards</h3><p>The app tells the dealer what to deal, whose turn it is, and what they can do: blinds, bets, pots and payouts.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="feature">
+      <div class="reveal">
+        <div class="kicker">The floor manager</div>
+        <h3>Runs the hand so nobody has to</h3>
+        <p>A narrator line always says what just happened and what comes next. Between rounds, a dealer card spells out the physical steps.</p>
+        <ul>
+          <li>“Burn 1 · deal 3 face up: the Flop”</li>
+          <li>Blinds, button and turn order handled automatically</li>
+          <li>Side pots, all-ins and split pots worked out exactly</li>
+        </ul>
+        <div class="quote">“Zoe: call 10, raise to 20+ or fold.” Every player always knows their options.</div>
+      </div>
+      <div class="shots reveal">
+        <div class="phone sm"><img src="media/deal.webp" alt="Table with dealer instructions and narrator" loading="lazy"></div>
+        <div class="phone sm"><img src="media/flop.webp" alt="The flop, with the pot and bets on the table" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="reveal">
+        <div class="kicker">Everyone's phone</div>
+        <h3>Friends play from their own phones</h3>
+        <p>Scan, tap your name, done. Your stack, your turn and your buttons are right in your hand, and the whole table updates live on every phone.</p>
+        <ul>
+          <li>Joins in under ten seconds, from any browser</li>
+          <li>Private pre-actions: Check/Fold, Call any</li>
+          <li>Phone fell asleep? It rejoins your seat instantly</li>
+          <li>Or keep one phone on the table and pass it around</li>
+        </ul>
+      </div>
+      <div class="shots reveal">
+        <div class="phone sm"><img src="media/invite.webp" alt="Invite screen with a QR code" loading="lazy"></div>
+        <div class="phone sm"><img src="media/guest-turn.webp" alt="A player's own phone showing their turn" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="reveal">
+        <div class="kicker">Betting that can't go wrong</div>
+        <h3>Tap, size, hold</h3>
+        <p>One tap to check or call. Raises use smart presets (3×, half pot, pot) with a slider for anything else. All-in needs a deliberate hold, so no accidental shoves.</p>
+        <ul>
+          <li>Minimum raises and the short all-in rules enforced</li>
+          <li>Greyed-out button? Tap it to learn why</li>
+          <li>Undo instead of “are you sure?” pop-ups</li>
+        </ul>
+      </div>
+      <div class="shots reveal">
+        <div class="phone sm"><img src="media/raise.webp" alt="Raise tray with presets and slider" loading="lazy"></div>
+        <div class="phone sm"><img src="media/showdown.webp" alt="Showdown: pick the winner" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="reveal">
+        <div class="kicker">The referee</div>
+        <h3>“Who won?” Settled in seconds.</h3>
+        <p>Not sure whose hand is better? Enter the cards and Chipless names the winner, lights up the five cards that play, and explains why.</p>
+        <div class="quote">“Maya's Flush, Ace-high beats Sam's Three Kings.”</div>
+      </div>
+      <div class="shots reveal">
+        <div class="phone sm"><img src="media/referee.webp" alt="Card entry with the verdict" loading="lazy"></div>
+        <div class="phone sm"><img src="media/result.webp" alt="Winner announced on the table" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="feature">
+      <div class="reveal">
+        <div class="kicker">Settle up</div>
+        <h3>Who pays whom, in the fewest payments</h3>
+        <p>Playing for real buy-ins? Chipless tracks every rebuy and works out the minimum number of transfers at the end of the night. Share the summary to your group chat with one tap.</p>
+        <ul>
+          <li>“Balanced ✓”: every chip accounted for</li>
+          <li>Fewest payments, or everyone settles with one banker</li>
+          <li>Or just play for points</li>
+        </ul>
+      </div>
+      <div class="shots reveal">
+        <div class="phone sm"><img src="media/settle.webp" alt="Results and payments" loading="lazy"></div>
+        <div class="phone sm"><img src="media/guest-join.webp" alt="Join screen on a friend's phone" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="learn">
+  <div class="wrap center-h">
+    <div class="kicker">Built for beginners</div>
+    <h2>Learn poker by playing it</h2>
+    <p class="sub">No tutorial. Hints appear exactly when a rule matters and fade once you've got it. Try it yourself: who wins these hands?</p>
+    <div class="quiz" style="text-align:left" id="quiz"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap center-h">
+    <div class="kicker">Tiny and private</div>
+    <h2>Made like it's 1999. Feels like 2026.</h2>
+    <p class="sub">No frameworks bolted together, no trackers, no cloud. The whole app is smaller than a single photo.</p>
+    <div class="grid4" style="text-align:left">
+      <div class="stat reveal"><b>106 KB</b><span>Entire Android app</span></div>
+      <div class="stat reveal"><b>0</b><span>Accounts, ads or analytics</span></div>
+      <div class="stat reveal"><b>34 KB</b><span>All a friend's phone downloads to join</span></div>
+      <div class="stat reveal"><b>2.6 M</b><span>Hands tested against the evaluator</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap">
+    <div class="download reveal">
+      <div>
+        <div class="kicker">Get Chipless</div>
+        <h2>Deal the next hand tonight</h2>
+        <p class="sub">Only the host needs the app. Everyone else just scans.</p>
+        <ol>
+          <li>Download the APK on your Android phone (Android 8 or newer).</li>
+          <li>Open it and allow installing from your browser if asked.</li>
+          <li>Start a table. Friends on the same Wi-Fi or your hotspot scan to join.</li>
+        </ol>
+        <div class="ctas">
+          <a class="btn primary" href="https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk">Download APK</a>
+          <a class="btn" href="https://github.com/sambuaneesh/chipless/releases">All releases</a>
+        </div>
+      </div>
+      <div class="phone sm" style="max-width:260px;margin:0 auto"><img src="media/home.webp" alt="Chipless home screen" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap center-h">
+    <div class="kicker">FAQ</div>
+    <h2>Questions</h2>
+  </div>
+  <div class="wrap faq">
+    <details><summary>Do my friends need to install anything?</summary><p>No. Only the host needs the Android app. Everyone else scans the QR code and plays in their phone's browser, on Android or iPhone.</p></details>
+    <details><summary>Does it need the internet?</summary><p>No. Everything runs on the host's phone over your Wi-Fi or the host's mobile hotspot. Nothing leaves the room. If public or campus Wi-Fi blocks phones from talking to each other, use the hotspot.</p></details>
+    <details><summary>Which poker game does it support?</summary><p>No-Limit Texas Hold'em, with proper tournament-grade rules for raises, all-ins, side pots and split pots. You deal real cards; the app tracks everything else.</p></details>
+    <details><summary>Can we play without phones for everyone?</summary><p>Yes. Leave one phone in the middle of the table and take turns tapping. You can invite phones any time later, and mix both.</p></details>
+    <details><summary>Does Chipless handle real money?</summary><p>No. It only keeps score. In buy-in mode it records what each person bought in for and tells you who owes whom at the end. You settle up yourselves.</p></details>
+    <details><summary>What if the app gets closed mid-game?</summary><p>Every action is saved instantly. Reopen the app and the table is exactly where you left it, and friends' phones reconnect on their own.</p></details>
+    <details><summary>Is it really free?</summary><p>Yes. Chipless is open source under the GPL-3.0 license. No ads, no in-app purchases, no tracking.</p></details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#"><span class="chip"></span>Chipless</a>
+    <span>Free and open source (GPL-3.0) · <a href="https://github.com/sambuaneesh/chipless">Source on GitHub</a> · Please play responsibly.</span>
+  </div>
+</footer>
+
+<script>
+// Who-wins quiz (answers precomputed with the app's own evaluator).
+const QUIZ = [
+  { board: ['Kh', '7d', '7c', '2s', '9h'], hands: [['Ks', 'Qd'], ['Kd', 'Jc']], win: [0], why: 'Both have Two Pair, Kings and Sevens. The Queen kicker beats the Jack.' },
+  { board: ['Ah', 'Kh', '9h', '4c', '2d'], hands: [['Qh', '3h'], ['Ad', 'Ac']], win: [0], why: 'Five hearts make a Flush, which beats Three Aces.' },
+  { board: ['Ts', '9d', '8c', '7h', '6s'], hands: [['Ad', 'Ac'], ['Kh', '2c']], win: [0, 1], why: 'The board is a straight and nobody beats it. The board plays, so it\'s a split pot.' },
+]
+const S = { s: '♠', h: '♥', d: '♦', c: '♣' }
+const card = (c) => `<span class="card${c[1] === 'h' || c[1] === 'd' ? ' r' : ''}">${c[0] === 'T' ? '10' : c[0]}<i>${S[c[1]]}</i></span>`
+document.getElementById('quiz').innerHTML = QUIZ.map((q, i) => `
+  <div class="q reveal" data-i="${i}">
+    <div class="muted" style="font-size:14px">Board</div>
+    <div class="board">${q.board.map(card).join('')}</div>
+    <div class="hands">${q.hands.map((h, j) => `<button class="hand" data-j="${j}"><span>Player ${j + 1}</span><span class="board">${h.map(card).join('')}</span></button>`).join('')}</div>
+    <p class="verdict muted">Tap the hand you think wins.</p>
+  </div>`).join('')
+document.querySelectorAll('.q').forEach((el) => el.addEventListener('click', (e) => {
+  const b = e.target.closest('.hand'); if (!b) return
+  const q = QUIZ[el.dataset.i], pick = +b.dataset.j
+  el.querySelectorAll('.hand').forEach((h) => h.classList.add(q.win.includes(+h.dataset.j) ? 'win' : 'lose'))
+  el.querySelector('.verdict').innerHTML = (q.win.includes(pick) ? '<b style="color:var(--green)">Right!</b> ' : '<b style="color:var(--red)">Not quite.</b> ') + q.why
+}))
+// Scroll reveal.
+const io = 'IntersectionObserver' in window ? new IntersectionObserver((es) => es.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('in'); io.unobserve(x.target) } }), { threshold: .15 }) : null
+document.querySelectorAll('.reveal').forEach((el) => io ? io.observe(el) : el.classList.add('in'))
+</script>
+</body>
+</html>

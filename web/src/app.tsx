@@ -69,7 +69,7 @@ function runPreAction(s: Snap) {
 
 let flashT: number | undefined
 function flashTitle() {
-  const base = 'Poker Chips'
+  const base = 'Chipless'
   let n = 0
   clearInterval(flashT)
   flashT = window.setInterval(() => {

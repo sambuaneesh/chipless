@@ -13,7 +13,7 @@ export function Home({ onNew }: { onNew: () => void }) {
     <div class="home">
       <div class="brand">
         <div class="logo" aria-hidden="true"><i /><i /><i /></div>
-        <h1>Poker Chips</h1>
+        <h1>Chipless</h1>
         <p>Real cards. No chips needed.<br />The app runs the table and teaches as you play.</p>
       </div>
       <div class="homeacts">
@@ -33,14 +33,14 @@ const PRESETS: Record<Exclude<Preset, 'custom'>, { label: string; sub: string; s
 }
 
 export function Setup({ onBack }: { onBack: () => void }) {
-  const saved = (() => { try { return JSON.parse(local('pc.lastNames') || '[]') as string[] } catch { return [] } })()
+  const saved = (() => { try { return JSON.parse(local('chipless.lastNames') || '[]') as string[] } catch { return [] } })()
   const [names, setNames] = useState<string[]>(saved.length >= 2 ? saved : [])
   const [input, setInput] = useState('')
   const [dealer, setDealer] = useState(-1)
   const [preset, setPreset] = useState<Preset>('casual')
   const [c, setC] = useState({ sb: 5, bb: 10, stack: 1000, timer: false, minutes: 20 })
   const [mode, setMode] = useState<Cfg['mode']>('free')
-  const [currency, setCurrency] = useState(local('pc.currency') || '₹')
+  const [currency, setCurrency] = useState(local('chipless.currency') || '₹')
   const [buyIn, setBuyIn] = useState(500)
   const [teach, setTeach] = useState<Cfg['teach']>('beginner')
   const [share, setShare] = useState(false)
@@ -63,7 +63,7 @@ export function Setup({ onBack }: { onBack: () => void }) {
     if (p !== 'custom') { const x = PRESETS[p]; setC({ ...c, sb: x.sb, bb: x.bb, stack: x.stack, timer: x.timer }) }
   }
   const start = () => {
-    local('pc.lastNames', JSON.stringify(names)); local('pc.currency', currency)
+    local('chipless.lastNames', JSON.stringify(names)); local('chipless.currency', currency)
     haptic('confirm')
     cmd('setup', {
       names, button: dealer, sb: c.sb, bb: c.bb, stack: c.stack, timer: c.timer, minutes: c.minutes,
@@ -163,7 +163,7 @@ export function Waiting({ text }: { text: string }) {
     <div class="home">
       <div class="brand">
         <div class="logo" aria-hidden="true"><i /><i /><i /></div>
-        <h1>Poker Chips</h1>
+        <h1>Chipless</h1>
         <p>{text}</p>
       </div>
       <div class="spinner" aria-hidden="true" />

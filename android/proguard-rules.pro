@@ -1,4 +1,4 @@
 # The WebView calls these by name.
--keepclassmembers class app.pokerchips.Bridge {
+-keepclassmembers class app.chipless.Bridge {
     @android.webkit.JavascriptInterface <methods>;
 }

@@ -29,6 +29,6 @@ tasks.register<JavaExec>("dev") {
     group = "application"
     description = "Run the table server on this computer, serving web/dist."
     classpath = sourceSets["main"].runtimeClasspath
-    mainClass.set("app.pokerchips.server.DevMainKt")
+    mainClass.set("app.chipless.server.DevMainKt")
     args(rootProject.file("web/dist").path, layout.buildDirectory.file("dev-session.json").get().asFile.path)
 }

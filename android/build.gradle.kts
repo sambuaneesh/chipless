@@ -5,15 +5,27 @@ plugins {
 }
 
 android {
-    namespace = "app.pokerchips"
+    namespace = "app.chipless"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "app.pokerchips"
+        applicationId = "io.github.sambuaneesh.chipless"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = providers.gradleProperty("chiplessVersionCode").get().toInt()
+        versionName = providers.gradleProperty("chiplessVersion").get()
+    }
+
+    // Release key lives outside the repo (~/.gradle/gradle.properties). Without it, release
+    // builds fall back to the debug key so anyone can build and sideload from source.
+    val storeFile = providers.gradleProperty("CHIPLESS_STORE_FILE").orNull
+    signingConfigs {
+        if (storeFile != null) create("release") {
+            this.storeFile = file(storeFile)
+            storePassword = providers.gradleProperty("CHIPLESS_STORE_PASSWORD").get()
+            keyAlias = providers.gradleProperty("CHIPLESS_KEY_ALIAS").get()
+            keyPassword = providers.gradleProperty("CHIPLESS_KEY_PASSWORD").get()
+        }
     }
 
     buildTypes {
@@ -21,8 +33,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // Sideload-ready out of the box. For Play, replace with your own upload key.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
         }
     }
 

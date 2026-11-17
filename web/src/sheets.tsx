@@ -284,7 +284,7 @@ export function SettleView({ s }: { s: Snap }) {
   const value = (n: (typeof st.nets)[number]) => (isMoney && n.money != null ? n.money : n.chips)
   const transfers = via === 'min' ? st.transfers : st.nets.filter((n) => n.id !== bank && value(n) !== 0).map((n) => value(n) < 0 ? { from: n.id, to: bank, amount: -value(n) } : { from: bank, to: n.id, amount: value(n) })
   const text = [
-    `Poker night — results`,
+    `Chipless — poker night results`,
     ...nets.map((n) => `${n.name}: ${isMoney && n.money != null ? money(n.money, s.cfg, true) : signed(n.chips)}`),
     '',
     ...(transfers.length ? ['Payments:', ...transfers.map((t) => `${name(t.from)} → ${name(t.to)}: ${fmtAmt(t.amount)}`)] : []),

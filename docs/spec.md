@@ -1,6 +1,6 @@
 # Product Spec v1.0
 
-> Working name: **Poker Chips**. Status: ready for review, 2026-11-17.
+> Name: **Chipless**. Status: v1.0, 2026-11-17.
 > Background: [research/ux.md](research/ux.md), [research/rules.md](research/rules.md), [research/stack.md](research/stack.md).
 > Decisions: [ADR-0001 stack](adr/0001-lean-kotlin-stack.md), [ADR-0002 rules defaults](adr/0002-rules-defaults.md).
 

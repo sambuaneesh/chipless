@@ -1,19 +1,33 @@
-# Poker Chips
+<p align="center">
+  <img src="site/media/og.jpg" alt="Chipless: real cards, no chips" width="720">
+</p>
 
-A fast, tiny poker table for real-card home games. You deal real cards; the app is the chips, the dealer button, the pot and the floor manager. It runs every No-Limit Hold'em hand correctly and teaches beginners as you play.
+<p align="center">
+  <a href="https://github.com/sambuaneesh/chipless/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/sambuaneesh/chipless?color=d6ad62&label=download"></a>
+  <a href="https://github.com/sambuaneesh/chipless/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/sambuaneesh/chipless/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="LICENSE"><img alt="License: GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-63cf96"></a>
+</p>
 
-- **One phone:** leave it in the middle of the table and pass it around.
-- **Everyone's phone:** friends scan a QR code and play from their browser. There's nothing to install, and everyone sees the table live.
-- **Release APK is about 106 KB.** The web client is about 34 KB gzipped. There are no runtime dependencies beyond the Android framework, the Kotlin stdlib and Preact.
+# Chipless
 
-## Features
-- Rules engine: blinds, button, minimum raise, short all-ins (TDA 49), side pots, uncalled bets and the odd chip.
-- Narrator line, dealer cue card ("Burn 1 · deal 3 — the Flop") and hints that fade as you learn.
-- Betting is tap / size / hold: one tap to check or call, presets for raises, and a hold for all-in. Undo is always available instead of confirm dialogs.
-- Showdown: tap the winner, or enter the cards and the Referee explains why they won ("Ann's Queen kicker beats Ben's Jack").
-- Free play, or real buy-ins with rebuys and settlement using the fewest payments.
-- Fixed blinds or a tournament timer. The host's voice calls out turns. Synthesized sounds, haptics, and pre-actions on players' phones.
-- Crash-proof: the action log is saved after every action.
+**Real cards. No chips.** Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. You deal real cards; the app runs every No-Limit Hold'em hand correctly, explains each rule as it comes up, and your friends play along from their own phones.
+
+**[Website](https://sambuaneesh.github.io/chipless/)** · **[Download the APK](https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk)** · Android 8.0+
+
+| | | | |
+|---|---|---|---|
+| <img src="site/media/deal.webp" width="200" alt="Table with dealer cue"> | <img src="site/media/raise.webp" width="200" alt="Raise tray"> | <img src="site/media/referee.webp" width="200" alt="Referee verdict"> | <img src="site/media/settle.webp" width="200" alt="Settlement"> |
+
+## Why it's different
+- **It's the floor manager, not just a chip counter.** A narrator line says what happened and what each player can do. A dealer card spells out the physical steps ("Burn 1 · deal 3 face up: the Flop").
+- **Two ways to play, in one app.**
+  - **Pass this phone:** one phone in the middle of the table.
+  - **Everyone uses theirs:** friends scan a QR code and play from any browser. There's nothing to install, and every phone updates live.
+- **Casino-correct rules:** blinds and button, minimum raises, short all-ins (TDA 49), side pots, uncalled bets and the odd chip.
+- **Betting is tap, size, hold.** One tap to check or call, smart raise presets, and a hold for all-in. Undo replaces "are you sure?" pop-ups. Tap a greyed-out button to learn why it's disabled.
+- **The Referee:** enter the cards and it names the winner, then explains why ("Maya's Flush, Ace-high beats Sam's Three Kings").
+- **Settling up:** play for points, or for real buy-ins with rebuys, and finish with the fewest payments.
+- **Tiny, offline and private.** The whole app is about 106 KB. No accounts, ads, analytics or cloud. Every action is saved, so a closed app picks up exactly where it was.
 
 ## Layout
 | Path | What |
@@ -32,7 +46,11 @@ echo "sdk.dir=$HOME/Android/Sdk" > local.properties   # once
 ./gradlew :android:assembleRelease                      # builds web + APK; fails if the APK > 1 MB
 adb install -r android/build/outputs/apk/release/android-release.apk
 ```
-The release build is signed with the debug key so it can be sideloaded. Use your own key before publishing to Play.
+Without a release key, release builds are signed with the debug key so anyone can build and sideload from source. Maintainers add the release key to `~/.gradle/gradle.properties` (`CHIPLESS_STORE_FILE`, `CHIPLESS_STORE_PASSWORD`, `CHIPLESS_KEY_ALIAS`, `CHIPLESS_KEY_PASSWORD`) and publish with:
+
+```bash
+scripts/release.sh 1.0.1   # bump version, test, build, verify signature, tag, push, GitHub release
+```
 
 ## Develop
 ```bash
@@ -42,3 +60,9 @@ cd web && npm ci && node build.mjs --watch # rebuild the client on change
 node web/test/e2e.mjs <HOST url> <GUEST url> <screenshot dir>   # headless two-phone smoke test
 ```
 Open the HOST URL in a desktop browser to act as the host phone. Open the GUEST URL on any phone on the same network.
+
+## Website
+The landing page lives in [`site/`](site/) and deploys to GitHub Pages on every push to `main`. `site/capture.mjs` re-records the demo video and screenshots from a real game against the dev server.
+
+## License
+[GPL-3.0](LICENSE). Chipless only keeps score. It doesn't handle money. Please play responsibly and within the law where you live.
