@@ -24,7 +24,7 @@ it tracks chips, enforces betting rules, teaches beginners, and syncs live to ev
 | Network | Same room only (LAN / hotspot). Remote play out of scope for v1. |
 
 ## Open
-- Stack choice (native Kotlin vs Rust core vs others). See `docs/research/`.
+- ~~Stack choice~~ → decided: lean Kotlin + vanilla TS web client ([ADR-0001](adr/0001-lean-kotlin-stack.md)).
 - Blind structure: fixed vs timed levels.
 - Typical player count (assumed 2–10).
 - UX research findings to fold in. See `docs/research/`.
