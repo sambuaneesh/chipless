@@ -18,7 +18,7 @@ Open an issue at <https://codeberg.org/IzzyOnDroid/repodata/issues> with the **A
 > **App:** Chipless, https://github.com/sambuaneesh/chipless
 > **License:** GPL-3.0-only
 > **Description:** Poker chips app for real-card Texas Hold'em home games. One phone tracks chips, blinds, pots and side pots, coaches beginners, and can host the table over Wi-Fi/hotspot so friends join from a browser (LAN only, no internet).
-> **APK:** attached to every GitHub release as `chipless.apk` (~110 KB), signed with our own key (cert SHA-256 above). Fastlane metadata in the repo.
+> **APK:** attached to every GitHub release as `chipless.apk` (~125 KB), signed with our own key (cert SHA-256 above). Fastlane metadata in the repo.
 > **Build:** `./gradlew :android:assembleRelease` (JDK 21, Node 22+ for the web UI, which Gradle builds with `npm ci` + esbuild). Builds are reproducible.
 > **Trackers / non-free deps:** none. No AndroidX either.
 > **AI use:** parts of the code were written with an AI coding assistant and reviewed and tested by the author.
@@ -98,14 +98,14 @@ Costs $25 plus ID. New personal accounts must first run a closed test with at le
 - Never ask anyone for upvotes.
 - Keep self-promotion to about 10% of what you post.
 
-**Position against TableChips** (GPL, on F-Droid, also uses browser join). Credit it, and lead with what's different: the rules coach, the showdown referee that explains "who wins and why", fewest-transfer settle-up, pass-and-play, and the ~110 KB size.
+**Position against TableChips** (GPL, on F-Droid, also uses browser join). Credit it, and lead with what's different: the rules coach, the showdown referee that explains "who wins and why", fewest-transfer settle-up, pass-and-play, and the ~125 KB size.
 
 1. **AlternativeTo:** add Chipless and mark it as an alternative to HG Poker and EasyPoker.
 2. **Show HN**, Tuesday 8–10 am US Eastern:
-   - **Title:** "Show HN: A 110 KB Android app that hosts a poker table over Wi-Fi with a hand-written WebSocket server"
+   - **Title:** "Show HN: A 125 KB Android app that hosts a poker table over Wi-Fi with a hand-written WebSocket server"
    - **Body:** what it is, why it exists (a friends' game with no chips), and the technical story (no AndroidX, an event-sourced rules engine, a 35 KB Preact client, reproducible builds). Link the repo and the site.
 3. **r/fossdroid** ("Application Release" flair, state the license), **c/fdroid@lemmy.ml** and **c/androidapps@lemmy.world**:
-   - **Title:** "Chipless: 110 KB GPL-3.0 poker chips app, no ads/accounts/internet; friends join over hotspot in any browser"
+   - **Title:** "Chipless: 125 KB GPL-3.0 poker chips app, no ads/accounts/internet; friends join over hotspot in any browser"
 4. **dev.to / Hashnode** write-up, then link it from **r/opensource** ("Promotional" flair) and **r/coolgithubprojects**.
 5. **r/droidappshowcase** and **r/SideProject:** "Chipless – free poker chips app for real-card home games (beginners get rules help, settle-up in fewest payments)".
 6. **Poker players** (message the r/poker mods first; r/pokerhomegames):

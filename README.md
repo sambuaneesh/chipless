@@ -30,11 +30,14 @@
 - **Two ways to play, in one app.**
   - **Pass this phone:** one phone in the middle of the table.
   - **Everyone uses theirs:** friends scan a QR code and play from their phone's browser. There's nothing to install, and every phone updates live.
+- **Everyone sees every move.** Each bet, call and fold pops up big over the table on every phone and stays as a coloured tag on the player, with a timeline of the round. Big raises and all-ins get dramatic sounds; bets can be called out loud ("Maya raises by 300, to 400").
+- **Board cards, if you want them.** The host can record the flop, turn and river as they're dealt. Every phone shows the board, and it's filled in at showdown.
+- **Save, export, switch phones.** Export the night as a readable hand history, or save a backup and continue the game on another phone, even mid-hand. Drag to rearrange seats, and close the table when you're done.
 - **Casino-correct rules:** blinds and button, minimum raises, short all-ins (TDA 49), side pots, uncalled bets and the odd chip.
 - **Betting is tap, size, hold.** One tap to check or call, smart raise presets, and a hold for all-in. Undo replaces "are you sure?" pop-ups. Tap a greyed-out button to learn why it's disabled.
 - **The Referee:** enter the cards and it names the winner, then explains why ("Maya's Flush, Ace-high beats Sam's Three Kings").
 - **Settling up:** play for points, or for real buy-ins with rebuys, and finish with the fewest payments.
-- **Tiny, offline and private.** The whole app is about 108 KB. No accounts, ads, analytics or cloud. Every action is saved, so a closed app picks up exactly where it was.
+- **Tiny, offline and private.** The whole app is about 125 KB. No accounts, ads, analytics or cloud. Every action is saved, so a closed app picks up exactly where it was.
 
 ## Layout
 | Path | What |

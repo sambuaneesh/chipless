@@ -4,7 +4,7 @@ import { cmd } from './net'
 import { haptic } from './native'
 import { local } from './prefs'
 import type { Cfg } from './types'
-import { Avatar, Btn, Icon, NumField, Seg, Toggle } from './ui'
+import { Avatar, Btn, Icon, moved, NumField, Seg, SortList, Toggle } from './ui'
 import { openSheet } from './uistate'
 import { HandRanks } from './referee'
 
@@ -19,6 +19,7 @@ export function Home({ onNew }: { onNew: () => void }) {
       <div class="homeacts">
         <Btn kind="primary" big onClick={onNew}><Icon name="play" /> New table</Btn>
         <Btn kind="ghost" big onClick={() => openSheet({ k: 'calc' })}><Icon name="cards" /> Who wins? <small>card checker</small></Btn>
+        <Btn kind="quiet" onClick={() => openSheet({ k: 'restore' })}><Icon name="open" size={18} /> Continue a saved game</Btn>
       </div>
       <HandRanks />
     </div>
@@ -52,11 +53,11 @@ export function Setup({ onBack }: { onBack: () => void }) {
     setNames([...names, n]); setInput('')
   }
   const remove = (i: number) => { setNames(names.filter((_, j) => j !== i)); if (dealer === i) setDealer(-1) }
-  const move = (i: number, d: number) => {
-    const j = i + d
-    if (j < 0 || j >= names.length) return
-    const a = [...names]; [a[i], a[j]] = [a[j], a[i]]; setNames(a)
-    if (dealer === i) setDealer(j); else if (dealer === j) setDealer(i)
+  const move = (i: number, j: number) => {
+    const d = dealer >= 0 ? names[dealer] : null
+    const a = moved(names, i, j)
+    setNames(a)
+    if (d) setDealer(a.indexOf(d))
   }
   const choose = (p: Preset) => {
     setPreset(p)
@@ -83,19 +84,15 @@ export function Setup({ onBack }: { onBack: () => void }) {
 
       <section>
         <h2>Who's playing?</h2>
-        <p class="tiny muted">Add names in the order you sit, going clockwise. Tap a name to make them the first dealer.</p>
-        <div class="names">
-          {names.map((n, i) => (
-            <div class={'nm-row' + (dealer === i ? ' is-dealer' : '')}>
-              <button class="nm-main" onClick={() => setDealer(dealer === i ? -1 : i)} aria-label={`${n}${dealer === i ? ', first dealer' : ''}`}>
-                <Avatar name={n} seat={i} size={34} /><span>{n}</span>{dealer === i && <i class="dchip">D</i>}
-              </button>
-              <button class="iconbtn sm" aria-label={`Move ${n} up`} onClick={() => move(i, -1)} disabled={i === 0}><Icon name="left" size={16} /></button>
-              <button class="iconbtn sm" aria-label={`Move ${n} down`} onClick={() => move(i, 1)} disabled={i === names.length - 1}><Icon name="right" size={16} /></button>
-              <button class="iconbtn sm" aria-label={`Remove ${n}`} onClick={() => remove(i)}><Icon name="close" size={16} /></button>
-            </div>
-          ))}
-        </div>
+        <p class="tiny muted">Add names in the order you sit, going clockwise. Drag ⠿ to reorder. Tap a name to make them the first dealer.</p>
+        <SortList items={names} label={(n) => n} onMove={move} render={(n, i) => (
+          <div class={'nm-row' + (dealer === i ? ' is-dealer' : '')}>
+            <button class="nm-main" onClick={() => setDealer(dealer === i ? -1 : i)} aria-label={`${n}${dealer === i ? ', first dealer' : ''}`}>
+              <Avatar name={n} seat={i} size={34} /><span>{n}</span>{dealer === i && <i class="dchip">D</i>}
+            </button>
+            <button class="iconbtn sm" aria-label={`Remove ${n}`} onClick={() => remove(i)}><Icon name="close" size={16} /></button>
+          </div>
+        )} />
         {names.length < 10 && (
           <div class="addp">
             <input placeholder={names.length ? 'Add another name' : 'First player name'} value={input} maxLength={16} enterKeyHint="done"

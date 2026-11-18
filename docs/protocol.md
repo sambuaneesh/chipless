@@ -12,7 +12,8 @@ The host phone serves `GET /` (the web client) and `GET /ws` (WebSocket). All me
 | `act` | `id`, `move` (`fold`/`check`/`call`/`raise`), `to`, `seq` | player (self) or host | Betting action. `to` is raise-to. A stale `seq` is rejected. |
 | `undo` | `seq` | host, or the player whose action was last | Pop the last event and replay. |
 | `eval` | `board`, `hands[{name,cards}]` | anyone | Referee calculator; replies `eval`. |
-| `cmd` | `c`, … | host | `setup`, `deal`, `award{ranking}`, `awardCards{board,holes}`, `add`, `remove`, `sitout`, `sitin`, `rebuy`, `adjust`, `rename`, `reorder`, `button`, `settings`, `timer{do}`, `end`, `reopen`, `reset`, `lan{open}` |
+| `export` | | anyone | Replies `export`: the readable hand history, plus a backup for the host. |
+| `cmd` | `c`, … | host | `setup`, `deal`, `award{ranking}`, `awardCards{board,holes}`, `add`, `remove`, `sitout`, `sitin`, `rebuy`, `adjust`, `rename`, `reorder`, `button`, `settings`, `timer{do}`, `end`, `reopen`, `reset`, `lan{open}`, `board{cards}` (record board cards mid-hand), `import{data}` (restore a backup; all-or-nothing), `close` (reset and stop sharing) |
 | `ping` | | anyone | Replies `pong` (used for health checks). |
 
 ## Server → client
@@ -22,6 +23,7 @@ The host phone serves `GET /` (the web client) and `GET /ws` (WebSocket). All me
 | `seat` | `token`, `id`. The client stores the token for silent rejoin. |
 | `state` | `s`: the full snapshot (see `web/src/types.ts` `Snap`), broadcast on every change |
 | `eval` | `r`: `{hands[{name,desc,cat,best}], winners, text, final}` |
+| `export` | `text`, `file` (suggested name); host only: `backup` (JSON string), `backupFile` |
 | `error` | `msg` (human-readable), `stale` |
 
 Snapshots carry `seq`, which increases on every game or config change. Presence changes rebroadcast without bumping it. Cards use two-character text: `As`, `Td`, `9h`.

@@ -1,12 +1,14 @@
-import { useMemo, useState } from 'preact/hooks'
-import { chips, money, signed, SITE } from './fmt'
-import { cmd, forgetSeat, store } from './net'
-import { share } from './native'
+import { useEffect, useMemo, useState } from 'preact/hooks'
+import { chips, money, seatColor as seatColorOf, signed, SITE } from './fmt'
+import { cmd, forgetSeat, send, store, useStore } from './net'
+import { canExit, exitApp, isNative, saveFile, share } from './native'
+import { RanksSheet } from './referee'
+import { seatAngle } from './table'
 import { prefs, setPref } from './prefs'
 import { qrPath } from './qr'
 import { CurrencyPick } from './setup'
 import type { Snap } from './types'
-import { Avatar, Btn, Icon, NumField, Seg, Sheet, Toggle } from './ui'
+import { Avatar, Btn, Icon, moved, NumField, Seg, Sheet, SortList, Toggle } from './ui'
 import { closeSheet, openSheet, uiSet, useUi } from './uistate'
 
 export function Sheets({ s }: { s: Snap | null }) {
@@ -21,6 +23,11 @@ export function Sheets({ s }: { s: Snap | null }) {
     case 'blinds': return s && <Blinds s={s} />
     case 'settings': return <Settings s={s} />
     case 'invite': return s && <Invite s={s} />
+    case 'ranks': return <RanksSheet />
+    case 'seating': return s && <Seating s={s} />
+    case 'export': return <Export s={s} />
+    case 'restore': return <Restore s={s} />
+    case 'close': return <CloseTable s={s} />
     case 'confirm': return (
       <Sheet title="Are you sure?" onClose={closeSheet}>
         <p>{sh.text}</p>
@@ -49,20 +56,26 @@ function Menu({ s }: { s: Snap | null }) {
     <Sheet title="Menu" onClose={closeSheet}>
       <div class="list">
         {playing && <Item icon="history" label="Hand history" sub="Everything that happened" onClick={() => openSheet({ k: 'history' })} />}
+        <Item icon="ranks" label="Hand rankings" sub="Which hand beats which, card values" onClick={() => openSheet({ k: 'ranks' })} />
         {host && playing && <Item icon="users" label="Players & seats" sub="Add, rebuy, sit out, fix stacks" onClick={() => openSheet({ k: 'players' })} />}
+        {host && playing && <Item icon="seats" label="Seating order" sub="Drag to change who sits where" onClick={() => openSheet({ k: 'seating' })} />}
         {host && playing && <Item icon="timer" label="Blinds & timer" sub={s?.timer ? `Level ${s.timer.level}` : `${chips(s!.cfg.sb)}/${chips(s!.cfg.bb)} fixed`} onClick={() => openSheet({ k: 'blinds' })} />}
         {host && playing && <Item icon="qr" label="Invite phones" sub={s?.lan.open ? 'Sharing on your network' : 'Let friends join from their browser'} onClick={() => openSheet({ k: 'invite' })} />}
         <Item icon="cards" label="Who wins?" sub="Enter cards, get the winner explained" onClick={() => openSheet({ k: 'calc' })} />
         <Item icon="gear" label="Settings" sub="Sound, voice, hints, display" onClick={() => openSheet({ k: 'settings' })} />
         {host && playing && <Item icon="flag" label="End game & settle up" sub="Results and who pays whom" onClick={() => openSheet({ k: 'confirm', text: 'End the game and see the results?', yes: 'End & settle', run: () => cmd('end') })} />}
+        {s && s.phase !== 'setup' && <Item icon="save" label="Save & export" sub={host ? 'Readable hand history · backup to switch phones' : 'Readable hand history'} onClick={() => openSheet({ k: 'export' })} />}
+        {host && <Item icon="open" label="Continue a saved game" sub="Restore a backup from another phone" onClick={() => openSheet({ k: 'restore' })} />}
         {host && s && s.phase !== 'setup' && <Item icon="plus" label="New game" sub="Start over with a fresh table" onClick={() => openSheet({ k: 'confirm', text: 'Start a new game? The current table and results will be cleared.', yes: 'New game', run: () => cmd('reset') })} />}
+        {host && s && s.phase !== 'setup' && <Item icon="power" label={canExit ? 'Close table & exit' : 'Close table'} sub="End the game for everyone and shut it down" onClick={() => openSheet({ k: 'close' })} />}
+        {host && canExit && (!s || s.phase === 'setup') && <Item icon="power" label="Exit Chipless" sub="Close the app" onClick={() => exitApp()} />}
         {!host && store.me != null && <Item icon="close" label="Leave my seat" sub="Use this phone for someone else" onClick={() => { forgetSeat(); closeSheet() }} />}
       </div>
     </Sheet>
   )
 }
 
-const KIND_ICON: Record<string, string> = { win: '★', allin: '●', raise: '▲', bet: '▲', fold: '✕', check: '✓', call: '=', street: '▸', hand: '♠', fix: '✎', why: '›' }
+const KIND_ICON: Record<string, string> = { board: '▣', show: '◆', win: '★', allin: '●', raise: '▲', bet: '▲', fold: '✕', check: '✓', call: '=', street: '▸', hand: '♠', fix: '✎', why: '›' }
 
 function History({ s }: { s: Snap }) {
   const hands = useMemo(() => {
@@ -89,6 +102,7 @@ function Players({ s }: { s: Snap }) {
   return (
     <Sheet title="Players & seats" onClose={closeSheet}>
       <p class="muted tiny">Listed clockwise, the same order you sit. Tap a player for options.</p>
+      <Btn kind="ghost" onClick={() => openSheet({ k: 'seating' })}><Icon name="seats" size={18} /> Change seating order</Btn>
       <div class="list">
         {s.players.map((p, i) => (
           <button class="item" onClick={() => openSheet({ k: 'seat', id: p.id })}>
@@ -199,6 +213,8 @@ function Settings({ s }: { s: Snap | null }) {
       )}
       <h3>This phone</h3>
       <Toggle on={prefs.sound} onChange={(v) => set('sound', v)} label="Sounds" sub="Chips, checks, your-turn chime" />
+      <Toggle on={prefs.drama} onChange={(v) => set('drama', v)} label="Dramatic sounds" sub="Big bets swell, all-ins hit hard, big pots get a fanfare" />
+      <Toggle on={prefs.callBets} onChange={(v) => set('callBets', v)} label="Announce bets out loud" sub="“Maya raises by 300, to 400. Pot-sized!”" />
       {host && <Toggle on={prefs.voice} onChange={(v) => set('voice', v)} label="Call out turns" sub="“Anna, it's on you”" />}
       <Toggle on={prefs.haptics} onChange={(v) => set('haptics', v)} label="Vibration" />
       {host && <Toggle on={prefs.face} onChange={(v) => set('face', v)} label="Turn buttons toward the player" sub="For a phone lying in the middle of the table" />}
@@ -325,12 +341,14 @@ export function SettleView({ s }: { s: Snap }) {
         </>
       )}
       <ShareBtn text={text} />
+      <Btn kind="quiet" onClick={() => openSheet({ k: 'export' })}><Icon name="save" size={18} /> Save hand history{host ? ' & backup' : ''}</Btn>
       {host && (
         <div class="row">
           <Btn kind="quiet" big onClick={() => cmd('reopen')}>Back to table</Btn>
           <Btn kind="primary" big onClick={() => openSheet({ k: 'confirm', text: 'Start a new game? These results will be cleared.', yes: 'New game', run: () => cmd('reset') })}>New game</Btn>
         </div>
       )}
+      {host && <Btn kind="quiet" onClick={() => openSheet({ k: 'close' })}><Icon name="power" size={18} /> {canExit ? 'Close table & exit' : 'Close table'}</Btn>}
       {!host && <p class="tiny muted center-t">Host your own game: <a href={SITE} target="_blank" rel="noopener">get Chipless</a>, free for Android.</p>}
     </div>
   )
@@ -349,5 +367,152 @@ function ShareBtn({ text }: { text: string }) {
       {msg && <p class="tiny muted center-t">{msg}</p>}
       {shown && <textarea class="sharetext" readOnly value={text} onFocus={(e) => (e.target as HTMLTextAreaElement).select()} />}
     </>
+  )
+}
+
+// ------------------------------------------------------------------ seating
+
+/** Small table diagram: who sits where, numbered in playing order (clockwise). */
+function MiniRing({ names, colors, dealer }: { names: string[]; colors: number[]; dealer: number }) {
+  const n = names.length
+  return (
+    <div class="miniring" aria-hidden="true">
+      <div class="mfelt"><span>↻<small>play goes clockwise</small></span></div>
+      {names.map((nm, i) => {
+        const a = (seatAngle(i, n) * Math.PI) / 180
+        return (
+          <span class={'mseat' + (i === dealer ? ' d' : '')} style={{ left: `${50 + 42 * Math.cos(a)}%`, top: `${50 + 40 * Math.sin(a)}%`, '--c': seatColorOf(colors[i]) }}>
+            <b>{i + 1}</b>{nm.length > 7 ? nm.slice(0, 6) + '…' : nm}
+          </span>
+        )
+      })}
+    </div>
+  )
+}
+
+function Seating({ s }: { s: Snap }) {
+  const [ids, setIds] = useState(s.players.map((p) => p.id))
+  useEffect(() => { setIds((cur) => { const now = s.players.map((p) => p.id); return cur.length === now.length && now.every((x) => cur.includes(x)) ? cur : now }) }, [s.players.length])
+  const by = (id: number) => s.players.find((p) => p.id === id)!
+  const seatOf = (id: number) => s.players.findIndex((p) => p.id === id)
+  const changed = ids.join() !== s.players.map((p) => p.id).join()
+  const inHand = !!s.hand && s.hand.street !== 'done'
+  const dealer = ids.indexOf(s.button ?? -1)
+  return (
+    <Sheet title="Seating order" onClose={closeSheet}>
+      <p class="muted tiny">Drag ⠿ to move someone, or use the arrows. The list goes clockwise around the table: each player acts after the one above them, and the last acts before the first.</p>
+      <MiniRing names={ids.map((id) => by(id).name)} colors={ids.map(seatOf)} dealer={dealer} />
+      <SortList items={ids} label={(id) => by(id).name} onMove={(a, b) => setIds(moved(ids, a, b))}
+        render={(id, i) => {
+          const p = by(id)
+          const prev = by(ids[(i - 1 + ids.length) % ids.length])
+          return (
+            <div class="seatrow">
+              <span class="sn">{i + 1}</span>
+              <Avatar name={p.name} seat={seatOf(id)} size={32} />
+              <span class="sx"><b>{p.name}{id === s.button ? ' · D' : ''}</b><small>acts after {prev.name}</small></span>
+              <button class={'dbtn' + (id === s.button ? ' on' : '')} disabled={inHand || id === s.button} aria-label={`Make ${p.name} the dealer`} onClick={() => cmd('button', { id })}>D</button>
+            </div>
+          )
+        }} />
+      {inHand && <p class="tiny" style={{ color: 'var(--amber)' }}>A hand is being played. Seats change after it ends — set them up now and save when it's over.</p>}
+      <div class="row">
+        <Btn kind="quiet" big disabled={!changed} onClick={() => setIds(s.players.map((p) => p.id))}>Reset</Btn>
+        <Btn kind="primary" big disabled={!changed || inHand} onClick={() => { cmd('reorder', { ids }); closeSheet() }}><Icon name="check" /> Save seats</Btn>
+      </div>
+      <p class="tiny muted">Tap D to choose who deals next. The blinds follow the dealer.</p>
+    </Sheet>
+  )
+}
+
+// ------------------------------------------------------------------ export / restore / close
+
+function Export({ s }: { s: Snap | null }) {
+  const st = useStore()
+  const host = store.role === 'host'
+  const [msg, setMsg] = useState('')
+  useEffect(() => { store.exported = null; send({ t: 'export' }) }, [])
+  const ex = st.exported
+  const tell = (t: string) => { setMsg(t); setTimeout(() => setMsg(''), 3000) }
+  const doShare = async (text: string) => {
+    const r = await share(text)
+    if (r === 'copied') tell('Copied — paste it anywhere')
+    if (r === 'shown') tell('Sharing isn’t available here — use Save instead')
+  }
+  return (
+    <Sheet title="Save & export" onClose={closeSheet}>
+      {!ex ? <p class="muted">Preparing…</p> : (
+        <>
+          <h3>Hand history</h3>
+          <p class="tiny muted">The whole night in plain text: standings, who pays whom, and every hand action by action.</p>
+          <pre class="exportpre">{ex.text.split('\n').slice(0, 40).join('\n')}{ex.text.split('\n').length > 40 ? '\n…' : ''}</pre>
+          <div class="row">
+            <Btn kind="ghost" onClick={() => doShare(ex.text)}><Icon name="share" size={18} /> Share</Btn>
+            <Btn kind="ghost" onClick={() => { saveFile(ex.file, 'text/plain', ex.text); if (!isNative) tell('Downloaded ' + ex.file) }}><Icon name="save" size={18} /> Save file</Btn>
+          </div>
+          {host && ex.backup && (
+            <>
+              <h3>Move the game to another phone</h3>
+              <p class="tiny muted">A backup keeps everything: players, stacks, buy-ins, blinds, the hand in progress and its history. On the other phone open Chipless, tap <b>Continue a saved game</b> and choose this file.</p>
+              <div class="row">
+                <Btn kind="primary" onClick={() => { saveFile(ex.backupFile!, 'application/json', ex.backup!); if (!isNative) tell('Downloaded ' + ex.backupFile) }}><Icon name="save" size={18} /> Save backup</Btn>
+                <Btn kind="ghost" onClick={() => doShare(ex.backup!)}><Icon name="share" size={18} /> Share as text</Btn>
+              </div>
+              {s?.phase === 'play' && <p class="tiny muted">Tip: after restoring on the new phone, close the table on this one so nobody plays on the old copy.</p>}
+            </>
+          )}
+          {msg && <p class="tiny center-t" style={{ color: 'var(--green)' }}>{msg}</p>}
+        </>
+      )}
+    </Sheet>
+  )
+}
+
+function Restore({ s }: { s: Snap | null }) {
+  const [text, setText] = useState('')
+  const [err, setErr] = useState('')
+  const [file, setFile] = useState('')
+  const busy = !!s && s.phase !== 'setup'
+  let data: unknown = null
+  try { data = text.trim() ? JSON.parse(text) : null } catch { data = null }
+  const ok = !!data && (data as { app?: string }).app === 'chipless'
+  useEffect(() => { setErr(text.trim() && !ok ? 'That doesn’t look like a Chipless backup.' : '') }, [text])
+  const load = (e: Event) => {
+    const f = (e.target as HTMLInputElement).files?.[0]
+    if (!f) return
+    setFile(f.name)
+    f.text().then(setText).catch(() => setErr('Couldn’t read that file.'))
+  }
+  const run = () => { cmd('import', { data }); closeSheet() }
+  return (
+    <Sheet title="Continue a saved game" onClose={closeSheet}>
+      <p class="tiny muted">Pick the backup file saved on the other phone (Save & export → Save backup), or paste its text. The table continues exactly where it was, including a hand in progress.</p>
+      <label class="btn ghost filepick"><Icon name="open" size={18} /> {file || 'Choose backup file'}
+        <input type="file" accept=".json,application/json,text/plain" onChange={load} />
+      </label>
+      <textarea class="sharetext" placeholder="…or paste the backup text here" value={text} onInput={(e) => setText((e.target as HTMLTextAreaElement).value)} />
+      {err && <p class="tiny" style={{ color: 'var(--red)' }}>{err}</p>}
+      {ok && busy && <p class="tiny" style={{ color: 'var(--amber)' }}>This replaces the game on this phone. Save its history first if you need it.</p>}
+      <p class="tiny muted">Friends' phones need to rejoin: they scan the new QR code and tap their name.</p>
+      <Btn kind="primary" big disabled={!ok} onClick={run}><Icon name="check" /> Restore game</Btn>
+    </Sheet>
+  )
+}
+
+function CloseTable({ s }: { s: Snap | null }) {
+  const close = () => {
+    closeSheet()
+    cmd('close')
+    if (canExit) setTimeout(exitApp, 350)
+  }
+  return (
+    <Sheet title={canExit ? 'Close table & exit' : 'Close table'} onClose={closeSheet}>
+      <p>This ends the game for everyone{s?.lan.open ? ', stops sharing with other phones' : ''}{canExit ? ' and closes Chipless' : ''}. The table, results and history are cleared.</p>
+      <Btn kind="ghost" big onClick={() => openSheet({ k: 'export' })}><Icon name="save" /> Save history or backup first</Btn>
+      <div class="row">
+        <Btn kind="quiet" big onClick={closeSheet}>Cancel</Btn>
+        <Btn kind="danger" big onClick={close}><Icon name="power" /> {canExit ? 'Close & exit' : 'Close table'}</Btn>
+      </div>
+    </Sheet>
   )
 }

@@ -12,9 +12,12 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import android.window.OnBackInvokedCallback
 import android.window.OnBackInvokedDispatcher
 
@@ -23,6 +26,8 @@ class MainActivity : Activity() {
     private lateinit var web: WebView
     private lateinit var bridge: Bridge
     private var backCallback: OnBackInvokedCallback? = null
+    private var pickCallback: ValueCallback<Array<Uri>>? = null
+    private var pendingSave: String? = null
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +53,15 @@ class MainActivity : Activity() {
                     if (host == "127.0.0.1" || host == "localhost") return false
                     runCatching { startActivity(Intent(Intent.ACTION_VIEW, req.url)) }
                     return true
+                }
+            }
+            // <input type="file"> (restoring a backup) opens the system file picker.
+            webChromeClient = object : WebChromeClient() {
+                override fun onShowFileChooser(view: WebView, cb: ValueCallback<Array<Uri>>, params: FileChooserParams): Boolean {
+                    pickCallback?.onReceiveValue(null)
+                    pickCallback = cb
+                    val pick = Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("*/*")
+                    return runCatching { startActivityForResult(pick, REQ_PICK); true }.getOrElse { pickCallback = null; false }
                 }
             }
         }
@@ -104,6 +118,42 @@ class MainActivity : Activity() {
         }
     }
 
+    fun saveFile(name: String, mime: String, text: String) {
+        pendingSave = text
+        val create = Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType(mime).putExtra(Intent.EXTRA_TITLE, name)
+        runCatching { startActivityForResult(create, REQ_SAVE) }.onFailure {
+            pendingSave = null
+            Toast.makeText(this, "No file manager found — use Share instead", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun exitApp() {
+        (application as App).setLan(false)
+        finishAndRemoveTask()
+        web.postDelayed({ android.os.Process.killProcess(android.os.Process.myPid()) }, 400)
+    }
+
+    @Deprecated("Simple result handling without AndroidX")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQ_PICK -> {
+                pickCallback?.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(resultCode, data))
+                pickCallback = null
+            }
+            REQ_SAVE -> {
+                val text = pendingSave
+                pendingSave = null
+                val uri = data?.data
+                if (resultCode != RESULT_OK || uri == null || text == null) return
+                val ok = runCatching {
+                    contentResolver.openOutputStream(uri, "wt")!!.use { it.write(text.toByteArray(Charsets.UTF_8)) }
+                }.isSuccess
+                Toast.makeText(this, if (ok) "Saved" else "Couldn't save the file", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         web.onResume()
@@ -125,4 +175,9 @@ class MainActivity : Activity() {
 
     @Suppress("unused")
     private fun open(uri: String) = startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
+
+    companion object {
+        private const val REQ_PICK = 11
+        private const val REQ_SAVE = 12
+    }
 }

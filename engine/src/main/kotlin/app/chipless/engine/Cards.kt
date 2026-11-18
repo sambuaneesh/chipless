@@ -18,6 +18,12 @@ object Cards {
 
     fun text(c: Int): String = "${RANKS[c shr 2]}${SUITS[c and 3]}"
 
+    /** Human form with suit symbols: "A♠ 10♥". */
+    fun pretty(cards: List<Int>): String = cards.joinToString(" ") { c ->
+        val r = RANKS[c shr 2].let { if (it == 'T') "10" else it.toString() }
+        r + "♠♥♦♣"[c and 3]
+    }
+
     fun rankName(r: Int, plural: Boolean = false): String {
         val n = RANK_NAMES[r]
         return if (!plural) n else if (n == "Six") "Sixes" else n + "s"

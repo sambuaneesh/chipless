@@ -130,6 +130,7 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
                 "act" -> act(c, m)
                 "undo" -> undo(c, m)
                 "eval" -> c.send(Json.write(mapOf("t" to "eval", "r" to evaluate(m))))
+                "export" -> c.send(Json.write(exportMessage(c.host)))
                 "cmd" -> {
                     if (!c.host) throw RuleError("Only the host can do that")
                     command(m)
@@ -263,6 +264,14 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
                 val (sb, bb) = blindsForNextHand()
                 push(Event.StartHand(sb, bb))
                 if (cfg.timer && !timerRunning && levelEndsAt == 0L) startTimer()
+            }
+            "board" -> push(Event.Board(parseCards(m.list("cards"))))
+            "import" -> importBackup(m.obj("data"))
+            "close" -> {
+                events.clear(); seats.clear(); ended = false; game = Game(); notice = null; timerRunning = false
+                for (c in clients) if (!c.host) { c.id = null; welcome(c) }
+                changed()
+                onLan?.invoke(false)
             }
             "award" -> push(Event.Award(m.list("ranking").map { g -> (g as List<*>).map { (it as Number).toInt() } }))
             "awardCards" -> awardCards(m)
@@ -422,7 +431,9 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
             "cue" to Coach.cue(g),
             "hint" to Coach.hint(g)?.let { mapOf("key" to it.key, "text" to it.text) },
             "notice" to notice,
-            "log" to g.log.takeLast(120).map { mapOf("h" to it.hand, "text" to it.text, "kind" to it.kind, "who" to it.who) },
+            "log" to g.log.takeLast(120).map {
+                mapOf("h" to it.hand, "text" to it.text, "kind" to it.kind, "who" to it.who, "tag" to it.tag, "amt" to it.amount, "by" to it.by)
+            },
             "undo" to mapOf("host" to undoable(null), "by" to (events.lastOrNull() as? Event.Act)?.id),
             "timer" to timerJson(now),
             "settle" to if (g.created) settleJson(g) else null,
@@ -489,6 +500,64 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
             "nets" to everyone.map { mapOf("id" to it.id, "name" to it.name, "chips" to chips[it.id], "money" to money?.get(it.id), "buyIn" to it.buyIn) },
             "transfers" to transfers.map { mapOf("from" to it.from, "to" to it.to, "amount" to it.amount) },
         )
+    }
+
+    // ------------------------------------------------------------------ export / import
+
+    private fun stamp(): String = java.time.LocalDateTime.ofInstant(java.time.Instant.ofEpochMilli(clock()), java.time.ZoneId.systemDefault())
+        .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmm"))
+
+    /** A portable copy of the whole game, for continuing on another phone. */
+    private fun backup(): Map<String, Any?> {
+        val left = if (timerRunning) maxOf(0, levelEndsAt - clock()) else if (levelEndsAt == 0L) cfg.minutes * 60_000L else levelLeft
+        return linkedMapOf(
+            "app" to "chipless", "kind" to "backup", "v" to 1, "at" to clock(),
+            "cfg" to cfg.toJson(), "ended" to ended, "events" to events.map(Codec::encode),
+            "timer" to mapOf("level" to level, "left" to left, "running" to timerRunning, "started" to (levelEndsAt != 0L)),
+        )
+    }
+
+    private fun exportMessage(host: Boolean): Map<String, Any?> {
+        val st = stamp()
+        val out = linkedMapOf<String, Any?>("t" to "export", "text" to Report.text(game, cfg, ended, clock()), "file" to "chipless-hands-$st.txt")
+        if (host && game.created) {
+            out["backup"] = Json.write(backup())
+            out["backupFile"] = "chipless-backup-$st.json"
+        }
+        return out
+    }
+
+    /** Replace the table with a backup. Every event must replay cleanly, or nothing changes. */
+    private fun importBackup(o: Obj) {
+        if (o.strOr("app", null) != "chipless" || o.strOr("kind", null) != "backup") throw RuleError("That isn't a Chipless backup file")
+        if (o.intOr("v", 0) > 1) throw RuleError("This backup is from a newer version of Chipless — update the app first")
+        val c = Config().also { it.read(o.obj("cfg")) }
+        val evs = try {
+            o.list("events").map { Codec.decode(it as Obj) }
+        } catch (e: Exception) {
+            throw RuleError("The backup file is damaged")
+        }
+        val g = Game()
+        try {
+            for (e in evs) { g.apply(e); g.checkInvariants() }
+        } catch (e: Exception) {
+            throw RuleError("The backup doesn't replay cleanly (${e.message}). Nothing was changed.")
+        }
+        if (!g.created) throw RuleError("The backup has no game in it")
+        cfg.read(o.obj("cfg"))
+        events.clear(); events.addAll(evs)
+        game = g
+        ended = o.bool("ended")
+        seats.clear()
+        for (cl in clients) if (!cl.host) { cl.id = null; welcome(cl) }
+        val t = o["timer"] as? Obj
+        level = (t?.intOr("level", 0) ?: 0).coerceIn(0, LEVELS.lastIndex)
+        levelLeft = t?.longOr("left", cfg.minutes * 60_000L) ?: (cfg.minutes * 60_000L)
+        val started = t?.bool("started") ?: false
+        timerRunning = cfg.timer && (t?.bool("running") ?: false)
+        levelEndsAt = if (timerRunning) clock() + levelLeft else if (started) 1L else 0L
+        notice = "Game restored from a backup — ${g.players.size} players, ${g.handNo} hand${if (g.handNo == 1) "" else "s"} played."
+        changed()
     }
 
     // ------------------------------------------------------------------ persistence

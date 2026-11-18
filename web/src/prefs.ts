@@ -5,12 +5,16 @@ export interface Prefs {
   face: boolean
   fourColor: boolean
   haptics: boolean
+  /** Say bets out loud ("Maya raises by 300, to 400"). */
+  callBets: boolean
+  /** Bigger sounds and effects for big bets, all-ins and big pots. */
+  drama: boolean
 }
 
 const KEY = 'chipless.prefs'
 
 function load(host: boolean): Prefs {
-  const d: Prefs = { sound: host, voice: host, face: false, fourColor: false, haptics: true }
+  const d: Prefs = { sound: host, voice: host, face: false, fourColor: false, haptics: true, callBets: host, drama: true }
   try {
     return { ...d, ...JSON.parse(localStorage.getItem(KEY) || '{}') }
   } catch {

@@ -19,6 +19,7 @@ object Codec {
         is Event.SetButton -> mapOf("e" to "button", "id" to e.id)
         is Event.StartHand -> mapOf("e" to "deal", "sb" to e.sb, "bb" to e.bb)
         is Event.Act -> mapOf("e" to "act", "id" to e.id, "move" to e.move.name, "to" to e.to)
+        is Event.Board -> mapOf("e" to "board", "cards" to e.cards)
         is Event.Award -> mapOf(
             "e" to "award", "ranking" to e.ranking, "board" to e.board,
             "holes" to e.holes.mapKeys { it.key.toString() },
@@ -38,6 +39,7 @@ object Codec {
         "button" -> Event.SetButton(o.int("id"))
         "deal" -> Event.StartHand(o.int("sb"), o.int("bb"))
         "act" -> Event.Act(o.int("id"), Move.valueOf(o.str("move")), o.intOr("to", 0))
+        "board" -> Event.Board(o.ints("cards"))
         "award" -> Event.Award(
             o.list("ranking").map { g -> (g as List<*>).map { (it as Number).toInt() } },
             o.ints("board"),

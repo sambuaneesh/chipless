@@ -3,7 +3,7 @@ import { chips, clock, initials, seatColor } from './fmt'
 import { store, undo } from './net'
 import { hintSeen, markHint } from './prefs'
 import type { HandS, PlayerS, Snap } from './types'
-import { openSheet } from './uistate'
+import { openSheet, useUi } from './uistate'
 import { Card, ChipStack, Icon, IconBtn } from './ui'
 
 /** Seat angle (degrees, screen coords): index 0 at the bottom, clockwise. */
@@ -14,13 +14,19 @@ function pos(i: number, n: number, rx: number, ry: number) {
   return { left: `${50 + rx * Math.cos(a)}%`, top: `${50 + ry * Math.sin(a)}%` }
 }
 
+/** "Raise 400" → "raise"; drives the colour of action pills. */
+export const tagKind = (t: string) => t.split(' ')[0].toLowerCase().replace('all-in', 'allin')
+
 export function Ring({ s, compact, me }: { s: Snap; compact?: boolean; me?: number | null }) {
   const h = s.hand
   const n = s.players.length
+  const u = useUi()
+  const quake = u.flash && (u.flash.kind === 'allin' || u.flash.kind === 'big')
   return (
-    <div class={'ring' + (compact ? ' compact' : '')}>
+    <div class={'ring' + (compact ? ' compact' : '') + (quake ? ' quake' : '')}>
       <div class="felt" />
       <Center s={s} />
+      {u.flash && <Flash f={u.flash} s={s} />}
       {s.players.map((p, i) => {
         const bet = h?.bets[p.id]
         return (
@@ -64,10 +70,11 @@ function Seat({ p, s, i, me, style }: { p: PlayerS; s: Snap; i: number; me?: num
       </span>
       <span class="nm">{p.name}</span>
       <span class="st">{allIn ? 'ALL-IN' : chips(p.stack)}</span>
-      {open && h && (p.id === h.sbId || p.id === h.bbId) && !label && (
+      {open && h && (p.id === h.sbId || p.id === h.bbId) && !label && !turn && (
         <span class="blind">{p.id === h.bbId ? 'BB' : 'SB'}</span>
       )}
-      {label && <span class="lbl">{label}</span>}
+      {turn && open && h?.street !== 'showdown' && <span class="think" aria-hidden="true"><i /><i /><i /></span>}
+      {label && <span key={label} class={'lbl k-' + tagKind(label)}>{label}</span>}
       {!open && status && <span class="lbl muted">{status}</span>}
     </button>
   )
@@ -99,11 +106,22 @@ function Center({ s }: { s: Snap }) {
   }
   const reached = { preflop: 0, flop: 3, turn: 4, river: 5, showdown: 5, done: 5 }[h.street]
   const shown = h.runout ? 5 : reached
+  const host = store.role === 'host'
+  const known = h.board.length > 0
+  const slots = (
+    <>
+      {[0, 1, 2, 3, 4].map((i) => h.board[i]
+        ? <Card c={h.board[i]} small />
+        : known || host && reached > 0
+          ? <span class={'card small back' + (i < reached ? ' on' : i < shown ? ' next' : ' off')} />
+          : <span class={'slot' + (i < reached ? ' on' : i < shown ? ' next' : '')} />)}
+    </>
+  )
   return (
     <div class="center" id="pot">
-      <div class="board slots" aria-label={`${streetName(h)} — ${reached} board cards`}>
-        {[0, 1, 2, 3, 4].map((i) => <span class={'slot' + (i < reached ? ' on' : i < shown ? ' next' : '')} />)}
-      </div>
+      {host && reached > 0
+        ? <button class={'board cards edit'} onClick={() => openSheet({ k: 'board' })} aria-label={`Board: ${h.board.length ? h.board.join(' ') : 'no cards recorded'} — tap to record the cards`}>{slots}</button>
+        : <div class={'board ' + (known ? 'cards' : 'slots')} aria-label={`${streetName(h)} — ${known ? h.board.join(' ') : reached + ' board cards'}`}>{slots}</div>}
       <div class="potv">{chips(h.total)}</div>
       <div class="potl">{streetName(h)}</div>
       {h.pots.length > 1 && <div class="potsub">{h.pots.map((p, i) => `${i === 0 ? 'Main' : 'Side'} ${chips(p.amount)}`).join(' · ')}</div>}
@@ -118,10 +136,53 @@ export function streetName(h: HandS) {
 
 export function Cue({ s }: { s: Snap }) {
   if (!s.cue) return null
+  const h = s.hand
+  const reached = h ? ({ preflop: 0, flop: 3, turn: 4, river: 5, showdown: 5, done: 0 } as const)[h.street] : 0
+  const canRecord = store.role === 'host' && !!h && h.street !== 'showdown' && reached > 0 && h.board.length < reached
   return (
     <div class="cue" role="status">
       <span class="cue-ico"><Icon name="cards" size={18} /></span>
       <span><b>Dealer</b> {s.cue}</span>
+      {canRecord && <button class="cue-btn" onClick={() => openSheet({ k: 'board' })}>Enter cards<small>optional</small></button>}
+    </div>
+  )
+}
+
+const FLASH_ICON: Record<string, string> = { fold: '✕', check: '✓', call: '=', bet: '▲', raise: '▲', big: '▲▲', allin: '●', win: '★' }
+
+/** The latest action, big and clear, over the felt for a moment. */
+function Flash({ f, s }: { f: NonNullable<ReturnType<typeof useUi>['flash']>; s: Snap }) {
+  const i = s.players.findIndex((p) => p.id === f.who)
+  return (
+    <div key={f.key} class={'flash k-' + f.kind} role="status" aria-live="assertive" style={{ '--c': seatColor(Math.max(0, i)) }}>
+      <span class="fi">{FLASH_ICON[f.kind] ?? '•'}</span>
+      <span class="ft"><b>{f.title}</b><span>{f.sub}</span></span>
+    </div>
+  )
+}
+
+/** This street's actions in order, so anyone glancing at the table sees what everyone did. */
+export function Timeline({ s }: { s: Snap }) {
+  const h = s.hand
+  if (!h || h.street === 'done') return null
+  const lines = s.log.filter((l) => l.h === h.no)
+  let from = 0
+  lines.forEach((l, i) => { if (l.kind === 'street' || l.kind === 'hand') from = i + 1 })
+  const acts = lines.slice(from).filter((l) => l.tag && l.who != null)
+  const street = streetName(h)
+  return (
+    <div class="timeline" aria-label={`${street} so far`}>
+      <span class="tl-st">{street}</span>
+      {acts.length === 0 && <span class="tl-none">No action yet</span>}
+      {acts.map((l, k) => {
+        const i = s.players.findIndex((p) => p.id === l.who)
+        const p = s.players[i]
+        return (
+          <span class={'tl-a k-' + tagKind(l.tag!) + (k === acts.length - 1 ? ' last' : '')} style={{ '--c': seatColor(Math.max(0, i)) }}>
+            <i>{p ? initials(p.name) : '?'}</i>{p?.name ?? '?'} <b>{l.tag}</b>
+          </span>
+        )
+      })}
     </div>
   )
 }
@@ -172,6 +233,7 @@ export function TopBar({ s, host }: { s: Snap; host: boolean }) {
       <div class="tb-act">
         {!store.online && <span class="offline">Reconnecting…</span>}
         {canUndo && <IconBtn name="undo" label="Undo last action" onClick={() => undo()} />}
+        <IconBtn name="ranks" label="Hand rankings" onClick={() => openSheet({ k: 'ranks' })} />
         {host && <IconBtn name="qr" label="Invite phones" onClick={() => openSheet({ k: 'invite' })} badge={s.lan.open} />}
         <IconBtn name="menu" label="Menu" onClick={() => openSheet({ k: 'menu' })} />
       </div>

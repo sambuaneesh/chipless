@@ -26,6 +26,14 @@ const PATHS: Record<string, string> = {
   info: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20M12 16v-4M12 8h.01',
   wifi: 'M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0M2 9a15 15 0 0 1 20 0M12 20h.01',
   play: 'M7 4v16l13-8z',
+  ranks: 'M4 6h.01M4 12h.01M4 18h.01M8 6h12M8 12h9M8 18h6',
+  save: 'M12 3v12M7 10l5 5 5-5M5 21h14',
+  open: 'M12 15V3M7 8l5-5 5 5M5 21h14',
+  power: 'M12 3v9M6.4 6.4a8 8 0 1 0 11.2 0',
+  grip: 'M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01',
+  up: 'M6 15l6-6 6 6',
+  down: 'M6 9l6 6 6-6',
+  seats: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18M12 7v.01M17 12h.01M12 17v.01M7 12h.01',
   spark: 'M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6',
 }
 
@@ -156,6 +164,65 @@ export function HoldBtn({ label, sub, onDone, ms = 600 }: { label: string; sub?:
       {sub && <small>{holding ? 'keep holding…' : sub}</small>}
     </button>
   )
+}
+
+// ------------------------------------------------------------------ sortable list
+
+/**
+ * Drag rows by their handle to reorder (pointer events, works with touch), or use the
+ * arrow buttons. [onMove] gets the old and new index.
+ */
+export function SortList<T>({ items, render, onMove, label }: { items: T[]; render: (t: T, i: number) => ComponentChildren; onMove: (from: number, to: number) => void; label: (t: T) => string }) {
+  const [drag, setDrag] = useState<{ from: number; dy: number; h: number } | null>(null)
+  const target = drag ? Math.max(0, Math.min(items.length - 1, drag.from + Math.round(drag.dy / drag.h))) : -1
+  const start = (i: number, e: PointerEvent) => {
+    const handle = e.currentTarget as HTMLElement
+    const row = handle.closest('.srt-row') as HTMLElement
+    const h = row.getBoundingClientRect().height + 6
+    const y0 = e.clientY
+    e.preventDefault()
+    handle.setPointerCapture(e.pointerId)
+    haptic('tick')
+    let dy = 0
+    setDrag({ from: i, dy: 0, h })
+    const move = (ev: PointerEvent) => { dy = ev.clientY - y0; setDrag({ from: i, dy, h }) }
+    const up = () => {
+      handle.removeEventListener('pointermove', move); handle.removeEventListener('pointerup', up); handle.removeEventListener('pointercancel', up)
+      const to = Math.max(0, Math.min(items.length - 1, i + Math.round(dy / h)))
+      setDrag(null)
+      if (to !== i) { haptic('confirm'); onMove(i, to) }
+    }
+    handle.addEventListener('pointermove', move); handle.addEventListener('pointerup', up); handle.addEventListener('pointercancel', up)
+  }
+  const shift = (k: number) => {
+    if (!drag || k === drag.from) return 0
+    if (drag.from < k && k <= target) return -drag.h
+    if (target <= k && k < drag.from) return drag.h
+    return 0
+  }
+  return (
+    <div class={'srt' + (drag ? ' dragging' : '')} role="list">
+      {items.map((t, i) => (
+        <div role="listitem" class={'srt-row' + (drag?.from === i ? ' lifted' : '')}
+          style={{ transform: `translateY(${drag?.from === i ? drag.dy : shift(i)}px)` }}>
+          <button class="srt-grip" aria-label={`Drag to move ${label(t)}`} onPointerDown={(e) => start(i, e as unknown as PointerEvent)} style={{ touchAction: 'none' }}>
+            <Icon name="grip" size={20} />
+          </button>
+          <div class="srt-body">{render(t, i)}</div>
+          <button class="iconbtn sm" aria-label={`Move ${label(t)} up`} disabled={i === 0} onClick={() => onMove(i, i - 1)}><Icon name="up" size={18} /></button>
+          <button class="iconbtn sm" aria-label={`Move ${label(t)} down`} disabled={i === items.length - 1} onClick={() => onMove(i, i + 1)}><Icon name="down" size={18} /></button>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+/** Move one element of a list to a new index (returns a new list). */
+export function moved<T>(list: T[], from: number, to: number): T[] {
+  const a = [...list]
+  const [x] = a.splice(from, 1)
+  a.splice(to, 0, x)
+  return a
 }
 
 // ------------------------------------------------------------------ poker bits

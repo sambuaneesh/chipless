@@ -31,6 +31,9 @@ sealed interface Event {
     data class StartHand(val sb: Int, val bb: Int) : Event
     data class Act(val id: Int, val move: Move, val to: Int = 0) : Event
 
+    /** Board cards recorded so far this hand (optional; the host may enter them as they're dealt). */
+    data class Board(val cards: List<Int>) : Event
+
     /**
      * Showdown result. [ranking] lists live players best-first; players in the same group tie.
      * Live players not listed have mucked. Optional cards come from the Referee.
@@ -56,8 +59,19 @@ data class Pot(val amount: Int, val eligible: List<Int>)
 
 data class PotResult(val amount: Int, val eligible: List<Int>, val winners: List<Int>, val shares: Map<Int, Int>)
 
-/** One line of the table narrative. [kind] drives sounds and styling on clients. */
-data class Line(val hand: Int, val text: String, val kind: String, val who: Int? = null)
+/**
+ * One line of the table narrative. [kind] drives sounds and styling on clients; [tag] is the
+ * short action label ("Raise 400"), [amount] the chips involved, [by] how much the bet went up.
+ */
+data class Line(
+    val hand: Int,
+    val text: String,
+    val kind: String,
+    val who: Int? = null,
+    val tag: String? = null,
+    val amount: Int = 0,
+    val by: Int = 0,
+)
 
 data class Legal(
     val canCheck: Boolean,
@@ -136,8 +150,8 @@ class Game {
 
     private fun name(id: Int) = player(id).name
 
-    private fun say(text: String, kind: String, who: Int? = null) {
-        log.add(Line(handNo, text, kind, who))
+    private fun say(text: String, kind: String, who: Int? = null, tag: String? = null, amount: Int = 0, by: Int = 0) {
+        log.add(Line(handNo, text, kind, who, tag, amount, by))
     }
 
     // ---------------------------------------------------------------- reducer
@@ -196,6 +210,7 @@ class Game {
             }
             is Event.StartHand -> startHand(e.sb, e.bb)
             is Event.Act -> act(e)
+            is Event.Board -> board(e.cards)
             is Event.Award -> award(e)
         }
     }
@@ -417,6 +432,8 @@ class Game {
         val l = legal(e.id)
         val text: String
         val kind: String
+        var amount = 0
+        var by = 0
         when (e.move) {
             Move.FOLD -> {
                 h.folded.add(p.id)
@@ -431,6 +448,7 @@ class Game {
             Move.CALL -> {
                 if (!l.canCall) throw RuleError("Nothing to call — ${p.name} can check")
                 pay(h, p, l.call)
+                amount = l.call
                 if (p.stack == 0) {
                     text = "${p.name} calls ${fmt(l.call)} and is all-in."; kind = "allin"
                     h.label[p.id] = "All-in"
@@ -447,6 +465,7 @@ class Game {
                 val wasBet = h.currentBet
                 pay(h, p, to - h.sc(p.id))
                 val inc = to - wasBet
+                amount = to; by = maxOf(0, inc)
                 if (inc >= h.lfr) h.lfr = inc else h.lastShortAllIn = p.id
                 h.currentBet = maxOf(h.currentBet, to)
                 if (h.street == Street.RIVER) h.riverAggressor = p.id
@@ -462,7 +481,7 @@ class Game {
         }
         h.acted[p.id] = h.currentBet
         h.streetActions++
-        say(text, kind, p.id)
+        say(text, kind, p.id, h.label[p.id], amount, by)
         if (h.live.size == 1) { endRound(h); return }
         val next = nextNeeding(h, p.id)
         if (next == null) endRound(h) else h.toAct = next
@@ -536,8 +555,40 @@ class Game {
         seated(w).stack += total
         h.results = listOf(PotResult(total, listOf(w), listOf(w), mapOf(w to total)))
         h.street = Street.DONE
-        say("${name(w)} wins ${fmt(total)} — everyone else folded.", "win", w)
+        say("${name(w)} wins ${fmt(total)} — everyone else folded.", "win", w, amount = total)
         finishHand(h)
+    }
+
+    // ---------------------------------------------------------------- board
+
+    /** How many board cards are face up by now. */
+    fun boardReached(h: Hand): Int = when (h.street) {
+        Street.PREFLOP -> 0
+        Street.FLOP -> 3
+        Street.TURN -> 4
+        else -> 5
+    }
+
+    private fun board(cards: List<Int>) {
+        val h = hand ?: throw RuleError("No hand in progress")
+        if (!h.open) throw RuleError("This hand is over")
+        val max = boardReached(h)
+        if (max == 0) throw RuleError("No board cards yet — the flop comes after this betting round")
+        if (cards.size > max) throw RuleError("Only $max board card${if (max > 1) "s are" else " is"} out so far")
+        if (cards.any { it !in 0..51 }) throw RuleError("Unknown card")
+        if (cards.size != cards.toSet().size) throw RuleError("The same card is entered twice")
+        val old = h.board
+        if (cards == old) return
+        h.board = cards
+        val names = listOf("Flop", "Turn", "River")
+        val grew = cards.size > old.size && cards.take(old.size) == old
+        val text = when {
+            cards.isEmpty() -> "Board cards cleared"
+            grew && old.size >= 3 && cards.size - old.size == 1 -> names[cards.size - 3] + ": " + Cards.pretty(cards.takeLast(1))
+            grew -> "Board: " + Cards.pretty(cards)
+            else -> "Board corrected: " + Cards.pretty(cards)
+        }
+        say("$text.", "board")
     }
 
     // ---------------------------------------------------------------- showdown
@@ -602,17 +653,24 @@ class Game {
         }
         for (r in results) for ((id, a) in r.shares) seated(id).stack += a
         h.results = results
-        h.board = e.board
+        if (e.board.isNotEmpty()) {
+            if (e.board != h.board) say("Board: ${Cards.pretty(e.board)}.", "board")
+            h.board = e.board
+        }
         h.holes = e.holes
         h.street = Street.DONE
-        val scores = if (e.board.size == 5) e.holes.mapValues { (_, c) -> Eval.score((c + e.board).toIntArray()) } else emptyMap()
+        val scores = if (h.board.size == 5) e.holes.mapValues { (_, c) -> Eval.score((c + h.board).toIntArray()) } else emptyMap()
+        for ((id, c) in e.holes) {
+            val sc = scores[id]
+            say("${name(id)} shows ${Cards.pretty(c)}${sc?.let { " (${Eval.describe(it).removePrefix("a ")})" } ?: ""}.", "show", id)
+        }
         results.forEachIndexed { i, r ->
             val who = r.winners.joinToString(" and ") { name(it) }
             val title = potName(i, results.size).replaceFirstChar { it.uppercase() }
             val prefix = if (results.size > 1) "$title (${fmt(r.amount)}): " else ""
             val verb = if (r.winners.size > 1) "split ${fmt(r.amount)}" else "wins ${fmt(r.amount)}"
             val hand = r.winners.first().let { w -> scores[w]?.let { " with ${Eval.describe(it)}" } } ?: ""
-            say("$prefix$who $verb$hand.", "win", r.winners.first())
+            say("$prefix$who $verb$hand.", "win", r.winners.first(), amount = r.amount)
             val w = r.winners.first()
             val ws = scores[w]
             if (ws != null) {

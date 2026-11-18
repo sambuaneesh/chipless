@@ -5,7 +5,7 @@ import { send, store, undo } from './net'
 import { haptic } from './native'
 import type { Snap } from './types'
 import { Avatar, Btn, Icon } from './ui'
-import { uiSet, useUi, type PreAction } from './uistate'
+import { openSheet, uiSet, useUi, type PreAction } from './uistate'
 
 /** First screen on a friend's phone: tap your name (or add yourself). */
 export function Join({ s }: { s: Snap }) {
@@ -37,6 +37,7 @@ export function Join({ s }: { s: Snap }) {
         </div>
       )}
       <p class="tiny muted center-t">New players get {chips(s.cfg.stack)} chips and are dealt in from the next hand.</p>
+      <Btn kind="quiet" onClick={() => openSheet({ k: 'ranks' })}><Icon name="ranks" size={18} /> Hand rankings</Btn>
       <p class="tiny muted center-t">Running on <a href={SITE} target="_blank" rel="noopener">Chipless</a>, a free, open-source poker chips app.</p>
     </div>
   )

@@ -6,6 +6,8 @@ interface NativeApi {
   haptic(kind: string): void
   share(text: string): void
   keepAwake(on: boolean): void
+  saveFile?(name: string, mime: string, text: string): void
+  exit?(): void
 }
 
 const N: NativeApi | undefined = (window as unknown as { Native?: NativeApi }).Native
@@ -41,6 +43,30 @@ export async function share(text: string): Promise<'shared' | 'copied' | 'shown'
   } catch {
     return 'shown'
   }
+}
+
+/** Save a text file: the system "Save as" screen in the app, a download in browsers. */
+export function saveFile(name: string, mime: string, text: string) {
+  if (N?.saveFile) return N.saveFile(name, mime, text)
+  const url = URL.createObjectURL(new Blob([text], { type: mime }))
+  const a = document.createElement('a')
+  a.href = url; a.download = name
+  document.body.appendChild(a); a.click(); a.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 4000)
+}
+
+export const canExit = !!N?.exit
+export function exitApp() { N?.exit?.() }
+
+/** Speak regardless of the turn-callout setting (callers check their own setting). */
+export function talk(text: string) {
+  if (N) return N.speak(text)
+  try {
+    const u = new SpeechSynthesisUtterance(text)
+    u.rate = 1.08
+    speechSynthesis.cancel()
+    speechSynthesis.speak(u)
+  } catch { /* unsupported */ }
 }
 
 export function keepAwake(on: boolean) {

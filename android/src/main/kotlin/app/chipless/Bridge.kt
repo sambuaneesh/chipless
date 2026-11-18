@@ -1,6 +1,5 @@
 package app.chipless
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
@@ -11,7 +10,7 @@ import android.view.WindowManager
 import android.webkit.JavascriptInterface
 
 /** Native helpers exposed to the web client as `window.Native`. Called on a WebView thread. */
-class Bridge(private val activity: Activity) {
+class Bridge(private val activity: MainActivity) {
     private var tts: TextToSpeech? = null
     private var ttsReady = false
     private var pending: String? = null
@@ -67,6 +66,18 @@ class Bridge(private val activity: Activity) {
             if (on) activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             else activity.window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
+    }
+
+    /** Save text through the system "Save as" screen (Storage Access Framework; no permissions). */
+    @JavascriptInterface
+    fun saveFile(name: String, mime: String, text: String) {
+        activity.runOnUiThread { activity.saveFile(name, mime, text) }
+    }
+
+    /** Close the app completely: stop sharing, finish, and end the process. */
+    @JavascriptInterface
+    fun exit() {
+        activity.runOnUiThread { activity.exitApp() }
     }
 
     fun close() {

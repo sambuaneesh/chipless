@@ -33,7 +33,13 @@ export interface HandS {
   results: ResultS[]; board: string[]; scores: Record<string, ScoreS>
 }
 
-export interface LogLine { h: number; text: string; kind: string; who: number | null }
+export interface LogLine {
+  h: number; text: string; kind: string; who: number | null
+  /** Short action label ("Raise 400"), chips involved, and how much the bet went up. */
+  tag: string | null; amt: number; by: number
+}
+
+export interface ExportS { text: string; file: string; backup?: string; backupFile?: string }
 
 export interface TimerS {
   level: number; sb: number; bb: number; nextSb: number; nextBb: number

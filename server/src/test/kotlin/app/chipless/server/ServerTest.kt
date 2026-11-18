@@ -179,4 +179,108 @@ class ServerTest {
         c.read(mapOf("currency" to "<b>"))
         assertEquals("EUR", c.currency)
     }
+
+    private class Rig {
+        val out = ArrayList<Obj>()
+        val session = Session()
+        val host = Client(true) { out.add(Json.parse(it) as Obj) }
+        init {
+            session.connect(host)
+            send("hello", "host" to session.hostToken)
+        }
+        fun send(t: String, vararg kv: Pair<String, Any?>) = session.handle(host, Json.write(mapOf("t" to t) + kv))
+        fun cmd(c: String, vararg kv: Pair<String, Any?>) = send("cmd", "c" to c, *kv)
+        fun last(t: String) = out.last { it["t"] == t }
+        fun errors() = out.filter { it["t"] == "error" }.map { it["msg"] }
+    }
+
+    @Test
+    fun boardCardsCanBeRecordedDuringTheHandAndAreKeptAtShowdown() {
+        val r = Rig()
+        r.cmd("setup", "names" to listOf("Ann", "Ben"), "button" to 0)
+        r.cmd("deal")
+        r.cmd("board", "cards" to listOf("As", "Kd", "7c"))
+        assertEquals(1, r.errors().size) // no board before the flop
+        r.send("act", "id" to 1, "move" to "call"); r.send("act", "id" to 2, "move" to "check")
+        r.cmd("board", "cards" to listOf("As", "Kd", "7c"))
+        assertEquals(listOf("As", "Kd", "7c"), r.last("state").obj("s").obj("hand").list("board"))
+        r.cmd("board", "cards" to listOf("As", "Kd", "7c", "2h"))
+        assertTrue(r.errors().last().toString().startsWith("Only 3")) // turn not dealt yet
+        val texts = r.session.game.log.map { it.text }
+        assertTrue("Board: A♠ K♦ 7♣." in texts, texts.toString())
+        // Check down to showdown, award by tapping: the recorded board stays.
+        repeat(3) { r.send("act", "id" to 2, "move" to "check"); r.send("act", "id" to 1, "move" to "check") }
+        assertEquals("showdown", r.last("state").obj("s").obj("hand").str("street"))
+        r.cmd("award", "ranking" to listOf(listOf(1)))
+        assertEquals(listOf("As", "Kd", "7c"), r.last("state").obj("s").obj("hand").list("board"))
+    }
+
+    @Test
+    fun actionLinesCarryTagAndRaiseSize() {
+        val r = Rig()
+        r.cmd("setup", "names" to listOf("Ann", "Ben", "Cy"), "button" to 0)
+        r.cmd("deal")
+        r.send("act", "id" to 1, "move" to "raise", "to" to 40)
+        val l = r.last("state").obj("s").list("log").last() as Obj
+        assertEquals("Raise 40", l["tag"]); assertEquals(40L, l["amt"]); assertEquals(30L, l["by"])
+    }
+
+    @Test
+    fun exportsReadableHistoryAndBackupThatRestoresOnAnotherDevice() {
+        val a = Rig()
+        a.cmd("setup", "names" to listOf("Ann", "Ben", "Cy"), "button" to 0, "mode" to "money", "currency" to "EUR", "money" to 5000)
+        a.cmd("deal")
+        a.send("act", "id" to 1, "move" to "raise", "to" to 40)
+        a.send("act", "id" to 2, "move" to "fold")
+        a.send("act", "id" to 3, "move" to "fold")
+        a.cmd("deal")
+        a.send("act", "id" to 2, "move" to "call")
+        a.send("export")
+        val ex = a.last("export")
+        val text = ex.str("text")
+        assertTrue("Hand 1" in text && "Ann raises to 40." in text && "Ann wins 25" in text, text)
+        assertTrue("STANDINGS" in text && "EUR" in text, text)
+        assertTrue(ex.str("file").endsWith(".txt"))
+
+        // Guests get the history but never the backup.
+        val guest = Client(false) { a.out.add((Json.parse(it) as Obj) + ("guest" to true)) }
+        a.session.connect(guest)
+        a.session.handle(guest, """{"t":"export"}""")
+        assertEquals(null, a.out.last { it["t"] == "export" }["backup"])
+
+        val b = Rig()
+        b.cmd("import", "data" to Json.parse(ex.str("backup")))
+        assertEquals(emptyList(), b.errors())
+        assertEquals(a.session.game.players.map { it.stack }, b.session.game.players.map { it.stack })
+        assertEquals(3, b.session.game.hand!!.toAct)
+        assertEquals("EUR", b.session.cfg.currency)
+        assertTrue(b.last("state").obj("s").str("notice").startsWith("Game restored"))
+        // The restored table keeps playing.
+        b.send("act", "id" to 3, "move" to "call")
+        b.send("act", "id" to 1, "move" to "check")
+        assertEquals(emptyList(), b.errors())
+        assertEquals("flop", b.last("state").obj("s").obj("hand").str("street"))
+    }
+
+    @Test
+    fun importRejectsJunkAndLeavesTheTableAlone() {
+        val r = Rig()
+        r.cmd("setup", "names" to listOf("Ann", "Ben"), "button" to 0)
+        r.cmd("import", "data" to mapOf("app" to "other"))
+        r.cmd("import", "data" to mapOf("app" to "chipless", "kind" to "backup", "v" to 1, "cfg" to mapOf<String, Any>(),
+            "events" to listOf(mapOf("e" to "deal", "sb" to 5, "bb" to 10))))
+        assertEquals(2, r.errors().size)
+        assertEquals(listOf("Ann", "Ben"), r.session.game.players.map { it.name })
+    }
+
+    @Test
+    fun closeClearsTheTableAndStopsSharing() {
+        val r = Rig()
+        var lan: Boolean? = null
+        r.session.onLan = { lan = it }
+        r.cmd("setup", "names" to listOf("Ann", "Ben"), "button" to 0)
+        r.cmd("close")
+        assertEquals("setup", r.last("state").obj("s").str("phase"))
+        assertEquals(false, lan)
+    }
 }

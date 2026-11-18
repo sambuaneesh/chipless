@@ -1,0 +1,5 @@
+- Every bet, call and fold pops up big on all phones, plus a timeline of the round
+- Dramatic sounds for big raises and all-ins; optional spoken bets
+- Record the board as it's dealt (optional); easier rank + suit card picker
+- Export a readable hand history; back up a game and continue on another phone
+- Drag to rearrange seats; hand rankings from any screen; close table & exit

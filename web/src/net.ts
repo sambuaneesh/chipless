@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'preact/hooks'
-import type { EvalResult, Snap } from './types'
+import type { EvalResult, ExportS, Snap } from './types'
 import { local } from './prefs'
 
 /** Everything the UI renders from. One store, plain subscribe/notify. */
@@ -11,6 +11,7 @@ export const store = {
   everConnected: false,
   toast: null as { text: string; at: number } | null,
   evalResult: null as EvalResult | null,
+  exported: null as ExportS | null,
   /** Server clock minus local clock, for timers. */
   skew: 0,
 }
@@ -102,6 +103,10 @@ export function connect() {
       }
       case 'eval':
         store.evalResult = m.r
+        notify()
+        break
+      case 'export':
+        store.exported = m as ExportS
         notify()
         break
       case 'error':
