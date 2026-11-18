@@ -4,7 +4,8 @@ import { chromium } from 'playwright-core'
 
 const [hostUrl, guestUrl, shots] = process.argv.slice(2)
 const browser = await chromium.launch({ executablePath: process.env.CHROME || '/usr/bin/chromium' })
-const phone = { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true }
+const [vw, vh] = (process.env.VIEWPORT || '390x844').split('x').map(Number)
+const phone = { viewport: { width: vw, height: vh }, deviceScaleFactor: 2, isMobile: true, hasTouch: true }
 const errors = []
 const mk = async (name) => {
   const ctx = await browser.newContext(phone)
@@ -147,7 +148,8 @@ const grip = host.locator('.srt-grip').first()
 const box = await grip.boundingBox()
 await host.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
 await host.mouse.down()
-for (let k = 1; k <= 10; k++) { await host.mouse.move(box.x + box.width / 2, box.y + box.height / 2 + k * 12); await wait(16) }
+const rowH = await host.locator('.srt-row').first().evaluate((e) => e.getBoundingClientRect().height + 6)
+for (let k = 1; k <= 10; k++) { await host.mouse.move(box.x + box.width / 2, box.y + box.height / 2 + (k * rowH * 2) / 10); await wait(16) }
 await shot(host, '21-seating-drag')
 await host.mouse.up()
 await wait(300)

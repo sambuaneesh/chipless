@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { cmd, send, store, useStore } from './net'
 import { haptic } from './native'
 import type { Snap } from './types'
@@ -36,7 +36,7 @@ function CardPad({ used, onPick, target }: { used: Set<string>; onPick: (c: stri
         <span>Now: <b>{target}</b></span>
         {rank || suit
           ? <span class="pad-sel">{rank ? (rank === 'T' ? '10' : rank) : '?'}{suit ? SUIT[suit] : '?'}</span>
-          : <small class="muted">rank + suit · tap a card to change it</small>}
+          : <small class="muted pad-help">rank + suit · tap a card to change it</small>}
       </div>
       <div class="pad-ranks" role="group" aria-label="Rank">
         {RANKS.map((r) => (
@@ -85,8 +85,11 @@ function useCards(names: string[], initBoard: string[] = [], boardSlots = 5) {
 }
 
 function SlotCard({ c, active, onClick, label, disabled }: { c: string | null; active: boolean; onClick: () => void; label: string; disabled?: boolean }) {
+  const ref = useRef<HTMLButtonElement>(null)
+  // Keep the slot being filled visible above the sticky card pad.
+  useEffect(() => { if (active) ref.current?.scrollIntoView?.({ block: 'center', behavior: 'smooth' }) }, [active])
   return (
-    <button class={'slotc' + (active ? ' active' : '')} onClick={onClick} disabled={disabled} aria-label={c ? `${label}: ${c}, tap to change` : `${label}: empty`}>
+    <button ref={ref} class={'slotc' + (active ? ' active' : '')} onClick={onClick} disabled={disabled} aria-label={c ? `${label}: ${c}, tap to change` : `${label}: empty`}>
       {c ? <Card c={c} /> : <span class="card empty" />}
     </button>
   )

@@ -53,7 +53,7 @@ export function ActionBar({ s, p, legal, flip, mine }: { s: Snap; p: PlayerS; le
       {u.raiseOpen && legal.canRaise ? (
         <RaiseTray s={s} legal={legal} word={raiseWord} onCancel={() => uiSet({ raiseOpen: false })} onRaise={(to) => go('raise', to)} />
       ) : (
-        <>
+        <div class="acts">
           <div class="row">
             {!legal.canCheck && <Btn kind="danger" big onClick={() => go('fold')}>Fold</Btn>}
             {legal.canCheck
@@ -69,7 +69,7 @@ export function ActionBar({ s, p, legal, flip, mine }: { s: Snap; p: PlayerS; le
           ) : (
             <WhyNot why={legal.why} word={raiseWord} />
           )}
-        </>
+        </div>
       )}
       {h.street === 'preflop' && h.toAct === h.bbId && legal.canCheck && <div class="tiny muted center-t">Big blind option</div>}
     </div>
@@ -218,7 +218,7 @@ function Showdown({ s }: { s: Snap }) {
     <div class="panel showdown">
       <div class="act-head">
         <span><b>{title}</b></span>
-        <span class="muted">{multi ? `${contested.length} pots` : 'Tap the winner — tap two for a split'}</span>
+        <span class="muted">{multi ? `${contested.length} pots` : 'Two for a split'}</span>
       </div>
       {ranking.length > 0 && <div class="tiny muted">Ranked: {ranking.map((g) => g.map((id) => nameOf(s, id)).join(' = ')).join(' › ')}</div>}
       <div class="picks">

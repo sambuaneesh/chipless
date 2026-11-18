@@ -57,7 +57,7 @@ export function MyPanel({ s }: { s: Snap }) {
 
   if (myTurn) {
     return (
-      <div class="mine turn">
+      <div class="mypanel turn">
         <ActionBar s={s} p={me} legal={h!.legal!} mine />
         {canUndo && <Btn kind="quiet" onClick={() => undo()}><Icon name="undo" size={16} /> Undo</Btn>}
       </div>
@@ -80,7 +80,7 @@ export function MyPanel({ s }: { s: Snap }) {
     ? [['checkfold', 'Fold'], ['callany', `Call ${chips(Math.min(owe, me.stack))}`]]
     : [['checkfold', 'Check / Fold'], ['check', 'Check'], ['callany', 'Call any']]
   return (
-    <div class="mine">
+    <div class="mypanel">
       <div class="mystack">
         <span class="muted">{me.name}</span>
         <b>{chips(me.stack)}</b>
@@ -95,7 +95,7 @@ export function MyPanel({ s }: { s: Snap }) {
           ))}
         </div>
       )}
-      {showPre && <p class="tiny muted center-t">Pre-select is private — it acts for you when your turn comes.</p>}
+      {showPre && <p class="tiny muted center-t prenote">Pre-select is private — it acts for you when your turn comes.</p>}
       {canUndo && <Btn kind="quiet" onClick={() => undo()}><Icon name="undo" size={16} /> Undo my last action</Btn>}
     </div>
   )

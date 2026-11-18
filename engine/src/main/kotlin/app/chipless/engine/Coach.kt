@@ -14,7 +14,7 @@ object Coach {
         val h = g.hand ?: return null
         if (h.street == Street.PREFLOP && h.streetActions == 0) {
             val first = h.dealt[(h.dealt.indexOf(h.button) + 1) % h.dealt.size]
-            return "Shuffle and deal 2 cards each, one at a time — start with ${g.player(first).name}, end with ${g.player(h.button).name}."
+            return "Shuffle, then deal 2 cards each, one at a time: ${g.player(first).name} first, ${g.player(h.button).name} last."
         }
         if (h.streetActions == 0) when (h.street) {
             Street.FLOP -> return "Burn 1 · deal 3 face up — the Flop"

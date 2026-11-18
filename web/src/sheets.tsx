@@ -400,7 +400,7 @@ function Seating({ s }: { s: Snap }) {
   const dealer = ids.indexOf(s.button ?? -1)
   return (
     <Sheet title="Seating order" onClose={closeSheet}>
-      <p class="muted tiny">Drag ⠿ to move someone, or use the arrows. The list goes clockwise around the table: each player acts after the one above them, and the last acts before the first.</p>
+      <p class="muted tiny">Drag ⠿ or use the arrows. Play goes clockwise: each player acts after the one above them.</p>
       <MiniRing names={ids.map((id) => by(id).name)} colors={ids.map(seatOf)} dealer={dealer} />
       <SortList items={ids} label={(id) => by(id).name} onMove={(a, b) => setIds(moved(ids, a, b))}
         render={(id, i) => {

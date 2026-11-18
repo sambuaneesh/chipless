@@ -1,0 +1,4 @@
+- Cleaner table on small phones: seats never overlap, action tags float above players, and Fold / Call / Raise fit in one row
+- Tips fold into a "Tip" button on short screens; no repeated instructions at showdown
+- Compact card picker that keeps the card you're filling in view
+- Guests' seats no longer show a stray dark box

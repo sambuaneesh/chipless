@@ -22,25 +22,29 @@ export function Ring({ s, compact, me }: { s: Snap; compact?: boolean; me?: numb
   const n = s.players.length
   const u = useUi()
   const quake = u.flash && (u.flash.kind === 'allin' || u.flash.kind === 'big')
+  // Seats sit on the rim of an ellipse that fills .tbl, which is inset by half a seat on every
+  // side, so no seat can spill over the top bar or the edges however many players there are.
   return (
-    <div class={'ring' + (compact ? ' compact' : '') + (quake ? ' quake' : '')}>
-      <div class="felt" />
-      <Center s={s} />
-      {u.flash && <Flash f={u.flash} s={s} />}
-      {s.players.map((p, i) => {
-        const bet = h?.bets[p.id]
-        return (
-          <>
-            <Seat p={p} s={s} i={i} me={me} style={pos(i, n, 41, compact ? 38 : 41)} />
-            {bet ? (
-              <div class="bet" data-bet={p.id} style={pos(i, n, 25, compact ? 21 : 23)}>
-                <ChipStack amount={bet} sb={h!.sb} max={4} />
-                <span>{chips(bet)}</span>
-              </div>
-            ) : null}
-          </>
-        )
-      })}
+    <div class={'ring' + (compact ? ' compact' : '') + (n >= 7 ? ' many' : '') + (quake ? ' quake' : '')}>
+      <div class="tbl">
+        <div class="felt" />
+        <Center s={s} />
+        {s.players.map((p, i) => {
+          const bet = h?.bets[p.id]
+          return (
+            <>
+              <Seat p={p} s={s} i={i} me={me} style={pos(i, n, 50, 50)} />
+              {bet ? (
+                <div class="bet" data-bet={p.id} style={pos(i, n, 25, 24)}>
+                  <ChipStack amount={bet} sb={h!.sb} max={4} />
+                  <span>{chips(bet)}</span>
+                </div>
+              ) : null}
+            </>
+          )
+        })}
+        {u.flash && <Flash f={u.flash} s={s} />}
+      </div>
     </div>
   )
 }
@@ -66,16 +70,15 @@ function Seat({ p, s, i, me, style }: { p: PlayerS; s: Snap; i: number; me?: num
       onClick={() => host && openSheet({ k: 'seat', id: p.id })} tabIndex={host ? 0 : -1}>
       <span class="avatar"><span>{initials(p.name)}</span>
         {isBtn && <i class="dealer" title="Dealer button">D</i>}
+        {open && h && (p.id === h.sbId || p.id === h.bbId) && <i class="blind">{p.id === h.bbId ? 'BB' : 'SB'}</i>}
         {conn && <i class={'conn ' + conn} title={conn === 'on' ? 'Connected' : 'Phone disconnected'} />}
+        {turn && open && h?.street !== 'showdown'
+          ? <span class="tag think" aria-hidden="true"><i /><i /><i /></span>
+          : label ? <span key={label} class={'tag lbl k-' + tagKind(label)}>{label}</span>
+            : !open && status ? <span class="tag lbl muted">{status}</span> : null}
       </span>
       <span class="nm">{p.name}</span>
       <span class="st">{allIn ? 'ALL-IN' : chips(p.stack)}</span>
-      {open && h && (p.id === h.sbId || p.id === h.bbId) && !label && !turn && (
-        <span class="blind">{p.id === h.bbId ? 'BB' : 'SB'}</span>
-      )}
-      {turn && open && h?.street !== 'showdown' && <span class="think" aria-hidden="true"><i /><i /><i /></span>}
-      {label && <span key={label} class={'lbl k-' + tagKind(label)}>{label}</span>}
-      {!open && status && <span class="lbl muted">{status}</span>}
     </button>
   )
 }
@@ -171,6 +174,7 @@ export function Timeline({ s }: { s: Snap }) {
   const acts = lines.slice(from).filter((l) => l.tag && l.who != null)
   const street = streetName(h)
   return (
+    <div class="tlrow">
     <div class="timeline" aria-label={`${street} so far`}>
       <span class="tl-st">{street}</span>
       {acts.length === 0 && <span class="tl-none">No action yet</span>}
@@ -184,27 +188,71 @@ export function Timeline({ s }: { s: Snap }) {
         )
       })}
     </div>
+    <TipChip s={s} />
+    </div>
   )
 }
 
-/** The narrator: last thing that happened, what to do now, and an optional hint. */
-export function Narrator({ s }: { s: Snap }) {
-  const last = s.log.length ? s.log[s.log.length - 1] : null
+const ACTIONS = new Set(['bet', 'raise', 'call', 'check', 'fold', 'allin', 'blinds', 'hand', 'street'])
+
+/**
+ * The narrator: what to do now, the last thing that happened (unless the timeline already
+ * shows it), and a teaching hint. [quiet] drops the prompt when the action bar right below
+ * already says the same thing. On short screens the hint folds into a "Tip" chip.
+ */
+/** The current teaching hint, if this device still needs it, with a shared open/closed state. */
+let tipOpen = false
+const tipSubs = new Set<() => void>()
+export function useHint(s: Snap) {
   const hint = s.hint
   const limit = s.cfg.teach === 'beginner' ? 6 : s.cfg.teach === 'mixed' ? 2 : 0
   const [shownKey, setShownKey] = useState<string | null>(null)
-  const showHint = !!hint && limit > 0 && (shownKey === hint.key || !hintSeen(hint.key, limit))
+  const [, force] = useState(0)
+  useEffect(() => { const f = () => force((x) => x + 1); tipSubs.add(f); return () => { tipSubs.delete(f) } }, [])
+  const show = !!hint && limit > 0 && (shownKey === hint.key || !hintSeen(hint.key, limit))
   useEffect(() => {
-    if (showHint && hint && shownKey !== hint.key) { markHint(hint.key); setShownKey(hint.key) }
-  }, [hint?.key, showHint])
+    if (show && hint && shownKey !== hint.key) { markHint(hint.key); setShownKey(hint.key); tipOpen = false; tipSubs.forEach((f) => f()) }
+  }, [hint?.key, show])
+  const toggle = () => { tipOpen = !tipOpen; tipSubs.forEach((f) => f()) }
+  return { show, text: hint?.text ?? '', open: tipOpen, toggle }
+}
+
+export function TipChip({ s }: { s: Snap }) {
+  const t = useHint(s)
+  if (!t.show) return null
+  return <button class={'hint-chip' + (t.open ? ' on' : '')} aria-expanded={t.open} onClick={t.toggle}><Icon name="info" size={14} /> Tip</button>
+}
+
+/**
+ * The narrator: what to do now, the last thing that happened (unless the timeline already
+ * shows it), and a teaching hint. [quiet] drops the prompt when the action bar right below
+ * already says the same thing. On short screens the hint folds into the "Tip" chip.
+ */
+export function Narrator({ s, quiet }: { s: Snap; quiet?: boolean }) {
+  const last = s.log.length ? s.log[s.log.length - 1] : null
+  const t = useHint(s)
+  const betting = !!s.hand && s.hand.street !== 'done' && s.hand.street !== 'showdown'
+  // The dealer card already says the showdown/run-out instructions.
+  const showLast = !!last && !(betting && ACTIONS.has(last.kind)) && !(s.cue && (last.kind === 'showdown' || last.kind === 'runout'))
+  // While a hand is on, the chip lives on the timeline row; otherwise next to the prompt.
+  const chipHere = !s.hand || s.hand.street === 'done'
+  if (quiet && !s.notice && !(t.show && t.open)) return <div class="narr quiet">{t.show && <div class="hint">{hintBody(t.text)}</div>}</div>
   return (
-    <button class="narr" onClick={() => openSheet({ k: 'history' })} aria-live="polite" aria-label="Table narrator — open history">
-      {s.notice ? <div class="notice"><Icon name="undo" size={14} /> {s.notice}</div> : last && <div class="last">{last.text}</div>}
-      <div class="prompt">{s.prompt}</div>
-      {showHint && hint && <div class="hint"><Icon name="info" size={14} /> {hint.text}</div>}
-    </button>
+    <div class={'narr' + (quiet ? ' quiet' : '')} aria-live="polite">
+      {s.notice ? <div class="notice"><Icon name="undo" size={14} /> {s.notice}</div>
+        : showLast && <button class="last" onClick={() => openSheet({ k: 'history' })}>{last!.text}</button>}
+      {(!quiet || chipHere) && (
+        <div class="prompt-row">
+          {!quiet && <div class="prompt">{s.prompt}</div>}
+          {chipHere && <TipChip s={s} />}
+        </div>
+      )}
+      {t.show && <div class={'hint' + (t.open ? ' open' : '')}>{hintBody(t.text)}</div>}
+    </div>
   )
 }
+
+const hintBody = (text: string) => <><Icon name="info" size={14} /> {text}</>
 
 export function TopBar({ s, host }: { s: Snap; host: boolean }) {
   const t = s.timer

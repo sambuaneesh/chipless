@@ -64,7 +64,6 @@ function announceLines(prev: Snap, next: Snap, lines: LogLine[]) {
       const huge = l.amt >= next.cfg.stack
       pick([huge ? 'bigwin' : 'win', 1], 6)
       if (!said.some((x) => x.includes(' wins '))) said.push(l.text.replace(/ — everyone else folded/, '').replace(/\.$/, '!'))
-      flash = { key: Date.now(), who: l.who, kind: 'win', title: who, sub: `wins ${chips(l.amt)}` }
     } else if (l.kind === 'runout') { pick(['heartbeat', 1], 3); said.push('All in! Let\'s see the cards.') }
     else if (l.kind === 'hand') pick(['deal', 0], 0)
     else if (l.kind === 'street') pick(['street', 0], 0)
@@ -72,6 +71,8 @@ function announceLines(prev: Snap, next: Snap, lines: LogLine[]) {
   }
   if (best.sfx) play(best.sfx, best.level)
   if (lines.some((l) => l.kind === 'allin')) haptic('heavy')
+  // The felt shows the winner itself; don't cover it with the last action's banner.
+  if (lines.some((l) => l.kind === 'win')) { flash = null; clearTimeout(flashT); uiSet({ flash: null }) }
   if (flash) {
     uiSet({ flash })
     clearTimeout(flashT)
@@ -165,13 +166,18 @@ export function App() {
 }
 
 function HostTable({ s }: { s: Snap }) {
+  const u = useUi()
+  const h = s.hand
+  const p = h?.toAct != null ? s.players.find((x) => x.id === h.toAct) : null
+  // The action bar below already names the player and their options.
+  const barShown = !!h && (h.street === 'showdown' || (!!h.legal && h.street !== 'done' && !!p && (p.conn !== 'on' || u.actFor === p.id)))
   return (
     <div class="table host">
       <TopBar s={s} host />
       <Ring s={s} />
       <Timeline s={s} />
       <Cue s={s} />
-      <Narrator s={s} />
+      <Narrator s={s} quiet={barShown} />
       <HostPanel s={s} />
     </div>
   )
@@ -186,7 +192,8 @@ function GuestTable({ s }: { s: Snap }) {
       <Ring s={s} compact me={store.me} />
       <Timeline s={s} />
       <Cue s={s} />
-      <Narrator s={s} />
+      {/* A guest's own panel already says whose turn it is; the prompt is for the host. */}
+      <Narrator s={s} quiet />
       <MyPanel s={s} />
     </div>
   )
