@@ -1,4 +1,4 @@
-<p>Got a deck of cards but no poker chips? <b>Chipless</b> turns one phone into the chips, the pot, the dealer button and a patient rules coach for real-card <b>No-Limit Texas Hold'em</b> home games.</p>
+<p><b>You deal the cards. Chipless deals with the rest.</b> It counts every chip, calls every turn and rules on every showdown in your <b>No-Limit Texas Hold'em</b> home game, then tells you why. One phone runs the table; nobody needs a chip set, an account or the internet.</p>
 
 <p><b>Two ways to play</b></p>
 <ul>

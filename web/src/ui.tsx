@@ -155,7 +155,7 @@ export function HoldBtn({ label, sub, onDone, ms = 600 }: { label: string; sub?:
   const stop = () => { clearTimeout(t.current); setHolding(false) }
   return (
     <button class={'btn hold' + (holding ? ' holding' : '')} style={{ '--hold': `${ms}ms` }}
-      aria-label={`${label} — press and hold`}
+      aria-label={`${label}, press and hold`}
       onPointerDown={start} onPointerUp={stop} onPointerLeave={stop} onPointerCancel={stop}
       onContextMenu={(e) => e.preventDefault()}
       onKeyDown={(e) => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) start(e) }} onKeyUp={stop}>

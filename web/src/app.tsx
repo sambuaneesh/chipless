@@ -63,7 +63,7 @@ function announceLines(prev: Snap, next: Snap, lines: LogLine[]) {
     } else if (l.kind === 'win') {
       const huge = l.amt >= next.cfg.stack
       pick([huge ? 'bigwin' : 'win', 1], 6)
-      if (!said.some((x) => x.includes(' wins '))) said.push(l.text.replace(/ — everyone else folded/, '').replace(/\.$/, '!'))
+      if (!said.some((x) => x.includes(' wins '))) said.push(l.text.replace(/\. Everyone else folded/, '').replace(/\.$/, '!'))
     } else if (l.kind === 'runout') { pick(['heartbeat', 1], 3); said.push('All in! Let\'s see the cards.') }
     else if (l.kind === 'hand') pick(['deal', 0], 0)
     else if (l.kind === 'street') pick(['street', 0], 0)

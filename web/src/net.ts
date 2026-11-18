@@ -31,7 +31,7 @@ export function useStore() {
   return store
 }
 
-/** Called with (previous, next) on every new snapshot — for sounds, animation, announcements. */
+/** Called with (previous, next) on every new snapshot, for sounds, animation, announcements. */
 export function onState(f: (prev: Snap | null, next: Snap) => void) { stateHooks.add(f) }
 
 export function toast(text: string) {

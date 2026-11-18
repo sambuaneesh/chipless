@@ -68,9 +68,9 @@ export function MyPanel({ s }: { s: Snap }) {
   let status: string
   if (!open) status = s.handNo === 0 ? 'Waiting for the first hand' : 'Waiting for the next hand'
   else if (!inHand) status = me.out ? 'Sitting out' : me.waiting ? 'You join when the big blind reaches you' : 'Not in this hand'
-  else if (folded) status = 'You folded — watch the rest'
+  else if (folded) status = 'You folded. Watch the rest.'
   else if (me.stack === 0) status = 'You are all-in'
-  else if (h!.street === 'showdown') status = 'Showdown — show your cards'
+  else if (h!.street === 'showdown') status = 'Showdown: show your cards'
   else status = toActName ? `Waiting for ${toActName}` : 'Waiting'
 
   const showPre = inHand && !folded && me.stack > 0 && h!.street !== 'showdown'
@@ -95,7 +95,7 @@ export function MyPanel({ s }: { s: Snap }) {
           ))}
         </div>
       )}
-      {showPre && <p class="tiny muted center-t prenote">Pre-select is private — it acts for you when your turn comes.</p>}
+      {showPre && <p class="tiny muted center-t prenote">Pre-select is private. It acts for you when your turn comes.</p>}
       {canUndo && <Btn kind="quiet" onClick={() => undo()}><Icon name="undo" size={16} /> Undo my last action</Btn>}
     </div>
   )

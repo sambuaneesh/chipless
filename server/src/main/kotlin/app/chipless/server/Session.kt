@@ -179,7 +179,7 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
     }
 
     private fun join(c: Client, name: String) {
-        if (!game.created || ended) throw RuleError("The table isn't open yet — wait for the host to start")
+        if (!game.created || ended) throw RuleError("The table isn't open yet. Wait for the host to start.")
         push(Event.AddPlayer(name, cfg.stack, game.players.size, Entry.POST))
         issueSeat(c, game.players.last().id)
     }
@@ -214,7 +214,7 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
 
     private fun checkSeq(m: Obj) {
         val s = m.longOr("seq", -1)
-        if (s != -1L && s != seq) throw RuleError("The table just changed — check and try again")
+        if (s != -1L && s != seq) throw RuleError("The table just changed. Check and try again.")
     }
 
     private fun act(c: Client, m: Obj) {
@@ -260,7 +260,7 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
                 }
             }
             "deal" -> {
-                if (ended) throw RuleError("The game has ended — reopen it to keep playing")
+                if (ended) throw RuleError("The game has ended. Reopen it to keep playing.")
                 val (sb, bb) = blindsForNextHand()
                 push(Event.StartHand(sb, bb))
                 if (cfg.timer && !timerRunning && levelEndsAt == 0L) startTimer()
@@ -376,7 +376,7 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
         val best = scores.max()
         val winners = scores.indices.filter { scores[it] == best }
         val text = if (parsed.size == 1) "${parsed[0].first} has ${Eval.describe(best)}."
-        else if (winners.size > 1) "Split — ${winners.joinToString(" and ") { parsed[it].first }} both have ${Eval.describe(best)}."
+        else if (winners.size > 1) "Split pot: ${winners.joinToString(" and ") { parsed[it].first }} both have ${Eval.describe(best)}."
         else {
             val w = winners[0]
             val runner = scores.indices.filter { it != w }.maxBy { scores[it] }
@@ -530,7 +530,7 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
     /** Replace the table with a backup. Every event must replay cleanly, or nothing changes. */
     private fun importBackup(o: Obj) {
         if (o.strOr("app", null) != "chipless" || o.strOr("kind", null) != "backup") throw RuleError("That isn't a Chipless backup file")
-        if (o.intOr("v", 0) > 1) throw RuleError("This backup is from a newer version of Chipless — update the app first")
+        if (o.intOr("v", 0) > 1) throw RuleError("This backup is from a newer version of Chipless. Update the app first.")
         val c = Config().also { it.read(o.obj("cfg")) }
         val evs = try {
             o.list("events").map { Codec.decode(it as Obj) }
@@ -556,7 +556,7 @@ class Session(private val store: Store? = null, private val clock: () -> Long = 
         val started = t?.bool("started") ?: false
         timerRunning = cfg.timer && (t?.bool("running") ?: false)
         levelEndsAt = if (timerRunning) clock() + levelLeft else if (started) 1L else 0L
-        notice = "Game restored from a backup — ${g.players.size} players, ${g.handNo} hand${if (g.handNo == 1) "" else "s"} played."
+        notice = "Game restored from a backup: ${g.players.size} players, ${g.handNo} hand${if (g.handNo == 1) "" else "s"} played."
         changed()
     }
 

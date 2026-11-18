@@ -123,7 +123,7 @@ class MainActivity : Activity() {
         val create = Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType(mime).putExtra(Intent.EXTRA_TITLE, name)
         runCatching { startActivityForResult(create, REQ_SAVE) }.onFailure {
             pendingSave = null
-            Toast.makeText(this, "No file manager found — use Share instead", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "No file manager found. Use Share instead.", Toast.LENGTH_LONG).show()
         }
     }
 

@@ -144,20 +144,20 @@ object Eval {
         val cat = category(w)
         var i = 0
         while (i < 5 && key(w, i) == key(l, i)) i++
-        if (i >= 5) return "Same hand — split."
+        if (i >= 5) return "Same hand, so the pot is split."
         val kc = KEY_COUNT[cat]
         val same = describe(w)
         return if (cat == FLUSH || cat == HIGH) {
             if (i == 0) "$wName's ${describe(w).removePrefix("a ")} beats $lName's ${describe(l).removePrefix("a ")}."
             else {
                 val base = if (cat == FLUSH) "a Flush, ${Cards.rankName(key(w, 0))}-high" else "${Cards.rankName(key(w, 0))}-high"
-                "Both have $base — the ${ordinal(i + 1)} card decides: " +
+                "Both have $base. The ${ordinal(i + 1)} card decides: " +
                     "$wName's ${Cards.rankName(key(w, i))} beats $lName's ${Cards.rankName(key(l, i))}."
             }
         } else if (i < kc) {
             "$wName's ${describe(w).removePrefix("a ")} beats $lName's ${describe(l).removePrefix("a ")}."
         } else {
-            "Both have $same — $wName's ${Cards.rankName(key(w, i))} kicker beats $lName's ${Cards.rankName(key(l, i))}."
+            "Both have $same. $wName's ${Cards.rankName(key(w, i))} kicker beats $lName's ${Cards.rankName(key(l, i))}."
         }
     }
 

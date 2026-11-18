@@ -123,8 +123,8 @@ function Center({ s }: { s: Snap }) {
   return (
     <div class="center" id="pot">
       {host && reached > 0
-        ? <button class={'board cards edit'} onClick={() => openSheet({ k: 'board' })} aria-label={`Board: ${h.board.length ? h.board.join(' ') : 'no cards recorded'} — tap to record the cards`}>{slots}</button>
-        : <div class={'board ' + (known ? 'cards' : 'slots')} aria-label={`${streetName(h)} — ${known ? h.board.join(' ') : reached + ' board cards'}`}>{slots}</div>}
+        ? <button class={'board cards edit'} onClick={() => openSheet({ k: 'board' })} aria-label={`Board: ${h.board.length ? h.board.join(' ') : 'no cards recorded'}. Tap to record the cards.`}>{slots}</button>
+        : <div class={'board ' + (known ? 'cards' : 'slots')} aria-label={`${streetName(h)}: ${known ? h.board.join(' ') : reached + ' board cards'}`}>{slots}</div>}
       <div class="potv">{chips(h.total)}</div>
       <div class="potl">{streetName(h)}</div>
       {h.pots.length > 1 && <div class="potsub">{h.pots.map((p, i) => `${i === 0 ? 'Main' : 'Side'} ${chips(p.amount)}`).join(' · ')}</div>}

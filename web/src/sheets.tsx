@@ -218,7 +218,7 @@ function Settings({ s }: { s: Snap | null }) {
       {host && <Toggle on={prefs.voice} onChange={(v) => set('voice', v)} label="Call out turns" sub="“Anna, it's on you”" />}
       <Toggle on={prefs.haptics} onChange={(v) => set('haptics', v)} label="Vibration" />
       {host && <Toggle on={prefs.face} onChange={(v) => set('face', v)} label="Turn buttons toward the player" sub="For a phone lying in the middle of the table" />}
-      <Toggle on={prefs.fourColor} onChange={(v) => set('fourColor', v)} label="Four-colour suits" sub="♦ blue, ♣ green — easier to tell apart" />
+      <Toggle on={prefs.fourColor} onChange={(v) => set('fourColor', v)} label="Four-colour suits" sub="♦ blue, ♣ green, easier to tell apart" />
       {host && s && s.phase !== 'setup' && (
         <>
           <h3>Money</h3>
@@ -249,7 +249,7 @@ function Invite({ s }: { s: Snap }) {
     <Sheet title="Invite phones" onClose={closeSheet}>
       {!s.lan.open ? (
         <>
-          <p>Friends can join from their own phone's browser — no app needed. Everyone sees the table live and acts on their own phone.</p>
+          <p>Friends can join from their own phone's browser, with no app to install. Everyone sees the table live and acts on their own phone.</p>
           <Btn kind="primary" big onClick={() => cmd('lan', { open: true })}><Icon name="wifi" /> Start sharing</Btn>
           <p class="tiny muted">Everyone must be on the same Wi-Fi, or connected to this phone's hotspot.</p>
         </>
@@ -281,7 +281,7 @@ function Invite({ s }: { s: Snap }) {
               </div>
             ))}
           </div>
-          <p class="tiny muted">Joined but can't connect? Some public Wi-Fi blocks phones from talking to each other — use this phone's hotspot instead. Players on a hotspot without internet should tap “Stay connected” if their phone asks.</p>
+          <p class="tiny muted">Joined but can't connect? Some public Wi-Fi blocks phones from talking to each other. Use this phone's hotspot instead. Players on a hotspot without internet should tap “Stay connected” if their phone asks.</p>
           <Btn kind="quiet" onClick={() => cmd('lan', { open: false })}>Stop sharing</Btn>
         </>
       )}
@@ -301,7 +301,7 @@ export function SettleView({ s }: { s: Snap }) {
   const value = (n: (typeof st.nets)[number]) => (isMoney && n.money != null ? n.money : n.chips)
   const transfers = via === 'min' ? st.transfers : st.nets.filter((n) => n.id !== bank && value(n) !== 0).map((n) => value(n) < 0 ? { from: n.id, to: bank, amount: -value(n) } : { from: bank, to: n.id, amount: value(n) })
   const text = [
-    `Chipless — poker night results`,
+    `Chipless · poker night results`,
     ...nets.map((n) => `${n.name}: ${isMoney && n.money != null ? money(n.money, s.cfg, true) : signed(n.chips)}`),
     '',
     ...(transfers.length ? ['Payments:', ...transfers.map((t) => `${name(t.from)} → ${name(t.to)}: ${fmtAmt(t.amount)}`), ''] : []),
@@ -311,7 +311,7 @@ export function SettleView({ s }: { s: Snap }) {
     <div class="settle">
       <h1>Results</h1>
       <div class={'balanced' + (st.balanced ? '' : ' bad')}>
-        {st.balanced ? <><Icon name="check" size={16} /> Balanced — {chips(st.in)} chips in, {chips(st.out)} out</> : <>Not balanced: {chips(st.in)} in, {chips(st.out)} out. Fix stacks in Players before settling.</>}
+        {st.balanced ? <><Icon name="check" size={16} /> Balanced: {chips(st.in)} chips in, {chips(st.out)} out</> : <>Not balanced: {chips(st.in)} in, {chips(st.out)} out. Fix stacks in Players before settling.</>}
       </div>
       <div class="nets">
         {nets.map((n, i) => (
@@ -337,7 +337,7 @@ export function SettleView({ s }: { s: Snap }) {
               <div class="xfer"><b>{name(t.from)}</b><span class="arrow">pays</span><b>{name(t.to)}</b><em>{fmtAmt(t.amount)}</em></div>
             ))}
           </div>
-          {via === 'min' && transfers.length > 0 && <p class="tiny muted">{transfers.length} payment{transfers.length > 1 ? 's' : ''} — the fewest possible.</p>}
+          {via === 'min' && transfers.length > 0 && <p class="tiny muted">{transfers.length} payment{transfers.length > 1 ? 's' : ''}, the fewest possible.</p>}
         </>
       )}
       <ShareBtn text={text} />
@@ -361,7 +361,7 @@ function ShareBtn({ text }: { text: string }) {
     <>
       <Btn kind="ghost" big onClick={async () => {
         const r = await share(text)
-        if (r === 'copied') setMsg('Copied — paste it in your group chat')
+        if (r === 'copied') setMsg('Copied. Paste it in your group chat.')
         if (r === 'shown') setShown(true)
       }}><Icon name="share" /> Share results</Btn>
       {msg && <p class="tiny muted center-t">{msg}</p>}
@@ -415,7 +415,7 @@ function Seating({ s }: { s: Snap }) {
             </div>
           )
         }} />
-      {inHand && <p class="tiny" style={{ color: 'var(--amber)' }}>A hand is being played. Seats change after it ends — set them up now and save when it's over.</p>}
+      {inHand && <p class="tiny" style={{ color: 'var(--amber)' }}>A hand is being played. Seats change after it ends, so set them up now and save when it's over.</p>}
       <div class="row">
         <Btn kind="quiet" big disabled={!changed} onClick={() => setIds(s.players.map((p) => p.id))}>Reset</Btn>
         <Btn kind="primary" big disabled={!changed || inHand} onClick={() => { cmd('reorder', { ids }); closeSheet() }}><Icon name="check" /> Save seats</Btn>
@@ -436,8 +436,8 @@ function Export({ s }: { s: Snap | null }) {
   const tell = (t: string) => { setMsg(t); setTimeout(() => setMsg(''), 3000) }
   const doShare = async (text: string) => {
     const r = await share(text)
-    if (r === 'copied') tell('Copied — paste it anywhere')
-    if (r === 'shown') tell('Sharing isn’t available here — use Save instead')
+    if (r === 'copied') tell('Copied. Paste it anywhere.')
+    if (r === 'shown') tell('Sharing isn’t available here. Use Save instead.')
   }
   return (
     <Sheet title="Save & export" onClose={closeSheet}>

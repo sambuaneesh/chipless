@@ -17,7 +17,7 @@ object Report {
         fun line(s: String = "") { b.append(s).append('\n') }
         val time = DateTimeFormatter.ofPattern("d MMM yyyy, HH:mm", Locale.US)
             .format(Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()))
-        line("CHIPLESS — POKER NIGHT")
+        line("CHIPLESS · POKER NIGHT")
         line("Exported $time")
         line(RULE)
         if (!g.created) {
@@ -66,7 +66,7 @@ object Report {
             line(if (no == 0) "Setup" else "Hand $no")
             for (l in lines) {
                 when (l.kind) {
-                    "hand" -> line("    ${l.text.substringAfter(" — ")}")
+                    "hand" -> line("    ${l.text.substringAfter(": ")}")
                     "blinds" -> { line("    ${l.text}"); line("  PRE-FLOP") }
                     "street" -> line("  ${l.text.removeSuffix(".").removePrefix("The ").uppercase()}")
                     "board" -> line("    ▸ ${l.text}")

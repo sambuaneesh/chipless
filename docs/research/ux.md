@@ -10,7 +10,7 @@
 
 1. **No app in this category is truly beginner-first.** Every competitor is a ledger or chip tracker for people who already know poker. The gap is an app that *runs the game*: it tells the dealer what to deal, tells each player what they can do and why, and explains who won.
 2. **The app removes whole classes of live-poker errors for free.** String bets, miscounted pots, wrong change, chip-count mismatches at cash-out, and forgotten blinds cannot happen, because chips are numbers. Say this in the UX ("the pot is always right").
-3. **Teach by pull, not push.** No tutorial. Show one contextual sentence at the moment it matters (e.g. "Call 40 to stay in — or raise to at least 80"). Hints fade per player as that player shows they know the rule.
+3. **Teach by pull, not push.** No tutorial. Show one contextual sentence at the moment it matters (e.g. "Call 40 to stay in, or raise to at least 80"). Hints fade per player as that player shows they know the rule.
 4. **Betting UI: one tap for the common action, two for sizing, a hold for all-in.** Undo grace period instead of "are you sure?" dialogs. Fold is never the easiest button when checking is free.
 5. **Hosted mode has a hard platform constraint.** A plain-HTTP LAN page is *not a secure context*, so the Wake Lock, Notifications, Service Worker and Web Share APIs are unavailable to joined phones. Vibration is unavailable on iOS entirely. The **host phone's speaker** (chime or voice: "Anna, your turn") is the only universal turn cue. Design for that.
 
@@ -57,18 +57,18 @@
 |---|---|---|
 | **Whose turn is it?** Acting out of turn leaks info and is binding in casinos | [PokerBank](https://www.thepokerbank.com/strategy/general/live-player-mistakes/), [DeucesCracked](https://www.deucescracked.com/blog/live-poker-rules-string-bets-acting-out-of-turn-explained) | A single glowing seat, the name in huge type, a spoken name. In hosted mode, only the actor's phone has live buttons; others get *private* pre-actions ("Check/Fold", "Call any"), which leak nothing in a live game |
 | **Check vs call vs bet vs raise** | general | Buttons always state the consequence: "Check (free)", "Call 40", "Raise to…". Never a bare "Call" |
-| **Minimum raise**; short all-ins that don't reopen betting (even rules columnists disagree) | [PokerSkill](https://www.pokerskill.com/poker-glossary/reopen-the-betting/), [Card Player](https://cardplayer.com/cardplayer-poker-magazines/65751-vitaly-lunkin-22-13/articles/18539-raising-the-minimum-amount) | The engine enforces TDA rules silently. The sizer starts *at* the min raise. When a rule bites, one line explains it: "Ben can only call or fold — Cara's all-in was less than a full raise." |
+| **Minimum raise**; short all-ins that don't reopen betting (even rules columnists disagree) | [PokerSkill](https://www.pokerskill.com/poker-glossary/reopen-the-betting/), [Card Player](https://cardplayer.com/cardplayer-poker-magazines/65751-vitaly-lunkin-22-13/articles/18539-raising-the-minimum-amount) | The engine enforces TDA rules silently. The sizer starts *at* the min raise. When a rule bites, one line explains it: "Ben can only call or fold, Cara's all-in was less than a full raise." |
 | **Blinds and button movement**; heads-up reversal (button = SB, acts first preflop, last after) | [homepokertourney](https://homepokertourney.org/mobile/poker-button-rules.htm) | Automatic. A "D / SB / BB" token animates to the new seat at each hand start. A narrator line explains heads-up the first time it happens. Use the **dead-button** rule (recommended for home games by the same source) |
 | **Burn and deal sequence**: forgetting to burn is "the single most commonly forgotten step by new dealers"; some deal the board early | [How to Deal](https://cache.esports.gg/guides/betting/how-to-deal-texas-holdem) | **Dealer prompt** after each betting round: "Dealer: burn 1, deal 3 (the Flop)". The burn line is optional (home-game setting) |
 | **String bets** | [PokerBank](https://www.thepokerbank.com/strategy/general/live-player-mistakes/) | **Impossible**: the amount is committed atomically. Don't mention it, just remove the problem |
 | **Pot size tracking** | [PokerBank](https://www.thepokerbank.com/strategy/general/live-player-mistakes/) | The pot is always visible, plus "to call" and pot odds (experienced setting) |
 | **Side pots**: beginners think an all-in player can win chips they didn't match | [BetterPoker](https://betterpoker.vercel.app/learn/absolute-beginner/rules-and-hand-rankings/all-ins-and-side-pots) | Pots render as separate stacks labelled with *eligible faces*: "Main 120 · Anna Ben Cara Dan" / "Side 60 · Ben Dan". Winner taps are per pot; ineligible players are greyed out |
 | **Showdown order**: the last aggressor on the river shows first; if checked through, the first player left of the button | [TDA via pokertda.com](https://www.pokertda.com/view-poker-tda-rules/), [Wikipedia](https://en.wikipedia.org/wiki/Showdown_(poker)) | "Showdown: Cara shows first (she bet the river)", then a clockwise highlight. On an all-in with action complete: "Everyone turn your cards face up" |
-| **Hand rankings, kickers, playing the board, split pots, suits never break ties** | [PokerNews kicker](https://www.pokernews.com/poker-hands/kicker-in-poker.htm), [playing the board](https://www.pokernews.com/poker-hands/playing-board.htm), [PokerStrategy](https://www.pokerstrategy.com/glossary/Kicker/) | Optional evaluator: highlight the **best five** of each hand; the tie-break line reads "Both have a pair of Kings → Anna's Q kicker beats Ben's J". When the board plays: "The board plays — split the pot." A rankings sheet is one tap away (pull), never pushed |
+| **Hand rankings, kickers, playing the board, split pots, suits never break ties** | [PokerNews kicker](https://www.pokernews.com/poker-hands/kicker-in-poker.htm), [playing the board](https://www.pokernews.com/poker-hands/playing-board.htm), [PokerStrategy](https://www.pokerstrategy.com/glossary/Kicker/) | Optional evaluator: highlight the **best five** of each hand; the tie-break line reads "Both have a pair of Kings → Anna's Q kicker beats Ben's J". When the board plays: "The board plays, split the pot." A rankings sheet is one tap away (pull), never pushed |
 | **Odd chip in a split** | [PokerNews split pot](https://www.pokernews.com/poker-hands/split-pot.htm) | Automatic (first seat left of the button), with a one-line note |
 
 **Hint lifecycle (progressive disclosure).**
-- **Novice:** one sentence under the action bar ("You can check — it's free to see the next card.").
+- **Novice:** one sentence under the action bar ("You can check, it's free to see the next card.").
 - **Learned:** the hint disappears after the player has taken that decision type correctly about 3 times. Track this per player, not per device.
 - **Regular:** no hints; numbers only.
 - A table-wide "Teaching" toggle sets the default (Beginner table / Mixed / Pros). Each player can override it on their own phone.
@@ -162,7 +162,7 @@ Show the Wi-Fi/hotspot name *next to* the QR ("Join Wi-Fi 'PokerNight' first"), 
 - Compute **net per player** = final stack value − total buy-ins. Show that first, because people understand "+€23" before "pay Ben €12".
 - **Transfers:** greedy matching of the largest debtor with the largest creditor gives ≤ n−1 transfers. The true minimum is NP-hard, but exact subset DP is feasible for ≤ 10 players ([Splitwise algorithm write-up](https://medium.com/@mithunmk93/algorithm-behind-splitwises-debt-simplification-feature-8ac485e97688), [Splitwise help](https://splitwise.uservoice.com/knowledgebase/articles/107220-what-does-the-simplify-debts-setting-do)). For ≤ 10 players, use the exact minimum.
 - Like Splitwise, offer two views: **"Simplest" (fewest transfers)** and **"Via host"** (everyone settles with the banker, which many home games prefer).
-- **Advantage over every ledger app:** final stacks are exact, so there is no "chips don't add up" mismatch to reconcile (cf. [PokerPot](https://apps.apple.com/us/app/-/id6758568455)). Say so on the screen: "Balanced ✓ — 4,000 in, 4,000 out".
+- **Advantage over every ledger app:** final stacks are exact, so there is no "chips don't add up" mismatch to reconcile (cf. [PokerPot](https://apps.apple.com/us/app/-/id6758568455)). Say so on the screen: "Balanced ✓, 4,000 in, 4,000 out".
 - Rounding: settle to the smallest currency unit, with the remainder assigned deterministically and shown.
 - Show a timeline of buy-ins and rebuys per player (transparency prevents disputes), plus a shareable summary card (image/text) for the group chat. Free-play mode shows a leaderboard instead.
 
@@ -181,8 +181,8 @@ Show the Wi-Fi/hotspot name *next to* the QR ("Join Wi-Fi 'PokerNight' first"), 
 
 ## 8. Fresh ideas
 
-1. **Narrator line.** One sentence at the top, in plain English: "Ben raised to 120. Cara to act — call 120 or fold." It doubles as a log (swipe down for history) and as the beginner's teacher. It is also how host corrections stay transparent.
-2. **Dealer cue card.** After each round the app tells the dealer what to do: "Burn 1 · Deal 3 — the Flop". Before a hand: "Deal 2 cards to each player, starting with Ben (left of the button)". The app becomes the **floor manager**, not just the bank.
+1. **Narrator line.** One sentence at the top, in plain English: "Ben raised to 120. Cara to act, call 120 or fold." It doubles as a log (swipe down for history) and as the beginner's teacher. It is also how host corrections stay transparent.
+2. **Dealer cue card.** After each round the app tells the dealer what to do: "Burn 1 · Deal 3, the Flop". Before a hand: "Deal 2 cards to each player, starting with Ben (left of the button)". The app becomes the **floor manager**, not just the bank.
 3. **The table speaks.** The host phone announces turns ("Anna, it's on you") and big moments ("All in!"), with system TTS and locale-aware wording. This solves the browser-notification gap and helps beginners who aren't watching the screen.
 4. **"Why?" on everything.** Long-press any disabled button or number for a one-line rule: "Why can't I raise? Cara's all-in didn't reopen the betting." It's pull help, so experienced players never see it unless they ask.
 5. **Showdown explainer.** Tap the cards (a rank × suit grid; the best-five highlight shows *which* five play). The result reads like a referee: "Anna wins with Two Pair, Kings and Sevens. Ben also had Kings and Sevens, but Anna's Queen kicker plays."
@@ -190,7 +190,7 @@ Show the Wi-Fi/hotspot name *next to* the QR ("Join Wi-Fi 'PokerNight' first"), 
 7. **Gesture shortcuts (expert mode).** On the action bar: swipe up = call/check, swipe down (hold) = fold. Off by default; enabled per player.
 8. **Hand replay card.** After each hand, a compact replay ("Preflop: Ben 3× … River: Anna bets 200, Ben calls") for "wait, what happened?" moments. It's also teachable.
 9. **Card scan (Could).** Use the host camera to read the board and hands at showdown with on-device ML (precedent: [Royal Draw](https://apps.apple.com/us/app/id6758281507)). It would only work on the native host app (secure context), and is high effort.
-10. **Learning-curve fade.** Hints retire per player as they demonstrate each concept. The group's "Teaching level" visibly drops over the night ("You've got this — hints off"), which is satisfying and respectful.
+10. **Learning-curve fade.** Hints retire per player as they demonstrate each concept. The group's "Teaching level" visibly drops over the night ("You've got this, hints off"), which is satisfying and respectful.
 
 ---
 
@@ -234,7 +234,7 @@ Show the Wi-Fi/hotspot name *next to* the QR ("Join Wi-Fi 'PokerNight' first"), 
 ## 10. Signature ideas (what nobody else does)
 
 1. **"The app is the floor manager."** It doesn't just track chips: it *runs* the hand. It tells the dealer what to deal, tells each player in one sentence what they can do, and calls the turn out loud. A table of total beginners plays a correct hand with nobody reading rules.
-2. **The Narrator.** A single living sentence at the top of every screen ("Ben raised to 120 — Cara: call 120 or fold"). It is the tutorial, the log, the audit trail and the dispute settler at once. It fades to terse numbers as the table levels up.
+2. **The Narrator.** A single living sentence at the top of every screen ("Ben raised to 120, Cara: call 120 or fold"). It is the tutorial, the log, the audit trail and the dispute settler at once. It fades to terse numbers as the table levels up.
 3. **"Why?" on long-press.** Every greyed-out button and every number explains itself in one line. Beginners learn the hard rules (short all-in, min-raise, side-pot eligibility) exactly when they bite; pros never see it.
 4. **The Referee showdown.** Instead of "Ben wins", it gives a verdict: the best five cards lit up, and the kicker or tie explained in a sentence. It turns the most confusing moment in poker into the most satisfying one.
 5. **Physical-table mirroring.** The on-screen ring is a scale model of where people actually sit. The active seat glows *toward* the real person and the action panel turns to face them. The phone on the felt behaves like a dealer button that knows the rules.
@@ -247,7 +247,7 @@ Show the Wi-Fi/hotspot name *next to* the QR ("Join Wi-Fi 'PokerNight' first"), 
 
 ```
 ┌──────────────────────────────────────┐
-│ ♠ Dealer: burn 1 · deal 1 — the Turn │  ← dealer cue card (appears between rounds)
+│ ♠ Dealer: burn 1 · deal 1, the Turn │  ← dealer cue card (appears between rounds)
 ├──────────────────────────────────────┤
 │              DAN  1.8k               │
 │        CARA ○           ○ EVE        │
@@ -262,7 +262,7 @@ Show the Wi-Fi/hotspot name *next to* the QR ("Join Wi-Fi 'PokerNight' first"), 
 │     ANNA ◉ ━━━━━━━━━━━━━━━ glowing   │  ← active seat glows toward real Anna
 │     2.0k   "Ben raised to 120"       │
 ├──────────────────────────────────────┤
-│ ▸ Anna — call 120 or fold. Min raise │  ← narrator line (tap ▾ for history)
+│ ▸ Anna, call 120 or fold. Min raise │  ← narrator line (tap ▾ for history)
 │   to 200.                            │
 ├──────────────────────────────────────┤
 │  ┌────────┐  ┌────────────────────┐  │  ← action panel rotates to face Anna's

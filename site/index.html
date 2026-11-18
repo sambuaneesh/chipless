@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Chipless: Poker Chips App for Home Games (Texas Hold'em, No Chips Needed)</title>
-<meta name="description" content="Free poker chips app for Android. Play Texas Hold'em home games with real cards and no chips: Chipless tracks chips, bets, blinds and side pots, explains the rules to beginners, and friends join from their phone's browser. Offline, no ads, open source.">
+<title>Chipless: Free Poker Chips App and Rules Referee for Home Games</title>
+<meta name="description" content="You deal the cards, Chipless deals with the rest: chips, blinds, side pots, whose turn it is, and who won and why. A free Android app for Texas Hold'em home games. Friends join from any browser, no internet needed, open source.">
 <link rel="canonical" href="https://sambuaneesh.github.io/chipless/">
 <meta name="robots" content="index,follow,max-image-preview:large">
 <meta name="keywords" content="poker chips app, poker chip counter, virtual poker chips, texas holdem app, home poker game, poker without chips, poker bank app, poker settle up, learn poker, poker rules app">
@@ -12,20 +12,21 @@
 <link rel="icon" type="image/png" sizes="192x192" href="media/icon-192.png">
 <link rel="apple-touch-icon" href="media/icon-180.png">
 <meta name="theme-color" content="#090e0c">
-<meta property="og:title" content="Chipless: real cards, no chips">
-<meta property="og:description" content="Your phone runs the poker table and teaches as you play. Friends join from their browser. Free and open source.">
+<meta property="og:title" content="You deal the cards. Chipless deals with the rest.">
+<meta property="og:description" content="It counts the chips, calls the turns and rules on every showdown, then tells you why. One Android phone, no internet, no account.">
 <meta property="og:image" content="https://sambuaneesh.github.io/chipless/media/og.jpg">
 <meta property="og:url" content="https://sambuaneesh.github.io/chipless/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Chipless">
 <meta property="og:image:alt" content="Chipless poker table app on a phone">
-<meta name="twitter:title" content="Chipless: real cards, no chips">
-<meta name="twitter:description" content="Your phone runs the poker table and teaches as you play. Free, offline, open source.">
+<meta name="twitter:title" content="You deal the cards. Chipless deals with the rest.">
+<meta name="twitter:description" content="It counts the chips, calls the turns and rules on every showdown, then tells you why. Free, offline, open source.">
 <meta name="twitter:image" content="https://sambuaneesh.github.io/chipless/media/og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="media/icon.svg">
+<link rel="preload" href="fonts/fraunces-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="site.css">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Chipless", "alternateName": "Chipless poker chips app", "description": "Poker chips app for real-card Texas Hold'em home games. Tracks chips, bets, blinds and side pots, teaches the rules, and lets friends join from their phone's browser.", "applicationCategory": "GameApplication", "applicationSubCategory": "Card game companion", "operatingSystem": "Android 8.0+", "softwareVersion": "1.1.1", "fileSize": "125KB", "downloadUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "installUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "url": "https://sambuaneesh.github.io/chipless/", "license": "https://www.gnu.org/licenses/gpl-3.0.html", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "screenshot": ["https://sambuaneesh.github.io/chipless/media/deal.webp", "https://sambuaneesh.github.io/chipless/media/raise.webp", "https://sambuaneesh.github.io/chipless/media/referee.webp", "https://sambuaneesh.github.io/chipless/media/settle.webp"], "image": "https://sambuaneesh.github.io/chipless/media/og.jpg", "codeRepository": "https://github.com/sambuaneesh/chipless", "author": {"@type": "Person", "name": "Aneesh Sambu", "url": "https://github.com/sambuaneesh"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Chipless", "alternateName": "Chipless poker chips app", "description": "Poker chips app and rules referee for real-card Texas Hold'em home games. Tracks chips, bets, blinds and side pots, explains each ruling, and lets friends join from their phone's browser with no internet.", "applicationCategory": "GameApplication", "applicationSubCategory": "Card game companion", "operatingSystem": "Android 8.0+", "softwareVersion": "1.1.1", "fileSize": "125KB", "downloadUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "installUrl": "https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk", "url": "https://sambuaneesh.github.io/chipless/", "license": "https://www.gnu.org/licenses/gpl-3.0.html", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "screenshot": ["https://sambuaneesh.github.io/chipless/media/deal.webp", "https://sambuaneesh.github.io/chipless/media/raise.webp", "https://sambuaneesh.github.io/chipless/media/referee.webp", "https://sambuaneesh.github.io/chipless/media/settle.webp"], "image": "https://sambuaneesh.github.io/chipless/media/og.jpg", "codeRepository": "https://github.com/sambuaneesh/chipless", "author": {"@type": "Person", "name": "Aneesh Sambu", "url": "https://github.com/sambuaneesh"}}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do my friends need to install anything?", "acceptedAnswer": {"@type": "Answer", "text": "No. Only the host needs the Android app. Everyone else scans the QR code and plays in their phone's web browser."}}, {"@type": "Question", "name": "Does it need the internet?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything runs on the host's phone over your Wi-Fi or the host's mobile hotspot. Nothing leaves the room. If public or campus Wi-Fi blocks phones from talking to each other, use the hotspot."}}, {"@type": "Question", "name": "Which poker game does it support?", "acceptedAnswer": {"@type": "Answer", "text": "No-Limit Texas Hold'em. Raises, all-ins, side pots and split pots follow the official TDA tournament rules and Robert's Rules of Poker. You deal real cards; the app tracks everything else."}}, {"@type": "Question", "name": "Can we play without phones for everyone?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Leave one phone in the middle of the table and take turns tapping. You can invite phones any time later, and mix both."}}, {"@type": "Question", "name": "Does Chipless handle real money?", "acceptedAnswer": {"@type": "Answer", "text": "No. It only keeps score. In buy-in mode it records what each person bought in for and tells you who owes whom at the end. You settle up yourselves."}}, {"@type": "Question", "name": "What if the app gets closed mid-game?", "acceptedAnswer": {"@type": "Answer", "text": "Every action is saved as it happens. Reopen the app and the table is exactly where you left it, and friends' phones reconnect on their own."}}, {"@type": "Question", "name": "Is it really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Chipless is open source under the GPL-3.0 license. No ads, no in-app purchases, no tracking."}}]}</script>
 </head>
 <body>
@@ -34,10 +35,10 @@
   <div class="wrap">
     <a class="brand" href="#"><span class="chip"></span>Chipless</a>
     <ul>
+      <li><a href="#rulings">At the table</a></li>
       <li><a href="#how">How it works</a></li>
       <li><a href="#features">Features</a></li>
-      <li><a href="#who">Who it's for</a></li>
-      <li><a href="#learn">Learn</a></li>
+      <li><a href="#learn">Try it</a></li>
       <li><a href="#tools">Free tools</a></li>
       <li><a href="#faq">FAQ</a></li>
     </ul>
@@ -51,20 +52,20 @@
 <header class="hero">
   <div class="wrap">
     <div>
-      <h1><span class="eyebrow"><span class="chip" style="width:14px;height:14px"></span> Free poker chips app for home games</span><span class="h1big">Real cards.<br><em>No chips.</em></span></h1>
-      <p class="lede">Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. Deal real cards; the app runs every hand, explains every rule, and your friends play along from their own phones.</p>
+      <h1><span class="eyebrow"><span class="chip" style="width:14px;height:14px"></span> Free poker chips app for home games</span><span class="h1big">You deal the cards.<br><em>Chipless deals with the rest.</em></span></h1>
+      <p class="lede">It counts every chip, calls every turn and rules on every showdown, then tells you <i>why</i>. All from one Android phone, with no internet, no account and no chip set in the house.</p>
       <div class="ctas">
         <a class="btn primary" href="https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
           Download for Android
         </a>
-        <a class="btn" href="#how">See how it works</a>
+        <a class="btn" href="#rulings">Hear it run a hand</a>
       </div>
       <ul class="facts">
-        <li>125 KB app</li>
-        <li>Works offline</li>
-        <li>No accounts, no ads</li>
-        <li>Friends join from their browser</li>
+        <li>125 KB, smaller than one photo</li>
+        <li>Runs on your Wi-Fi or hotspot, no internet</li>
+        <li>No account, ads or tracking</li>
+        <li>Open source</li>
       </ul>
     </div>
     <div class="phone reveal">
@@ -73,15 +74,34 @@
   </div>
 </header>
 
+<section id="rulings">
+  <div class="wrap">
+    <div class="center-h">
+      <div class="kicker">Overheard at the table</div>
+      <h2>Every home game needs a floor. <em>Now yours has one.</em></h2>
+      <p class="sub">In a card room, the floor is the person who settles disputes and knows every rule. Chipless plays that part. These are its own words, word for word, from one ordinary hand.</p>
+    </div>
+    <ol class="slips">
+      <li class="slip reveal"><span class="when">Before the deal</span><q>Shuffle, then deal 2 cards each, one at a time: Arjun first, Maya last.</q></li>
+      <li class="slip reveal"><span class="when">Pre-flop</span><q>Zoe: call 10, raise to 20+ or fold.</q><span class="why">Every player always knows their options and the exact price.</span></li>
+      <li class="slip reveal"><span class="when">A raise</span><q>To stay in, call 40. A raise must add at least 30 (the last bet/raise size), so the minimum is 70.</q><span class="why">The minimum-raise rule, taught at the moment it matters.</span></li>
+      <li class="slip reveal"><span class="when">The flop</span><q>The Flop: burn 1, deal 3 face up.</q></li>
+      <li class="slip reveal"><span class="when">A short all-in</span><q>Arjun's all-in was smaller than a full raise, so betting isn't reopened for you. You can only call or fold.</q><span class="why">The short all-in rule (TDA Rule 49), applied and explained.</span></li>
+      <li class="slip reveal"><span class="when">Showdown</span><q>Maya's Flush, Ace-high beats Sam's Three Kings.</q><span class="why">Not just who won. Why.</span></li>
+      <li class="slip reveal"><span class="when">End of the night</span><q>Arjun pays Maya 500. Sam pays Maya 200. Sam pays Zoe 200.</q><span class="why">The fewest possible payments, worked out exactly.</span></li>
+    </ol>
+  </div>
+</section>
+
 <section id="how">
   <div class="wrap center-h">
     <div class="kicker">How it works</div>
-    <h2>Three taps to a real poker night</h2>
-    <p class="sub">No chips, no dealer who knows the rules, no problem. Chipless handles everything except the cards.</p>
+    <h2>Seat. Shuffle. Deal.</h2>
+    <p class="sub">The host installs one small app. Everyone else needs a phone with a browser, which they already have.</p>
     <div class="steps" style="text-align:left">
-      <div class="step reveal"><h3>Set the table</h3><p>Type names in the order you sit, pick stakes, and choose fun points or real buy-ins.</p></div>
-      <div class="step reveal"><h3>Friends scan to join</h3><p>Everyone scans a QR code on your phone and plays from their own browser. Nothing to install, no internet needed.</p></div>
-      <div class="step reveal"><h3>Deal real cards</h3><p>The app tells the dealer what to deal, whose turn it is, and what they can do: blinds, bets, pots and payouts.</p></div>
+      <div class="step reveal"><h3>Seat the table</h3><p>Type names in the order you sit; Chipless works out the button, the blinds and who acts next from that. Play for points, or track real buy-ins and rebuys.</p></div>
+      <div class="step reveal"><h3>Shuffle up</h3><p>Friends scan a QR code and their phone becomes their stack. The host's phone is the server, over your Wi-Fi or its own hotspot, so the game works in a basement with no signal.</p></div>
+      <div class="step reveal"><h3>Deal</h3><p>You handle the cards. Chipless tells the dealer what to burn and turn, tells each player what they may do, and moves the chips when they do it.</p></div>
     </div>
   </div>
 </section>
@@ -90,57 +110,52 @@
   <div class="wrap">
     <div class="feature">
       <div class="reveal">
-        <div class="kicker">The floor manager</div>
-        <h3>Runs the hand so nobody has to</h3>
-        <p>A narrator line always says what just happened and what comes next. Between rounds, a dealer card spells out the physical steps.</p>
+        <div class="kicker">The dealer's memory</div>
+        <h3>Nobody has to ask “whose turn is it?”</h3>
+        <p>The player to act glows on every phone, and the host's phone can say their name out loud. Every bet pops up over the table and stays on the player as a coloured tag, so a glance tells you what happened while you were looking at your cards.</p>
         <ul>
-          <li>“Burn 1 · deal 3 face up: the Flop”</li>
-          <li>Blinds, button and turn order handled automatically</li>
+          <li>Blinds, button and turn order handled for you</li>
           <li>Side pots, all-ins and split pots worked out exactly</li>
           <li>Optional: record the flop, turn and river so every phone shows the board</li>
-          <li>Drag to rearrange seats; the turn order follows</li>
+          <li>Drag players to new seats; the turn order follows</li>
         </ul>
-        <div class="quote">“Zoe: call 10, raise to 20+ or fold.” Every player always knows their options.</div>
       </div>
       <div class="shots reveal">
-        <div class="phone sm"><img src="media/deal.webp" alt="Table with dealer instructions and narrator" loading="lazy"></div>
-        <div class="phone sm"><img src="media/flop.webp" alt="The flop, with the pot and bets on the table" loading="lazy"></div>
+        <div class="phone sm"><img src="media/deal.webp" alt="Table with the dealer's instruction" loading="lazy"></div>
+        <div class="phone sm"><img src="media/flop.webp" alt="The flop recorded on the felt, with the round's actions listed" loading="lazy"></div>
       </div>
     </div>
 
     <div class="feature">
       <div class="reveal">
         <div class="kicker">Everyone's phone</div>
-        <h3>Friends play from their own phones</h3>
-        <p>Scan, tap your name, and you're in. Your stack, your turn and your buttons are on your own phone, and the whole table updates live on every phone.</p>
+        <h3>Your stack, in your own hand</h3>
+        <p>Scan, tap your name, and your phone shows your chips, your turn and your buttons. Nothing to install and no sign-up; it's a web page served by the host's phone, about 44 KB in total.</p>
         <ul>
-          <li>Join with one scan and one tap, right in the browser</li>
           <li>Private pre-actions: Check/Fold, Call any</li>
-          <li>Every bet, call and fold pops up big on every phone, with a timeline of the round</li>
-          <li>Dramatic sounds for big raises and all-ins, and optional spoken bets</li>
-          <li>Phone went to sleep? It reconnects to your seat automatically</li>
-          <li>Or keep one phone on the table and pass it around</li>
+          <li>Phone fell asleep? It reconnects to your seat</li>
+          <li>Big raises swell, all-ins hit hard, and bets can be read aloud</li>
+          <li>Or skip all that and pass one phone around</li>
         </ul>
       </div>
       <div class="shots reveal">
         <div class="phone sm"><img src="media/invite.webp" alt="Invite screen with a QR code" loading="lazy"></div>
-        <div class="phone sm"><img src="media/guest-turn.webp" alt="A player's own phone showing their turn" loading="lazy"></div>
+        <div class="phone sm"><img src="media/guest-turn.webp" alt="A player's own phone on their turn" loading="lazy"></div>
       </div>
     </div>
 
     <div class="feature">
       <div class="reveal">
-        <div class="kicker">Betting that can't go wrong</div>
-        <h3>Tap, size, hold</h3>
-        <p>One tap to check or call. Raises use smart presets (3×, half pot, pot) with a slider for anything else. All-in needs a deliberate hold, so no accidental shoves.</p>
+        <div class="kicker">Betting</div>
+        <h3>Fat fingers can't shove</h3>
+        <p>Check or call is one tap. Raises come with presets (2.5×, 3×, half pot, pot) and a slider. Going all-in takes a deliberate press-and-hold, because “oops” shouldn't cost anyone 2,000 chips. And if something does go wrong, Undo is one tap away.</p>
         <ul>
-          <li>Minimum raises and the short all-in rules enforced</li>
+          <li>Minimum raises and short all-ins enforced</li>
           <li>Greyed-out button? Tap it to learn why</li>
-          <li>Undo instead of “are you sure?” pop-ups</li>
         </ul>
       </div>
       <div class="shots reveal">
-        <div class="phone sm"><img src="media/raise.webp" alt="Raise tray with presets and slider" loading="lazy"></div>
+        <div class="phone sm"><img src="media/raise.webp" alt="Raise presets and slider" loading="lazy"></div>
         <div class="phone sm"><img src="media/showdown.webp" alt="Showdown: pick the winner" loading="lazy"></div>
       </div>
     </div>
@@ -148,27 +163,25 @@
     <div class="feature">
       <div class="reveal">
         <div class="kicker">The referee</div>
-        <h3>“Who won?” Settled at the table.</h3>
-        <p>Not sure whose hand is better? Enter the cards and Chipless names the winner, lights up the five cards that play, and explains why.</p>
-        <div class="quote">“Maya's Flush, Ace-high beats Sam's Three Kings.”</div>
+        <h3>Who won? Ask the referee, not the loudest player.</h3>
+        <p>Pick the rank, pick the suit, and Chipless names the winner, lights up the five cards that play, and gives the reason in a sentence. Kickers, split pots and the A-2-3-4-5 straight included.</p>
+        <div class="quote">“Both have Two Pair, Kings and Sevens. Ann's Queen kicker beats Ben's Jack.”</div>
       </div>
       <div class="shots reveal">
         <div class="phone sm"><img src="media/referee.webp" alt="Card entry with the verdict" loading="lazy"></div>
-        <div class="phone sm"><img src="media/result.webp" alt="Winner announced on the table" loading="lazy"></div>
+        <div class="phone sm"><img src="media/result.webp" alt="Winner shown on the table" loading="lazy"></div>
       </div>
     </div>
 
     <div class="feature">
       <div class="reveal">
-        <div class="kicker">Settle up</div>
-        <h3>Who pays whom, in the fewest payments</h3>
-        <p>Playing for real buy-ins? Chipless tracks every rebuy and works out the minimum number of transfers at the end of the night. Share the summary to your group chat with one tap.</p>
+        <div class="kicker">Settling up</div>
+        <h3>The 2 a.m. maths, done right</h3>
+        <p>Rebuys are logged as they happen. At the end, Chipless checks that the chips coming out match the chips that went in, then finds the fewest payments. Five players never need more than four.</p>
         <ul>
-          <li>Balance check: chips in must equal chips out</li>
-          <li>Fewest payments, or everyone settles with one banker</li>
-          <li>Or just play for points</li>
-          <li>Export the night as a readable hand history</li>
-          <li>Back up a game and carry on from another phone, even mid-hand</li>
+          <li>Fewest payments, or everyone settles through one banker</li>
+          <li>The whole night exports as a readable hand history</li>
+          <li>Switching phones mid-game? Save a backup and carry on</li>
         </ul>
       </div>
       <div class="shots reveal">
@@ -182,35 +195,35 @@
 <section id="who">
   <div class="wrap center-h">
     <div class="kicker">Who it's for</div>
-    <h2>The poker chips app for real-life games</h2>
-    <p class="sub">Got a deck of cards but no poker chip set? Chipless is a virtual chip counter, poker bank and rules guide in one free app.</p>
+    <h2>Built for three kinds of table</h2>
+    <p class="sub">If you have a deck and a group chat, you have most of a poker night. Chipless is the rest of it: the chips, the bank and the rulebook.</p>
     <div class="steps" style="text-align:left">
-      <div class="step reveal"><h3>Game nights with friends</h3><p>Hostel rooms, house parties, road trips. Bring a deck; everyone's stack lives on their phone.</p></div>
-      <div class="step reveal"><h3>Total beginners</h3><p>Never played Texas Hold'em? The app tells you whose turn it is, what you can do, and who won and why.</p></div>
-      <div class="step reveal"><h3>Regular home games</h3><p>Blind timers, rebuys and an end-of-night settle-up that works out who pays whom, with no spreadsheet.</p></div>
+      <div class="step reveal"><h3>The table that's never played</h3><p>Does a flush beat a straight? Can the big blind raise? Chipless answers before anyone has to ask, and the hints retire once you've seen them a few times.</p></div>
+      <div class="step reveal"><h3>The table with no chip set</h3><p>Hostel rooms, road trips, the in-laws' kitchen. A deck weighs about 100 grams. A 500-chip set in its case weighs around 5 kilos.</p></div>
+      <div class="step reveal"><h3>The Friday regulars</h3><p>Blind timer, rebuys, and a settle-up that ends the night without a spreadsheet or a recount.</p></div>
     </div>
   </div>
 </section>
 
 <section id="learn">
   <div class="wrap center-h">
-    <div class="kicker">Built for beginners</div>
-    <h2>Learn poker by playing it</h2>
-    <p class="sub">No tutorial. Hints appear exactly when a rule matters and fade once you've got it. Try it yourself: who wins these hands?</p>
+    <div class="kicker">Try the referee</div>
+    <h2>Three hands. Who takes the pot?</h2>
+    <p class="sub">The same judgement Chipless makes at the table. Tap the hand you think wins.</p>
     <div class="quiz" style="text-align:left" id="quiz"></div>
   </div>
 </section>
 
-<section>
+<section id="small">
   <div class="wrap center-h">
-    <div class="kicker">Tiny and private</div>
-    <h2>Small, fast and private</h2>
-    <p class="sub">No frameworks bolted together, no trackers, no cloud. The whole app is smaller than a single photo.</p>
+    <div class="kicker">Small on purpose</div>
+    <h2>The app is smaller than the photo you'll take of the final hand</h2>
+    <p class="sub">No frameworks, no trackers, no servers of ours. The game lives on the host's phone, and nothing about your night leaves the room.</p>
     <div class="grid4" style="text-align:left">
-      <div class="stat reveal"><b>125 KB</b><span>Entire Android app</span></div>
+      <div class="stat reveal"><b>125 KB</b><span>The entire Android app</span></div>
+      <div class="stat reveal"><b>44 KB</b><span>All a friend's phone loads to join</span></div>
       <div class="stat reveal"><b>0</b><span>Accounts, ads or analytics</span></div>
-      <div class="stat reveal"><b>44 KB</b><span>All a friend's phone downloads to join</span></div>
-      <div class="stat reveal"><b>2–10</b><span>Players at one table</span></div>
+      <div class="stat reveal"><b>2 to 10</b><span>Players at one table</span></div>
     </div>
   </div>
 </section>
@@ -221,7 +234,7 @@
       <div>
         <div class="kicker">Get Chipless</div>
         <h2>Deal the next hand tonight</h2>
-        <p class="sub">Only the host needs the app. Everyone else just scans.</p>
+        <p class="sub">Only the host installs. Everyone else just scans.</p>
         <ol>
           <li>Download the APK on your Android phone (Android 8 or newer).</li>
           <li>Open it and allow installing from your browser if asked.</li>
@@ -241,8 +254,8 @@
 <section id="tools">
   <div class="wrap center-h">
     <div class="kicker">Free poker tools</div>
-    <h2>No app needed for these</h2>
-    <p class="sub">Handy at any home game, on any phone or computer.</p>
+    <h2>Some of the referee, no install</h2>
+    <p class="sub">The same hand evaluator and settle-up maths as the app, as web pages for any phone or laptop.</p>
     <div class="more" style="text-align:left;margin-top:32px">
       <a href="poker-hand-rankings/"><b>Poker hand rankings and who wins</b><small>Every hand from best to worst, plus a calculator that settles any showdown</small></a>
       <a href="poker-settle-up-calculator/"><b>Poker settle-up calculator</b><small>Enter buy-ins and cash-outs; get who pays whom in the fewest payments</small></a>

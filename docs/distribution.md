@@ -98,16 +98,22 @@ Costs $25 plus ID. New personal accounts must first run a closed test with at le
 - Never ask anyone for upvotes.
 - Keep self-promotion to about 10% of what you post.
 
+**Name clash: another "Chipless" exists.** playchipless.com is a free browser app with the same name and a similar idea, online since July 2025. Their pitch is "Poker set in your pocket" and "Phones replace the chips"; their site is light and minimal. Keep ours unmistakably different:
+- Lead with the referee: **"You deal the cards. Chipless deals with the rest."** and the "every home game needs a floor" idea. Quote the app's real sentences rather than describing them.
+- Never use "pocket", "phones replace the chips" or "poker set" in our copy.
+- Say "Chipless for Android", and link the GitHub repo or our site, so readers can tell the two apart. Mention what only we do: runs with no internet, open source, explains every ruling.
+- Visual identity: dark felt, brass, Fraunces display type, cream "ruling slips".
+
 **Position against TableChips** (GPL, on F-Droid, also uses browser join). Credit it, and lead with what's different: the rules coach, the showdown referee that explains "who wins and why", fewest-transfer settle-up, pass-and-play, and the ~125 KB size.
 
 1. **AlternativeTo:** add Chipless and mark it as an alternative to HG Poker and EasyPoker.
 2. **Show HN**, Tuesday 8–10 am US Eastern:
    - **Title:** "Show HN: A 125 KB Android app that hosts a poker table over Wi-Fi with a hand-written WebSocket server"
-   - **Body:** what it is, why it exists (a friends' game with no chips), and the technical story (no AndroidX, an event-sourced rules engine, a 35 KB Preact client, reproducible builds). Link the repo and the site.
+   - **Body:** what it is, why it exists (a friends' game with no chips), and the technical story (no AndroidX, an event-sourced rules engine, a 45 KB Preact client, reproducible builds). Link the repo and the site.
 3. **r/fossdroid** ("Application Release" flair, state the license), **c/fdroid@lemmy.ml** and **c/androidapps@lemmy.world**:
-   - **Title:** "Chipless: 125 KB GPL-3.0 poker chips app, no ads/accounts/internet; friends join over hotspot in any browser"
+   - **Title:** "Chipless for Android: a 125 KB GPL poker referee. You deal real cards, it runs the chips and explains every showdown; friends join over hotspot, no internet"
 4. **dev.to / Hashnode** write-up, then link it from **r/opensource** ("Promotional" flair) and **r/coolgithubprojects**.
-5. **r/droidappshowcase** and **r/SideProject:** "Chipless – free poker chips app for real-card home games (beginners get rules help, settle-up in fewest payments)".
+5. **r/droidappshowcase** and **r/SideProject:** "Chipless for Android: you deal the cards, it deals with the rest (chips, turns, who won and why, fewest-payment settle-up)".
 6. **Poker players** (message the r/poker mods first; r/pokerhomegames):
    - **Title:** "Played at a friend's with no chips, so I made a free app: everyone joins from their browser by QR, it handles blinds/side pots and tells beginners who won and why"
 7. **15-second vertical demo:** a YouTube Short titled "How to play poker without chips using your phone", plus Reels and TikTok.

@@ -1,1 +1,1 @@
-Poker chips app for real-card Texas Hold'em home games. Friends join by browser.
+Home poker referee: you deal the cards, it runs the chips, turns and showdowns.

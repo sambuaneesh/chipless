@@ -1,0 +1,3 @@
+- New home screen line: "You deal the cards. Chipless deals with the rest."
+- Every message the app shows was rewritten in plainer sentences
+- Dealer cues now name the street first: "The Flop: burn 1, deal 3 face up"

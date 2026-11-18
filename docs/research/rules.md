@@ -371,14 +371,14 @@ Porting to Kotlin or Rust is mechanical: the same integers and a 13-bit mask.
 - **Why the winner won**, compared with the best losing hand in the same pot:
 ```
 explain(W, L):
-  if cat(W) != cat(L): "Alice wins with a Flush, Ace-high — beats Bob's Straight, Ten-high"
+  if cat(W) != cat(L): "Alice wins with a Flush, Ace-high, beats Bob's Straight, Ten-high"
   else i = first key index where they differ
        keyCount = {8:1, 7:1, 6:2, 5:5, 4:1, 3:1, 2:2, 1:1, 0:5}[cat]
        if i < keyCount (for 5/0 categories: "{i+1}th card"): "Kings full beats Queens full"
-       else: "Both have a Pair of Aces — Alice's King kicker beats Bob's Jack"
-  tie: "Split pot: both play {desc}" (+ " — the board plays" if both best-5 == board)
+       else: "Both have a Pair of Aces, Alice's King kicker beats Bob's Jack"
+  tie: "Split pot: both play {desc}" (+ ", the board plays" if both best-5 == board)
 ```
-- Per pot: "Main pot (250): Carol — Three Sevens. Side pot 1 (240): Bob — Two Pair…"
+- Per pot: "Main pot (250): Carol, Three Sevens. Side pot 1 (240): Bob, Two Pair…"
 
 ---
 

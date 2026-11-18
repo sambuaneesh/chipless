@@ -49,7 +49,7 @@ A poker table in your pocket for real-card home games with no chips. The app is 
 ### 4.3 A hand
 1. **Dealer cue card:** "Deal 2 cards to each player, starting with Ben (left of the button)." Blinds are posted automatically and shown as chips sliding in.
 2. **Betting:** the active seat glows toward the real person, the host phone chimes and speaks "Anna, it's on you", and the **narrator line** states the situation ("Ben raised to 120. Anna: call 120, raise to 200+, or fold").
-3. **Between streets:** the cue card reads "Burn 1 · Deal 3 — the Flop" (then the Turn and the River). Bets sweep into the pot.
+3. **Between streets:** the cue card reads "The Flop: burn 1, deal 3 face up" (then the Turn and the River). Bets sweep into the pot.
 4. **All-in run-out:** when no more betting is possible, the app tells the dealer to deal out the remaining cards and goes straight to showdown.
 5. **Showdown:** the app prompts who shows first (as guidance only), then **Pick winner(s)** per pot, or opens the **Referee**.
 6. **Award:** the pot flies to the winner(s) (the one indulgent animation, skippable). The odd chip is handled automatically. A replay card is available.
@@ -66,7 +66,7 @@ A poker table in your pocket for real-card home games with no chips. The app is 
 - **Real buy-ins:**
   - Each player's net result comes first ("+₹230").
   - Then the **fewest transfers** (exact minimum for ≤ 10 players), or **Via host**.
-  - A "Balanced ✓ — 4,000 in, 4,000 out" check, a per-player buy-in timeline, and a shareable text/image summary.
+  - A "Balanced ✓: 4,000 in, 4,000 out" check, a per-player buy-in timeline, and a shareable text/image summary.
 
 ## 5. Screens
 | Screen | Notes |

@@ -14,7 +14,7 @@ export function Home({ onNew }: { onNew: () => void }) {
       <div class="brand">
         <div class="logo" aria-hidden="true"><i /><i /><i /></div>
         <h1>Chipless</h1>
-        <p>Real cards. No chips needed.<br />The app runs the table and teaches as you play.</p>
+        <p>You deal the cards.<br />Chipless deals with the rest.</p>
       </div>
       <div class="homeacts">
         <Btn kind="primary" big onClick={onNew}><Icon name="play" /> New table</Btn>
@@ -122,7 +122,7 @@ export function Setup({ onBack }: { onBack: () => void }) {
           </div>
         )}
         {preset === 'custom' && <Toggle on={c.timer} onChange={(v) => setC({ ...c, timer: v })} label="Blinds rise on a timer" />}
-        <p class="tiny muted">Each player starts with {chips(c.stack)} chips — {Math.floor(c.stack / c.bb)} big blinds.{c.timer ? ` Blinds go up every ${c.minutes} minutes.` : ''}</p>
+        <p class="tiny muted">Each player starts with {chips(c.stack)} chips, or {Math.floor(c.stack / c.bb)} big blinds.{c.timer ? ` Blinds go up every ${c.minutes} minutes.` : ''}</p>
       </section>
 
       <section>
@@ -145,7 +145,7 @@ export function Setup({ onBack }: { onBack: () => void }) {
       <section>
         <h2>Phones</h2>
         <Seg label="Phones" value={share ? 'all' : 'one'} onChange={(v) => setShare(v === 'all')} options={[['one', 'Pass this phone'], ['all', 'Everyone uses theirs']]} />
-        <p class="tiny muted">{share ? 'Friends scan a QR code and join from their browser — no install. You can still act for anyone here.' : 'Leave the phone in the middle of the table. You can invite phones any time later.'}</p>
+        <p class="tiny muted">{share ? 'Friends scan a QR code and join from their browser, nothing to install. You can still act for anyone here.' : 'Leave the phone in the middle of the table. You can invite phones any time later.'}</p>
       </section>
 
       <div class="sticky-cta">

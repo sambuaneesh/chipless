@@ -10,7 +10,7 @@
 
 # Chipless
 
-**Real cards. No chips.** A free, open-source **poker chips app** for Android. Chipless turns your phone into the chips, the dealer button and the rulebook for home poker. You deal real cards; the app runs every No-Limit Hold'em hand correctly, explains each rule as it comes up, and your friends play along from their own phones.
+**You deal the cards. Chipless deals with the rest.** A free, open-source **poker chips app** and rules referee for No-Limit Texas Hold'em home games. It counts every chip, calls every turn and rules on every showdown, then tells you why. The host's Android phone runs the whole table over Wi-Fi or its own hotspot; friends play from their browser, and nothing needs the internet.
 
 **[Website](https://sambuaneesh.github.io/chipless/)** · **[Download the APK](https://github.com/sambuaneesh/chipless/releases/latest/download/chipless.apk)** · Android 8.0+
 

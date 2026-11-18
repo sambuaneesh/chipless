@@ -246,8 +246,8 @@ class Game {
     }
 
     private fun entryNote(entry: Entry) = when (entry) {
-        Entry.POST -> " — posts a big blind next hand"
-        Entry.WAIT -> " — waits for the big blind"
+        Entry.POST -> " and posts a big blind next hand"
+        Entry.WAIT -> " and waits for the big blind"
         Entry.FREE -> ""
     }
 
@@ -255,7 +255,7 @@ class Game {
         val p = seated(id)
         val h = hand
         if (h != null && h.open && id in h.dealt && id !in h.folded) {
-            throw RuleError("${p.name} is still in this hand — fold them or finish the hand first")
+            throw RuleError("${p.name} is still in this hand. Fold them or finish the hand first.")
         }
         val idx = players.indexOf(p)
         val before = players[(idx - 1 + players.size) % players.size].id
@@ -282,7 +282,7 @@ class Game {
     private fun notInLiveHand(p: Player) {
         val h = hand
         if (h != null && h.open && p.id in h.dealt && p.id !in h.folded) {
-            throw RuleError("${p.name} is in this hand — do that after the hand")
+            throw RuleError("${p.name} is in this hand. Do that after the hand.")
         }
     }
 
@@ -355,7 +355,7 @@ class Game {
         h.currentBet = bb
         h.lfr = bb
 
-        say("Hand #$handNo — ${name(pos.btn)} deals.", "hand")
+        say("Hand #$handNo: ${name(pos.btn)} deals.", "hand")
         val blinds = buildString {
             append("${name(pos.sb)} posts ${allInTag(pos.sb, sbPaid)}small blind ${fmt(sbPaid)}, ")
             append("${name(pos.bb)} posts ${allInTag(pos.bb, bbPaid)}big blind ${fmt(bbPaid)}")
@@ -410,7 +410,7 @@ class Game {
         val minTo = minOf(h.currentBet + h.lfr, maxTo)
         val why = when {
             canRaise -> null
-            st <= o -> "You don't have enough chips to raise — calling puts you all-in."
+            st <= o -> "You don't have enough chips to raise. Calling puts you all-in."
             !othersCanRespond -> "Everyone else is all-in, so there's nobody left to raise against."
             else -> {
                 val who = h.lastShortAllIn?.let { name(it) } ?: "The last all-in"
@@ -441,12 +441,12 @@ class Game {
                 h.label[p.id] = "Fold"
             }
             Move.CHECK -> {
-                if (!l.canCheck) throw RuleError("${p.name} can't check — there's a bet of ${fmt(h.currentBet)}")
+                if (!l.canCheck) throw RuleError("${p.name} can't check: there's a bet of ${fmt(h.currentBet)}")
                 text = "${p.name} checks."; kind = "check"
                 h.label[p.id] = "Check"
             }
             Move.CALL -> {
-                if (!l.canCall) throw RuleError("Nothing to call — ${p.name} can check")
+                if (!l.canCall) throw RuleError("Nothing to call. ${p.name} can check.")
                 pay(h, p, l.call)
                 amount = l.call
                 if (p.stack == 0) {
@@ -505,7 +505,7 @@ class Game {
                 h.sc[top] = h.sc(top) - back
                 h.tc[top] = h.tc(top) - back
                 seated(top).stack += back
-                if (h.live.size > 1) say("${fmt(back)} uncalled — returned to ${name(top)}.", "return", top)
+                if (h.live.size > 1) say("${fmt(back)} uncalled, returned to ${name(top)}.", "return", top)
             }
         }
         h.sc.clear()
@@ -518,12 +518,12 @@ class Game {
         if (canAct <= 1 && h.street != Street.RIVER) {
             h.runoutFrom = h.street
             h.street = Street.SHOWDOWN
-            say("All-in — no more betting. Deal the rest of the board, then show cards.", "runout")
+            say("All-in, so no more betting. Deal the rest of the board, then show cards.", "runout")
             return
         }
         if (h.street == Street.RIVER) {
             h.street = Street.SHOWDOWN
-            say("Showdown — ${name(showFirst(h))} shows first.", "showdown")
+            say("Showdown. ${name(showFirst(h))} shows first.", "showdown")
             return
         }
         h.street = Street.entries[h.street.ordinal + 1]
@@ -555,7 +555,7 @@ class Game {
         seated(w).stack += total
         h.results = listOf(PotResult(total, listOf(w), listOf(w), mapOf(w to total)))
         h.street = Street.DONE
-        say("${name(w)} wins ${fmt(total)} — everyone else folded.", "win", w, amount = total)
+        say("${name(w)} wins ${fmt(total)}. Everyone else folded.", "win", w, amount = total)
         finishHand(h)
     }
 
@@ -573,7 +573,7 @@ class Game {
         val h = hand ?: throw RuleError("No hand in progress")
         if (!h.open) throw RuleError("This hand is over")
         val max = boardReached(h)
-        if (max == 0) throw RuleError("No board cards yet — the flop comes after this betting round")
+        if (max == 0) throw RuleError("No board cards yet. The flop comes after this betting round.")
         if (cards.size > max) throw RuleError("Only $max board card${if (max > 1) "s are" else " is"} out so far")
         if (cards.any { it !in 0..51 }) throw RuleError("Unknown card")
         if (cards.size != cards.toSet().size) throw RuleError("The same card is entered twice")
@@ -677,7 +677,7 @@ class Game {
                 val losers = r.eligible.filter { it !in r.winners && scores[it] != null }.sortedByDescending { scores.getValue(it) }
                 val l = losers.firstOrNull()
                 if (l != null) say(Eval.whyBeats(name(w), ws, name(l), scores.getValue(l)), "why", w)
-                else if (r.winners.size > 1) say("Same five cards — the pot is split.", "why", w)
+                else if (r.winners.size > 1) say("Same five cards, so the pot is split.", "why", w)
             }
         }
         finishHand(h)

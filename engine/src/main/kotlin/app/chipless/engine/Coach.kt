@@ -17,9 +17,9 @@ object Coach {
             return "Shuffle, then deal 2 cards each, one at a time: ${g.player(first).name} first, ${g.player(h.button).name} last."
         }
         if (h.streetActions == 0) when (h.street) {
-            Street.FLOP -> return "Burn 1 · deal 3 face up — the Flop"
-            Street.TURN -> return "Burn 1 · deal 1 face up — the Turn"
-            Street.RIVER -> return "Burn 1 · deal 1 face up — the River"
+            Street.FLOP -> return "The Flop: burn 1, deal 3 face up"
+            Street.TURN -> return "The Turn: burn 1, deal 1 face up"
+            Street.RIVER -> return "The River: burn 1, deal 1 face up"
             else -> {}
         }
         if (h.street == Street.SHOWDOWN) {
@@ -27,7 +27,7 @@ object Coach {
                 Street.PREFLOP -> "All-in: everyone shows. Deal the Flop, Turn and River (burn 1 before each)."
                 Street.FLOP -> "All-in: everyone shows. Burn 1, deal the Turn · burn 1, deal the River."
                 Street.TURN -> "All-in: everyone shows. Burn 1, deal the River."
-                else -> "Showdown — ${g.player(g.showFirst(h)).name} shows first, then clockwise."
+                else -> "Showdown. ${g.player(g.showFirst(h)).name} shows first, then clockwise."
             }
         }
         return null
@@ -69,7 +69,7 @@ object Coach {
         val l = g.legal(id)
         val p = g.player(id)
         if (l.canCall && l.call >= p.stack && h.live.size > 2) {
-            return Hint("short-call", "Calling puts ${p.name} all-in. They can only win what they matched from each player — the rest forms a side pot.")
+            return Hint("short-call", "Calling puts ${p.name} all-in. They can only win what they matched from each player. The rest forms a side pot.")
         }
         if (!l.canRaise && l.noRaiseWhy != null && !l.noRaiseWhy.startsWith("You don't")) {
             return Hint("no-reopen", l.noRaiseWhy)

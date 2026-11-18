@@ -81,7 +81,7 @@ function useCards(names: string[], initBoard: string[] = [], boardSlots = 5) {
   const clear = (s: Slot) => { put(s, null); setSel(s) }
   const target = sel.who < 0 ? `Board · ${BOARD_NAME[sel.i]}` : `${names[sel.who]} · card ${sel.i + 1}`
   const full = order.every((o) => get(o))
-  return { board, setBoard, hands, sel, setSel, used, pick, clear, get, target: full ? 'all filled — tap a card to change it' : target }
+  return { board, setBoard, hands, sel, setSel, used, pick, clear, get, target: full ? 'all cards in' : target }
 }
 
 function SlotCard({ c, active, onClick, label, disabled }: { c: string | null; active: boolean; onClick: () => void; label: string; disabled?: boolean }) {
@@ -141,7 +141,7 @@ export function BoardEditor({ s }: { s: Snap }) {
       <p class="tiny muted">Optional. Record the cards as they're dealt so everyone sees them, and they're already filled in at showdown.</p>
       <BoardRow st={{ ...st, target: st.target }} isSel={isSel} tap={(w, i) => i < reached && tap(w, i)} slots={reached} />
       <CardPad used={st.used} onPick={(c) => { if (st.sel.i < reached) st.pick(c) }} target={st.sel.i < reached ? `Board · ${BOARD_NAME[st.sel.i]}` : 'done'} />
-      {gap && <p class="tiny" style={{ color: 'var(--amber)' }}>Fill the cards from left to right — the {BOARD_NAME[firstGap]} is missing.</p>}
+      {gap && <p class="tiny" style={{ color: 'var(--amber)' }}>Fill the cards from left to right. The {BOARD_NAME[firstGap]} is missing.</p>}
       <div class="row">
         <Btn kind="quiet" big onClick={() => { cmd('board', { cards: [] }); closeSheet() }} disabled={!h.board.length}>Clear</Btn>
         <Btn kind="primary" big disabled={gap || cards.join() === h.board.join()} onClick={save}><Icon name="check" /> Save board</Btn>
@@ -239,7 +239,7 @@ const RANKINGS: [string, string[], string][] = [
   ['Three of a kind', ['8s', '8h', '8d', 'Kc', '3s'], 'Three of one rank'],
   ['Two pair', ['Jh', 'Jc', '4s', '4d', 'Ah'], 'Two different pairs'],
   ['Pair', ['Th', 'Ts', 'Ac', '7d', '2h'], 'Two of one rank'],
-  ['High card', ['Ah', 'Jd', '8c', '5s', '3h'], 'Nothing else — highest card plays'],
+  ['High card', ['Ah', 'Jd', '8c', '5s', '3h'], 'Nothing else, so the highest card plays'],
 ]
 
 function RankList() {

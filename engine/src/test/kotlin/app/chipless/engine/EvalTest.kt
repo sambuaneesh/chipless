@@ -55,7 +55,7 @@ class EvalTest {
     fun explanations() {
         val w = s("Ah", "Ad", "Kc", "7s", "2d")
         val l = s("As", "Ac", "Qc", "7h", "2c")
-        assertEquals("Both have a Pair of Aces — Ann's King kicker beats Bob's Queen.", Eval.whyBeats("Ann", w, "Bob", l))
+        assertEquals("Both have a Pair of Aces. Ann's King kicker beats Bob's Queen.", Eval.whyBeats("Ann", w, "Bob", l))
         assertEquals(
             "Ann's Flush, Ace-high beats Bob's Straight, Ten-high.",
             Eval.whyBeats("Ann", s("Ah", "9h", "7h", "4h", "2h"), "Bob", s("6c", "7d", "8s", "9c", "Td")),
